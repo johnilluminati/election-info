@@ -1,1 +1,18 @@
 @import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  .img-rounded-circle {
+     border-radius: 50%;
+     padding: 0.125rem;
+     border: 1px solid;
+  }
+}
+
+@theme {
+  --color-nav-bg-color: #0d6efd;
+  --color-body-bg-color: #212529;
+  --color-dark-mode-blue: #6ea8fe;
+  --color-person-header-tab-hover-blue: #8bb9fe;
+}
