@@ -1,6 +1,6 @@
 const HomeBanner = () => {
   return (
-    <section className="bg-white dark:bg-body-bg-color">
+    <section>
       <div className="px-4 py-16 sm:px-6 sm:py-24 lg:px-8 lg:py-32">
         <div className="text-center">
           <h1 className="text-4xl font-bold text-gray-900 sm:text-5xl dark:text-white">

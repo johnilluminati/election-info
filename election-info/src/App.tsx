@@ -4,6 +4,7 @@ import HomePage from "./pages/HomePage"
 import AboutPage from "./pages/AboutPage"
 import NotFoundPage from "./pages/NotFoundPage"
 import CandidateSearchPage from "./pages/CandidateSearchPage"
+import ElectionsSearchPage from "./pages/ElectionsSearchPage"
 
 function App() {
   const router = createBrowserRouter(
@@ -12,6 +13,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/candidates" element={<CandidateSearchPage />} />
+        <Route path="/elections" element={<ElectionsSearchPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     )
