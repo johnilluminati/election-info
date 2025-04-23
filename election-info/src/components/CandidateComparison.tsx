@@ -18,8 +18,8 @@ const person = [
     ]
   },
   {
-    "firstName": "Person",
-    "lastName": "McLastname",
+    "firstName": "Firstname",
+    "lastName": "McStupidface",
     "party": "Republican",
     "position": {
       "title": "Person",
