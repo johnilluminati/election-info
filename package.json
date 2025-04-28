@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "@maplibre/maplibre-gl-geocoder": "^1.8.0",
+    "@types/maplibre-gl": "^1.13.2",
+    "maplibre-gl": "^5.4.0",
+    "pmtiles": "^4.3.0"
+  }
+}
