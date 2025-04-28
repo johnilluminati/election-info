@@ -1,21 +1,26 @@
-import CandidateComparison from "../components/CandidateComparison"
+import { useState } from 'react';
+import CandidateComparison from "../components/CandidateComparison";
+import CongressionalMap from "../components/CongressionalMap";
 
 const ElectionsSearchPage = () => {
+  const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
+
+  const handleDistrictSelect = (districtId: string) => {
+    setSelectedDistrict(districtId);
+    // Here you can add logic to fetch and display district-specific election information
+  };
+
   return (
     <>
       <section className="h-96 lg:h-[600px] overflow-hidden">
         <div className="h-full border-b">
-          <div className="flex flex-row justify-center items-center text-center">
-            <div className="flex basis-3/4 justify-center items-center">Just imagine this is where the interactivemap will go.</div>
-            <div className="flex basis-1/4"></div>
-          </div>
           <div className="flex flex-row justify-center items-center w-full h-[calc(100%-2rem)]">
             <div className="flex basis-3/4 h-full">
-              
+              <CongressionalMap onDistrictSelect={handleDistrictSelect} />
             </div>
             <div className="flex basis-1/4 border-l h-full flex-col">
               <span className="text-2xl font-bold text-center w-full pb-4 border-b">
-                <u>Upcoming Elections - PA</u>
+                <u>Upcoming Elections {selectedDistrict ? `- District ${selectedDistrict}` : ''}</u>
               </span>
               <div className="overflow-y-auto p-4">
                 <div className="space-y-4">
@@ -51,13 +56,12 @@ const ElectionsSearchPage = () => {
                 </div>
               </div>
             </div>
-            
           </div>
         </div>
       </section>
       <CandidateComparison />
     </>
-  )
-}
+  );
+};
 
-export default ElectionsSearchPage
+export default ElectionsSearchPage;
