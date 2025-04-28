@@ -1,5 +1,5 @@
-import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
-import { useEffect, useState } from 'react';
+import { MapContainer, TileLayer, GeoJSON, useMap } from 'react-leaflet';
+import { useEffect, useState, useRef } from 'react';
 import { GeoJsonObject, Feature } from 'geojson';
 import L from 'leaflet';
 
@@ -9,89 +9,66 @@ interface VotingDistrictProperties {
   VTDNAME?: string;
 }
 
-export default function VotingDistrictMap() {
-  const [geoJsonLayers, setGeoJsonLayers] = useState<GeoJsonObject[]>([]);
+// Component to handle map viewport changes
+function MapViewportHandler({ onViewportChange }: { onViewportChange: (bounds: L.LatLngBounds, zoom: number) => void }) {
+  const map = useMap();
+  const lastBounds = useRef<L.LatLngBounds | null>(null);
+  const lastZoom = useRef(map.getZoom());
 
   useEffect(() => {
-    // List of GeoJSON files to load
-    const geoJsonFiles = [
-      '/data/alabama_voting_districts.geojson',
-      '/data/alaska_voting_districts.geojson',
-      '/data/american_samoa_voting_districts.geojson',
-      '/data/arizona_voting_districts.geojson',
-      '/data/arkansas_voting_districts.geojson',
-      '/data/california_voting_districts.geojson',
-      '/data/colorado_voting_districts.geojson',
-      '/data/commonwealth_of_northern_mariana_islands_voting_districts.geojson',
-      '/data/connecticut_voting_districts.geojson',
-      '/data/delaware_voting_districts.geojson',
-      '/data/district_of_columbia_voting_districts.geojson',
-      '/data/florida_voting_districts.geojson',
-      '/data/georgia_voting_districts.geojson',
-      '/data/guam_voting_districts.geojson',
-      '/data/hawaii_voting_districts.geojson',
-      '/data/idaho_voting_districts.geojson',
-      '/data/illinois_voting_districts.geojson',
-      '/data/indiana_voting_districts.geojson',
-      '/data/iowa_voting_districts.geojson',
-      '/data/kansas_voting_districts.geojson',
-      '/data/kentucky_voting_districts.geojson',
-      '/data/louisiana_voting_districts.geojson',
-      '/data/maine_voting_districts.geojson',
-      '/data/maryland_voting_districts.geojson',
-      '/data/massachusetts_voting_districts.geojson',
-      '/data/michigan_voting_districts.geojson',
-      '/data/minnesota_voting_districts.geojson',
-      '/data/mississippi_voting_districts.geojson',
-      '/data/missouri_voting_districts.geojson',
-      '/data/montana_voting_districts.geojson',
-      '/data/nebraska_voting_districts.geojson',
-      '/data/nevada_voting_districts.geojson',
-      '/data/new_hampshire_voting_districts.geojson',
-      '/data/new_jersey_voting_districts.geojson',
-      '/data/new_mexico_voting_districts.geojson',
-      '/data/new_york_voting_districts.geojson',
-      '/data/north_carolina_voting_districts.geojson',
-      '/data/north_dakota_voting_districts.geojson',
-      '/data/ohio_voting_districts.geojson',
-      '/data/oklahoma_voting_districts.geojson',
-      '/data/oregon_voting_districts.geojson',
-      '/data/pennsylvania_voting_districts.geojson',
-      '/data/puerto_rico_voting_districts.geojson',
-      '/data/rhode_island_voting_districts.geojson',
-      '/data/south_carolina_voting_districts.geojson',
-      '/data/south_dakota_voting_districts.geojson',
-      '/data/tennessee_voting_districts.geojson',
-      '/data/texas_voting_districts.geojson',
-      '/data/utah_voting_districts.geojson',
-      '/data/vermont_voting_districts.geojson',
-      '/data/virgin_islands_voting_districts.geojson',
-      '/data/virginia_voting_districts.geojson',
-      '/data/washington_voting_districts.geojson',
-      '/data/west_virginia_voting_districts.geojson',
-      '/data/wisconsin_voting_districts.geojson',
-      '/data/wyoming_voting_districts.geojson'
-    ];
+    const handleMoveEnd = () => {
+      const newBounds = map.getBounds();
+      const newZoom = map.getZoom();
+      
+      // Only trigger if bounds or zoom have changed significantly
+      if (!lastBounds.current || 
+          !lastBounds.current.equals(newBounds, 0.1) || 
+          Math.abs(newZoom - lastZoom.current) >= 1) {
+        lastBounds.current = newBounds;
+        lastZoom.current = newZoom;
+        onViewportChange(newBounds, newZoom);
+      }
+    };
 
-    // Fetch all GeoJSON files
-    Promise.all(
-      geoJsonFiles.map(file =>
-        fetch(file)
-          .then(res => res.json())
-          .catch(error => {
-            console.error(`Error loading ${file}:`, error);
-            return null;
-          })
-      )
-    )
-      .then(results => {
-        // Filter out any failed loads and set the state
-        setGeoJsonLayers(results.filter((result): result is GeoJsonObject => result !== null));
-      })
-      .catch(error => {
-        console.error('Error loading GeoJSON files:', error);
-      });
-  }, []);
+    map.on('moveend', handleMoveEnd);
+    return () => {
+      map.off('moveend', handleMoveEnd);
+    };
+  }, [map, onViewportChange]);
+
+  return null;
+}
+
+export default function VotingDistrictMap() {
+  const [geoJsonData, setGeoJsonData] = useState<GeoJsonObject | null>(null);
+  const [loading, setLoading] = useState(false);
+  const isLoadingRef = useRef(false);
+
+  const loadGeoJsonFile = async () => {
+    if (isLoadingRef.current || geoJsonData) return;
+    
+    isLoadingRef.current = true;
+    setLoading(true);
+    try {
+      const response = await fetch('/data/congressional_voting_districts.geojson');
+      const data = await response.json();
+      setGeoJsonData(data);
+    } catch (error) {
+      console.error('Error loading GeoJSON file:', error);
+    } finally {
+      setLoading(false);
+      isLoadingRef.current = false;
+    }
+  };
+
+  const handleViewportChange = async (bounds: L.LatLngBounds, zoom: number) => {
+    // Only load GeoJSON when zoomed in enough
+    if (zoom >= 6) {
+      loadGeoJsonFile();
+    } else {
+      setGeoJsonData(null);
+    }
+  };
 
   const onEachDistrict = (feature: Feature, layer: L.Layer) => {
     if (!feature.properties) return;
@@ -111,15 +88,51 @@ export default function VotingDistrictMap() {
     }
   };
 
+  const geoJsonStyle = {
+    fillColor: '#3388ff',
+    fillOpacity: 0.2,
+    color: '#3388ff',
+    weight: 1,
+    opacity: 0.5
+  };
+
   return (
-    <MapContainer center={[37.8, -96]} zoom={4} style={{ height: '600px', width: '100%' }}>
-      <TileLayer
-        attribution="&copy; OpenStreetMap contributors"
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-      {geoJsonLayers.map((layer, index) => (
-        <GeoJSON key={index} data={layer} onEachFeature={onEachDistrict} />
-      ))}
-    </MapContainer>
+    <div style={{ position: 'relative', width: '100%', height: '600px' }}>
+      {loading && (
+        <div style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          zIndex: 1000,
+          background: 'rgba(255, 255, 255, 0.8)',
+          padding: '20px',
+          borderRadius: '5px',
+          boxShadow: '0 0 10px rgba(0,0,0,0.1)'
+        }}>
+          Loading districts...
+        </div>
+      )}
+      <MapContainer 
+        center={[37.8, -96]} 
+        zoom={4} 
+        style={{ height: '100%', width: '100%' }}
+        scrollWheelZoom={true}
+        maxZoom={10}
+      >
+        <TileLayer
+          attribution="&copy; OpenStreetMap contributors"
+          url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"
+        />
+        <MapViewportHandler onViewportChange={handleViewportChange} />
+        {geoJsonData && (
+          <GeoJSON 
+            data={geoJsonData} 
+            onEachFeature={onEachDistrict}
+            style={geoJsonStyle}
+          />
+        )}
+      </MapContainer>
+    </div>
   );
 }

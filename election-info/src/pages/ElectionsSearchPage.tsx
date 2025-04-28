@@ -4,7 +4,7 @@ import VotingDistrictMap from "../components/VotingDistrictMap"
 const ElectionsSearchPage = () => {
   return (
     <>
-      <section className="h-96 lg:h-[500px] overflow-hidden">
+      <section className="h-96 lg:h-[600px] overflow-hidden">
         <div className="h-full border-b">
           <div className="flex flex-row justify-center items-center w-full h-[calc(100%-2rem)]">
             <div className="flex basis-3/4 h-full">
