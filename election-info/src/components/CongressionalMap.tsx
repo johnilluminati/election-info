@@ -123,18 +123,6 @@ const CongressionalMap: React.FC<CongressionalMapProps> = ({ onDistrictSelect })
         const feature = e.features[0];
         const districtId = feature.properties.GEOID;
         onDistrictSelect?.(districtId);
-
-        // Create a popup
-        new maplibregl.Popup()
-          .setLngLat(e.lngLat)
-          .setHTML(`
-            <div class="p-2">
-              <h3 class="font-bold">${feature.properties.NAMELSAD}</h3>
-              <p>State: ${feature.properties.STATE}</p>
-              <p>District ID: ${districtId}</p>
-            </div>
-          `)
-          .addTo(map.current!);
       }
     });
 
