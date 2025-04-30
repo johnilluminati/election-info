@@ -20,7 +20,7 @@ const CongressionalMap: React.FC<CongressionalMapProps> = ({ onDistrictSelect })
 
   useEffect(() => {
     // Fetch the GeoJSON data
-    fetch('/data/congressional_voting_districts.geojson')
+    fetch('/data/converted_congressional_voting_districts.geojson')
       .then(response => response.json())
       .then(data => setDistrictData(data))
       .catch(error => console.error('Error loading district data:', error));
@@ -80,8 +80,8 @@ const CongressionalMap: React.FC<CongressionalMapProps> = ({ onDistrictSelect })
           }
         ]
       },
-      center: [-77.1945, 41.2033], // Center of Pennsylvania
-      zoom: 7
+      center: [-98.5795, 39.8283], // Center of the United States
+      zoom: 3
     });
 
     // Add navigation controls
