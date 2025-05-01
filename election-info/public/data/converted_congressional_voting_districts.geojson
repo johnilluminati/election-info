@@ -166,7 +166,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Washigton", "district": "WA01"}
     },
     {
       "type": "Feature",
@@ -403,7 +403,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Washigton", "district": "WA10"}
     },
     {
       "type": "Feature",
@@ -1276,7 +1276,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Washigton", "district": "WA02"}
     },
     {
       "type": "Feature",
@@ -1739,7 +1739,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Washigton", "district": "WA03"}
     },
     {
       "type": "Feature",
@@ -2474,7 +2474,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Washigton", "district": "WA04"}
     },
     {
       "type": "Feature",
@@ -2733,7 +2733,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Washigton", "district": "WA05"}
     },
     {
       "type": "Feature",
@@ -3510,7 +3510,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Washigton", "district": "WA06"}
     },
     {
       "type": "Feature",
@@ -3659,7 +3659,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Washigton", "district": "WA07"}
     },
     {
       "type": "Feature",
@@ -4246,7 +4246,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Washigton", "district": "WA08"}
     },
     {
       "type": "Feature",
@@ -4345,7 +4345,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Washigton", "district": "WA09"}
     },
     {
       "type": "Feature",
@@ -4540,7 +4540,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Wisconsin", "district": "WI01"}
     },
     {
       "type": "Feature",
@@ -4743,7 +4743,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Wisconsin", "district": "WI02"}
     },
     {
       "type": "Feature",
@@ -5274,7 +5274,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Wisconsin", "district": "WI03"}
     },
     {
       "type": "Feature",
@@ -5349,7 +5349,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Wisconsin", "district": "WI04"}
     },
     {
       "type": "Feature",
@@ -5484,7 +5484,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Wisconsin", "district": "WI05"}
     },
     {
       "type": "Feature",
@@ -5779,7 +5779,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Wisconsin", "district": "WI06"}
     },
     {
       "type": "Feature",
@@ -6636,7 +6636,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Wisconsin", "district": "WI07"}
     },
     {
       "type": "Feature",
@@ -7133,7 +7133,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Wisconsin", "district": "WI08"}
     },
     {
       "type": "Feature",
@@ -7860,7 +7860,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "West Virginia", "district": "WV01"}
     },
     {
       "type": "Feature",
@@ -8559,7 +8559,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "West Virginia", "district": "WV02"}
     },
     {
       "type": "Feature",
@@ -8754,7 +8754,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Florida", "district": "FL01"}
     },
     {
       "type": "Feature",
@@ -9259,7 +9259,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Florida", "district": "FL02"}
     },
     {
       "type": "Feature",
@@ -9626,7 +9626,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Florida", "district": "FL03"}
     },
     {
       "type": "Feature",
@@ -9861,7 +9861,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Florida", "district": "FL04"}
     },
     {
       "type": "Feature",
@@ -9996,7 +9996,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Florida", "district": "FL05"}
     },
     {
       "type": "Feature",
@@ -10255,7 +10255,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Florida", "district": "FL06"}
     },
     {
       "type": "Feature",
@@ -10386,7 +10386,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Florida", "district": "FL07"}
     },
     {
       "type": "Feature",
@@ -10541,7 +10541,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Florida", "district": "FL08"}
     },
     {
       "type": "Feature",
@@ -10716,7 +10716,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Florida", "district": "FL09"}
     },
     {
       "type": "Feature",
@@ -10807,7 +10807,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Florida", "district": "FL10"}
     },
     {
       "type": "Feature",
@@ -11026,7 +11026,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Florida", "district": "FL11"}
     },
     {
       "type": "Feature",
@@ -11261,7 +11261,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Florida", "district": "FL12"}
     },
     {
       "type": "Feature",
@@ -11384,7 +11384,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Florida", "district": "FL13"}
     },
     {
       "type": "Feature",
@@ -11573,7 +11573,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Florida", "district": "FL14"}
     },
     {
       "type": "Feature",
@@ -11708,7 +11708,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Florida", "district": "FL15"}
     },
     {
       "type": "Feature",
@@ -11807,7 +11807,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Florida", "district": "FL16"}
     },
     {
       "type": "Feature",
@@ -11994,7 +11994,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Florida", "district": "FL17"}
     },
     {
       "type": "Feature",
@@ -12213,7 +12213,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Florida", "district": "FL18"}
     },
     {
       "type": "Feature",
@@ -12510,7 +12510,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Florida", "district": "FL19"}
     },
     {
       "type": "Feature",
@@ -12733,7 +12733,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Florida", "district": "FL20"}
     },
     {
       "type": "Feature",
@@ -12872,7 +12872,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Florida", "district": "FL21"}
     },
     {
       "type": "Feature",
@@ -12959,7 +12959,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Florida", "district": "FL22"}
     },
     {
       "type": "Feature",
@@ -13054,7 +13054,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Florida", "district": "FL23"}
     },
     {
       "type": "Feature",
@@ -13125,7 +13125,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Florida", "district": "FL24"}
     },
     {
       "type": "Feature",
@@ -13208,7 +13208,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Florida", "district": "FL25"}
     },
     {
       "type": "Feature",
@@ -13411,7 +13411,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Florida", "district": "FL26"}
     },
     {
       "type": "Feature",
@@ -13494,7 +13494,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Florida", "district": "FL27"}
     },
     {
       "type": "Feature",
@@ -13935,7 +13935,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Florida", "district": "FL28"}
     },
     {
       "type": "Feature",
@@ -14498,7 +14498,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Wyoming", "district": "WYAL"}
     },
     {
       "type": "Feature",
@@ -14829,7 +14829,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "New Hampshire", "district": "NH01"}
     },
     {
       "type": "Feature",
@@ -15668,7 +15668,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "New Hampshire", "district": "NH02"}
     },
     {
       "type": "Feature",
@@ -15831,7 +15831,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "New Jersey", "district": "NJ01"}
     },
     {
       "type": "Feature",
@@ -15942,7 +15942,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "New Jersey", "district": "NJ10"}
     },
     {
       "type": "Feature",
@@ -16101,7 +16101,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "New Jersey", "district": "NJ11"}
     },
     {
       "type": "Feature",
@@ -16280,7 +16280,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "New Jersey", "district": "NJ12"}
     },
     {
       "type": "Feature",
@@ -16683,7 +16683,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "New Jersey", "district": "NJ02"}
     },
     {
       "type": "Feature",
@@ -16922,7 +16922,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "New Jersey", "district": "NJ03"}
     },
     {
       "type": "Feature",
@@ -17069,7 +17069,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "New Jersey", "district": "NJ04"}
     },
     {
       "type": "Feature",
@@ -17240,7 +17240,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "New Jersey", "district": "NJ05"}
     },
     {
       "type": "Feature",
@@ -17411,7 +17411,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "New Jersey", "district": "NJ06"}
     },
     {
       "type": "Feature",
@@ -17722,7 +17722,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "New Jersey", "district": "NJ07"}
     },
     {
       "type": "Feature",
@@ -17833,7 +17833,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "New Jersey", "district": "NJ08"}
     },
     {
       "type": "Feature",
@@ -17952,7 +17952,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "New Jersey", "district": "NJ09"}
     },
     {
       "type": "Feature",
@@ -18407,7 +18407,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "New Mexico", "district": "NM01"}
     },
     {
       "type": "Feature",
@@ -18958,7 +18958,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "New Mexico", "district": "NM02"}
     },
     {
       "type": "Feature",
@@ -19585,7 +19585,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "New Mexico", "district": "NM03"}
     },
     {
       "type": "Feature",
@@ -20360,7 +20360,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "New Hampshire", "district": "NC01"}
     },
     {
       "type": "Feature",
@@ -20583,7 +20583,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "New Hampshire", "district": "NC10"}
     },
     {
       "type": "Feature",
@@ -21082,7 +21082,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "New Hampshire", "district": "NC11"}
     },
     {
       "type": "Feature",
@@ -21201,7 +21201,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "New Hampshire", "district": "NC12"}
     },
     {
       "type": "Feature",
@@ -21688,7 +21688,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "New Hampshire", "district": "NC13"}
     },
     {
       "type": "Feature",
@@ -22035,7 +22035,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "New Hampshire", "district": "NC14"}
     },
     {
       "type": "Feature",
@@ -22194,7 +22194,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "New Hampshire", "district": "NC02"}
     },
     {
       "type": "Feature",
@@ -23283,7 +23283,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "New Hampshire", "district": "NC03"}
     },
     {
       "type": "Feature",
@@ -23486,7 +23486,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "New Hampshire", "district": "NC04"}
     },
     {
       "type": "Feature",
@@ -23837,7 +23837,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "New Hampshire", "district": "NC05"}
     },
     {
       "type": "Feature",
@@ -24044,7 +24044,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "New Hampshire", "district": "NC06"}
     },
     {
       "type": "Feature",
@@ -24407,7 +24407,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "New Hampshire", "district": "NC07"}
     },
     {
       "type": "Feature",
@@ -24686,7 +24686,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "New Hampshire", "district": "NC08"}
     },
     {
       "type": "Feature",
@@ -25073,7 +25073,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "New Hampshire", "district": "NC09"}
     },
     {
       "type": "Feature",
@@ -25720,7 +25720,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "North Dakota", "district": "NDAL"}
     },
     {
       "type": "Feature",
@@ -26015,7 +26015,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Nebraska", "district": "NE01"}
     },
     {
       "type": "Feature",
@@ -26810,7 +26810,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Nebraska", "district": "NE03"}
     },
     {
       "type": "Feature",
@@ -26965,7 +26965,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Nebraska", "district": "NE02"}
     },
     {
       "type": "Feature",
@@ -27176,7 +27176,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "New York", "district": "NY01"}
     },
     {
       "type": "Feature",
@@ -27271,7 +27271,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "New York", "district": "NY02"}
     },
     {
       "type": "Feature",
@@ -27374,7 +27374,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "New York", "district": "NY03"}
     },
     {
       "type": "Feature",
@@ -27429,7 +27429,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "New York", "district": "NY04"}
     },
     {
       "type": "Feature",
@@ -27504,7 +27504,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "New York", "district": "NY05"}
     },
     {
       "type": "Feature",
@@ -27559,7 +27559,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "New York", "district": "NY06"}
     },
     {
       "type": "Feature",
@@ -27610,7 +27610,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "New York", "district": "NY07"}
     },
     {
       "type": "Feature",
@@ -27685,7 +27685,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "New York", "district": "NY08"}
     },
     {
       "type": "Feature",
@@ -27728,7 +27728,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "New York", "district": "NY09"}
     },
     {
       "type": "Feature",
@@ -27779,7 +27779,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "New York", "district": "NY10"}
     },
     {
       "type": "Feature",
@@ -27864,7 +27864,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "New York", "district": "NY11"}
     },
     {
       "type": "Feature",
@@ -27903,7 +27903,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "New York", "district": "NY12"}
     },
     {
       "type": "Feature",
@@ -27946,7 +27946,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "New York", "district": "NY13"}
     },
     {
       "type": "Feature",
@@ -28005,7 +28005,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "New York", "district": "NY14"}
     },
     {
       "type": "Feature",
@@ -28048,7 +28048,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "New York", "district": "NY15"}
     },
     {
       "type": "Feature",
@@ -28123,7 +28123,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "New York", "district": "NY16"}
     },
     {
       "type": "Feature",
@@ -28250,7 +28250,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "New York", "district": "NY17"}
     },
     {
       "type": "Feature",
@@ -28485,7 +28485,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "New York", "district": "NY18"}
     },
     {
       "type": "Feature",
@@ -29028,7 +29028,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "New York", "district": "NY19"}
     },
     {
       "type": "Feature",
@@ -29215,7 +29215,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "New York", "district": "NY20"}
     },
     {
       "type": "Feature",
@@ -29806,7 +29806,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "New York", "district": "NY21"}
     },
     {
       "type": "Feature",
@@ -30017,7 +30017,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "New York", "district": "NY22"}
     },
     {
       "type": "Feature",
@@ -30392,7 +30392,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "New York", "district": "NY23"}
     },
     {
       "type": "Feature",
@@ -31051,7 +31051,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "New York", "district": "NY24"}
     },
     {
       "type": "Feature",
@@ -31150,7 +31150,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "New York", "district": "NY25"}
     },
     {
       "type": "Feature",
@@ -31237,7 +31237,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "New York", "district": "NY26"}
     },
     {
       "type": "Feature",
@@ -31430,7 +31430,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Rhode Island", "district": "RI01"}
     },
     {
       "type": "Feature",
@@ -31591,7 +31591,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Rhode Island", "district": "RI02"}
     },
     {
       "type": "Feature",
@@ -31742,7 +31742,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Nevada", "district": "NV01"}
     },
     {
       "type": "Feature",
@@ -32093,7 +32093,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Nevada", "district": "NV02"}
     },
     {
       "type": "Feature",
@@ -32308,7 +32308,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Nevada", "district": "NV03"}
     },
     {
       "type": "Feature",
@@ -32767,7 +32767,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Nevada", "district": "NV04"}
     },
     {
       "type": "Feature",
@@ -32894,7 +32894,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Colorado", "district": "CO01"}
     },
     {
       "type": "Feature",
@@ -33317,7 +33317,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Colorado", "district": "CO02"}
     },
     {
       "type": "Feature",
@@ -33936,7 +33936,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Colorado", "district": "CO03"}
     },
     {
       "type": "Feature",
@@ -34471,7 +34471,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Colorado", "district": "CO04"}
     },
     {
       "type": "Feature",
@@ -34562,7 +34562,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Colorado", "district": "CO05"}
     },
     {
       "type": "Feature",
@@ -34721,7 +34721,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Colorado", "district": "CO06"}
     },
     {
       "type": "Feature",
@@ -35188,7 +35188,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Colorado", "district": "CO07"}
     },
     {
       "type": "Feature",
@@ -35375,7 +35375,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Colorado", "district": "CO08"}
     },
     {
       "type": "Feature",
@@ -36306,7 +36306,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "California", "district": "CA01"}
     },
     {
       "type": "Feature",
@@ -37281,7 +37281,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "California", "district": "CA02"}
     },
     {
       "type": "Feature",
@@ -38220,7 +38220,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "California", "district": "CA03"}
     },
     {
       "type": "Feature",
@@ -38715,7 +38715,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "California", "district": "CA04"}
     },
     {
       "type": "Feature",
@@ -39434,7 +39434,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "California", "district": "CA05"}
     },
     {
       "type": "Feature",
@@ -39537,7 +39537,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "California", "district": "CA06"}
     },
     {
       "type": "Feature",
@@ -39736,7 +39736,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "California", "district": "CA07"}
     },
     {
       "type": "Feature",
@@ -39935,7 +39935,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "California", "district": "CA08"}
     },
     {
       "type": "Feature",
@@ -40178,7 +40178,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "California", "district": "CA09"}
     },
     {
       "type": "Feature",
@@ -40345,7 +40345,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "California", "district": "CA10"}
     },
     {
       "type": "Feature",
@@ -40400,7 +40400,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "California", "district": "CA11"}
     },
     {
       "type": "Feature",
@@ -40471,7 +40471,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "California", "district": "CA12"}
     },
     {
       "type": "Feature",
@@ -40930,7 +40930,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "California", "district": "CA13"}
     },
     {
       "type": "Feature",
@@ -41049,7 +41049,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "California", "district": "CA14"}
     },
     {
       "type": "Feature",
@@ -41152,7 +41152,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "California", "district": "CA15"}
     },
     {
       "type": "Feature",
@@ -41711,7 +41711,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "California", "district": "CA19"}
     },
     {
       "type": "Feature",
@@ -41802,7 +41802,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "California", "district": "CA17"}
     },
     {
       "type": "Feature",
@@ -42221,7 +42221,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "California", "district": "CA18"}
     },
     {
       "type": "Feature",
@@ -42432,7 +42432,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "California", "district": "CA16"}
     },
     {
       "type": "Feature",
@@ -43395,7 +43395,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "California", "district": "CA20"}
     },
     {
       "type": "Feature",
@@ -43654,7 +43654,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "California", "district": "CA21"}
     },
     {
       "type": "Feature",
@@ -44025,7 +44025,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "California", "district": "CA22"}
     },
     {
       "type": "Feature",
@@ -44460,7 +44460,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "California", "district": "CA23"}
     },
     {
       "type": "Feature",
@@ -45089,7 +45089,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "California", "district": "CA24"}
     },
     {
       "type": "Feature",
@@ -45760,7 +45760,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "California", "district": "CA25"}
     },
     {
       "type": "Feature",
@@ -45979,7 +45979,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "California", "district": "CA26"}
     },
     {
       "type": "Feature",
@@ -46130,7 +46130,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "California", "district": "CA27"}
     },
     {
       "type": "Feature",
@@ -46393,7 +46393,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "California", "district": "CA28"}
     },
     {
       "type": "Feature",
@@ -46496,7 +46496,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "California", "district": "CA29"}
     },
     {
       "type": "Feature",
@@ -46615,7 +46615,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "California", "district": "CA30"}
     },
     {
       "type": "Feature",
@@ -46742,7 +46742,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "California", "district": "CA31"}
     },
     {
       "type": "Feature",
@@ -46905,7 +46905,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "California", "district": "CA32"}
     },
     {
       "type": "Feature",
@@ -47020,7 +47020,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "California", "district": "CA33"}
     },
     {
       "type": "Feature",
@@ -47079,7 +47079,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "California", "district": "CA34"}
     },
     {
       "type": "Feature",
@@ -47170,7 +47170,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "California", "district": "CA35"}
     },
     {
       "type": "Feature",
@@ -47289,7 +47289,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "California", "district": "CA36"}
     },
     {
       "type": "Feature",
@@ -47344,7 +47344,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "California", "district": "CA37"}
     },
     {
       "type": "Feature",
@@ -47447,7 +47447,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "California", "district": "CA38"}
     },
     {
       "type": "Feature",
@@ -47554,7 +47554,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "California", "district": "CA39"}
     },
     {
       "type": "Feature",
@@ -47721,7 +47721,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "California", "district": "CA40"}
     },
     {
       "type": "Feature",
@@ -48116,7 +48116,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "California", "district": "CA41"}
     },
     {
       "type": "Feature",
@@ -48345,7 +48345,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "California", "district": "CA42"}
     },
     {
       "type": "Feature",
@@ -48432,7 +48432,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "California", "district": "CA43"}
     },
     {
       "type": "Feature",
@@ -48523,7 +48523,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "California", "district": "CA44"}
     },
     {
       "type": "Feature",
@@ -48654,7 +48654,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "California", "district": "CA45"}
     },
     {
       "type": "Feature",
@@ -48737,7 +48737,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "California", "district": "CA46"}
     },
     {
       "type": "Feature",
@@ -48868,7 +48868,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "California", "district": "CA47"}
     },
     {
       "type": "Feature",
@@ -49171,7 +49171,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "California", "district": "CA48"}
     },
     {
       "type": "Feature",
@@ -49338,7 +49338,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "California", "district": "CA49"}
     },
     {
       "type": "Feature",
@@ -49541,7 +49541,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "California", "district": "CA50"}
     },
     {
       "type": "Feature",
@@ -49672,7 +49672,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "California", "district": "CA51"}
     },
     {
       "type": "Feature",
@@ -49747,7 +49747,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "California", "district": "CA52"}
     },
     {
       "type": "Feature",
@@ -50226,7 +50226,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Georgia", "district": "GA02"}
     },
     {
       "type": "Feature",
@@ -50561,7 +50561,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Georgia", "district": "GA03"}
     },
     {
       "type": "Feature",
@@ -51124,7 +51124,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Georgia", "district": "GA01"}
     },
     {
       "type": "Feature",
@@ -51607,7 +51607,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Georgia", "district": "GA08"}
     },
     {
       "type": "Feature",
@@ -52166,7 +52166,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Georgia", "district": "GA12"}
     },
     {
       "type": "Feature",
@@ -52425,7 +52425,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Georgia", "district": "GA14"}
     },
     {
       "type": "Feature",
@@ -52592,7 +52592,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Georgia", "district": "GA06"}
     },
     {
       "type": "Feature",
@@ -52791,7 +52791,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Georgia", "district": "GA11"}
     },
     {
       "type": "Feature",
@@ -52910,7 +52910,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Georgia", "district": "GA05"}
     },
     {
       "type": "Feature",
@@ -53053,7 +53053,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Georgia", "district": "GA04"}
     },
     {
       "type": "Feature",
@@ -53272,7 +53272,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Georgia", "district": "GA13"}
     },
     {
       "type": "Feature",
@@ -53511,7 +53511,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Georgia", "district": "GA07"}
     },
     {
       "type": "Feature",
@@ -53898,7 +53898,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Georgia", "district": "GA09"}
     },
     {
       "type": "Feature",
@@ -54381,7 +54381,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Georgia", "district": "GA10"}
     },
     {
       "type": "Feature",
@@ -54584,7 +54584,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Connecticut", "district": "CT01"}
     },
     {
       "type": "Feature",
@@ -54839,7 +54839,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Connecticut", "district": "CT02"}
     },
     {
       "type": "Feature",
@@ -55026,7 +55026,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Connecticut", "district": "CT03"}
     },
     {
       "type": "Feature",
@@ -55177,7 +55177,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Connecticut", "district": "CT04"}
     },
     {
       "type": "Feature",
@@ -55388,7 +55388,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Connecticut", "district": "CT05"}
     },
     {
       "type": "Feature",
@@ -55563,7 +55563,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Oklahoma", "district": "OK01"}
     },
     {
       "type": "Feature",
@@ -56118,7 +56118,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Oklahoma", "district": "OK02"}
     },
     {
       "type": "Feature",
@@ -56697,7 +56697,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Oklahoma", "district": "OK03"}
     },
     {
       "type": "Feature",
@@ -57248,7 +57248,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Oklahoma", "district": "OK04"}
     },
     {
       "type": "Feature",
@@ -57515,7 +57515,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Oklahoma", "district": "OK05"}
     },
     {
       "type": "Feature",
@@ -57662,7 +57662,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Ohio", "district": "OH01"}
     },
     {
       "type": "Feature",
@@ -57765,7 +57765,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Ohio", "district": "OH10"}
     },
     {
       "type": "Feature",
@@ -57856,7 +57856,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Ohio", "district": "OH11"}
     },
     {
       "type": "Feature",
@@ -58211,7 +58211,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Ohio", "district": "OH12"}
     },
     {
       "type": "Feature",
@@ -58306,7 +58306,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Ohio", "district": "OH13"}
     },
     {
       "type": "Feature",
@@ -58417,7 +58417,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Ohio", "district": "OH14"}
     },
     {
       "type": "Feature",
@@ -58680,7 +58680,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Ohio", "district": "OH15"}
     },
     {
       "type": "Feature",
@@ -59155,7 +59155,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Ohio", "district": "OH02"}
     },
     {
       "type": "Feature",
@@ -59230,7 +59230,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Ohio", "district": "OH03"}
     },
     {
       "type": "Feature",
@@ -59469,7 +59469,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Ohio", "district": "OH04"}
     },
     {
       "type": "Feature",
@@ -59760,7 +59760,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Ohio", "district": "OH05"}
     },
     {
       "type": "Feature",
@@ -60187,7 +60187,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Ohio", "district": "OH06"}
     },
     {
       "type": "Feature",
@@ -60370,7 +60370,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Ohio", "district": "OH07"}
     },
     {
       "type": "Feature",
@@ -60529,7 +60529,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Ohio", "district": "OH08"}
     },
     {
       "type": "Feature",
@@ -60814,7 +60814,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Ohio", "district": "OH09"}
     },
     {
       "type": "Feature",
@@ -61229,7 +61229,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Kansas", "district": "KS01"}
     },
     {
       "type": "Feature",
@@ -61772,7 +61772,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Kansas", "district": "KS02"}
     },
     {
       "type": "Feature",
@@ -61887,7 +61887,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Kansas", "district": "KS03"}
     },
     {
       "type": "Feature",
@@ -62074,7 +62074,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Kansas", "district": "KS04"}
     },
     {
       "type": "Feature",
@@ -62643,7 +62643,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "South Carolina", "district": "SC01"}
     },
     {
       "type": "Feature",
@@ -63042,7 +63042,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "South Carolina", "district": "SC02"}
     },
     {
       "type": "Feature",
@@ -63413,7 +63413,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "South Carolina", "district": "SC03"}
     },
     {
       "type": "Feature",
@@ -63624,7 +63624,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "South Carolina", "district": "SC04"}
     },
     {
       "type": "Feature",
@@ -64055,7 +64055,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "South Carolina", "district": "SC05"}
     },
     {
       "type": "Feature",
@@ -64986,7 +64986,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "South Carolina", "district": "SC06"}
     },
     {
       "type": "Feature",
@@ -65317,7 +65317,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "South Carolina", "district": "SC07"}
     },
     {
       "type": "Feature",
@@ -65932,7 +65932,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Kentucky", "district": "KY04"}
     },
     {
       "type": "Feature",
@@ -66263,7 +66263,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Kentucky", "district": "KY06"}
     },
     {
       "type": "Feature",
@@ -66810,7 +66810,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Kentucky", "district": "KY05"}
     },
     {
       "type": "Feature",
@@ -67847,7 +67847,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Kentucky", "district": "KY01"}
     },
     {
       "type": "Feature",
@@ -68446,7 +68446,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Kentucky", "district": "KY02"}
     },
     {
       "type": "Feature",
@@ -68537,7 +68537,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Kentucky", "district": "KY03"}
     },
     {
       "type": "Feature",
@@ -68860,7 +68860,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Oregon", "district": "OR01"}
     },
     {
       "type": "Feature",
@@ -69787,7 +69787,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Oregon", "district": "OR02"}
     },
     {
       "type": "Feature",
@@ -70006,7 +70006,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Oregon", "district": "OR03"}
     },
     {
       "type": "Feature",
@@ -70609,7 +70609,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Oregon", "district": "OR04"}
     },
     {
       "type": "Feature",
@@ -71144,7 +71144,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Oregon", "district": "OR05"}
     },
     {
       "type": "Feature",
@@ -71339,7 +71339,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Oregon", "district": "OR06"}
     },
     {
       "type": "Feature",
@@ -71886,7 +71886,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "South Dakota", "district": "SDAL"}
     },
     {
       "type": "Feature",
@@ -72187,7 +72187,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Delaware", "district": "DEAL"}
     },
     {
       "type": "Feature",
@@ -72318,7 +72318,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "District of Columbia", "district": "DCAL"}
     },
     {
       "type": "Feature",
@@ -72417,7 +72417,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Hawaii", "district": "HI01"}
     },
     {
       "type": "Feature",
@@ -73446,7 +73446,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Hawaii", "district": "HI02"}
     },
     {
       "type": "Feature",
@@ -73965,7 +73965,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Texas", "district": "TX01"}
     },
     {
       "type": "Feature",
@@ -74136,7 +74136,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Texas", "district": "TX02"}
     },
     {
       "type": "Feature",
@@ -74315,7 +74315,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Texas", "district": "TX03"}
     },
     {
       "type": "Feature",
@@ -74990,7 +74990,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Texas", "district": "TX04"}
     },
     {
       "type": "Feature",
@@ -75349,7 +75349,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Texas", "district": "TX05"}
     },
     {
       "type": "Feature",
@@ -75876,7 +75876,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Texas", "district": "TX06"}
     },
     {
       "type": "Feature",
@@ -76023,7 +76023,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Texas", "district": "TX07"}
     },
     {
       "type": "Feature",
@@ -76282,7 +76282,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Texas", "district": "TX08"}
     },
     {
       "type": "Feature",
@@ -76417,7 +76417,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Texas", "district": "TX09"}
     },
     {
       "type": "Feature",
@@ -76892,7 +76892,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Texas", "district": "TX10"}
     },
     {
       "type": "Feature",
@@ -77155,7 +77155,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Texas", "district": "TX11"}
     },
     {
       "type": "Feature",
@@ -77338,7 +77338,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Texas", "district": "TX12"}
     },
     {
       "type": "Feature",
@@ -77861,7 +77861,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Texas", "district": "TX13"}
     },
     {
       "type": "Feature",
@@ -78378,7 +78378,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Texas", "district": "TX14"}
     },
     {
       "type": "Feature",
@@ -78781,7 +78781,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Texas", "district": "TX15"}
     },
     {
       "type": "Feature",
@@ -78908,7 +78908,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Texas", "district": "TX16"}
     },
     {
       "type": "Feature",
@@ -79551,7 +79551,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Texas", "district": "TX17"}
     },
     {
       "type": "Feature",
@@ -79766,7 +79766,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Texas", "district": "TX18"}
     },
     {
       "type": "Feature",
@@ -79945,7 +79945,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Texas", "district": "TX19"}
     },
     {
       "type": "Feature",
@@ -80060,7 +80060,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Texas", "district": "TX20"}
     },
     {
       "type": "Feature",
@@ -80363,7 +80363,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Texas", "district": "TX21"}
     },
     {
       "type": "Feature",
@@ -80742,7 +80742,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Texas", "district": "TX22"}
     },
     {
       "type": "Feature",
@@ -81929,7 +81929,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Texas", "district": "TX23"}
     },
     {
       "type": "Feature",
@@ -82080,7 +82080,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Texas", "district": "TX24"}
     },
     {
       "type": "Feature",
@@ -82411,7 +82411,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Texas", "district": "TX25"}
     },
     {
       "type": "Feature",
@@ -82698,7 +82698,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Texas", "district": "TX26"}
     },
     {
       "type": "Feature",
@@ -83387,7 +83387,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Texas", "district": "TX27"}
     },
     {
       "type": "Feature",
@@ -83898,7 +83898,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Texas", "district": "TX28"}
     },
     {
       "type": "Feature",
@@ -84069,7 +84069,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Texas", "district": "TX29"}
     },
     {
       "type": "Feature",
@@ -84200,7 +84200,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Texas", "district": "TX30"}
     },
     {
       "type": "Feature",
@@ -84563,7 +84563,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Texas", "district": "TX31"}
     },
     {
       "type": "Feature",
@@ -84726,7 +84726,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Texas", "district": "TX32"}
     },
     {
       "type": "Feature",
@@ -84961,7 +84961,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Texas", "district": "TX33"}
     },
     {
       "type": "Feature",
@@ -85498,7 +85498,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Texas", "district": "TX34"}
     },
     {
       "type": "Feature",
@@ -85749,7 +85749,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Texas", "district": "TX35"}
     },
     {
       "type": "Feature",
@@ -86202,7 +86202,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Texas", "district": "TX36"}
     },
     {
       "type": "Feature",
@@ -86325,7 +86325,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Texas", "district": "TX37"}
     },
     {
       "type": "Feature",
@@ -86484,7 +86484,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Texas", "district": "TX38"}
     },
     {
       "type": "Feature",
@@ -87613,7 +87613,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Texas", "district": "LA01"}
     },
     {
       "type": "Feature",
@@ -88088,7 +88088,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Texas", "district": "LA02"}
     },
     {
       "type": "Feature",
@@ -89069,7 +89069,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Texas", "district": "LA03"}
     },
     {
       "type": "Feature",
@@ -90208,7 +90208,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Texas", "district": "LA04"}
     },
     {
       "type": "Feature",
@@ -91339,7 +91339,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Texas", "district": "LA05"}
     },
     {
       "type": "Feature",
@@ -92310,7 +92310,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Texas", "district": "LA06"}
     },
     {
       "type": "Feature",
@@ -92685,7 +92685,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Tennessee", "district": "TN01"}
     },
     {
       "type": "Feature",
@@ -93068,7 +93068,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Tennessee", "district": "TN02"}
     },
     {
       "type": "Feature",
@@ -93611,7 +93611,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Tennessee", "district": "TN03"}
     },
     {
       "type": "Feature",
@@ -94126,7 +94126,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Tennessee", "district": "TN04"}
     },
     {
       "type": "Feature",
@@ -94557,7 +94557,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Tennessee", "district": "TN05"}
     },
     {
       "type": "Feature",
@@ -95012,7 +95012,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Tennessee", "district": "TN06"}
     },
     {
       "type": "Feature",
@@ -95419,7 +95419,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Tennessee", "district": "TN07"}
     },
     {
       "type": "Feature",
@@ -95902,7 +95902,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Tennessee", "district": "TN08"}
     },
     {
       "type": "Feature",
@@ -96193,7 +96193,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Tennessee", "district": "TN09"}
     },
     {
       "type": "Feature",
@@ -96288,7 +96288,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Pennsylvania", "disitrict": "PA02"}
     },
     {
       "type": "Feature",
@@ -96595,7 +96595,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Pennsylvania", "disitrict": "PA08"}
     },
     {
       "type": "Feature",
@@ -96754,7 +96754,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Pennsylvania", "disitrict": "PA07"}
     },
     {
       "type": "Feature",
@@ -96817,7 +96817,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Pennsylvania", "disitrict": "PA03"}
     },
     {
       "type": "Feature",
@@ -96988,7 +96988,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Pennsylvania", "disitrict": "PA01"}
     },
     {
       "type": "Feature",
@@ -97207,7 +97207,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Pennsylvania", "disitrict": "PA04"}
     },
     {
       "type": "Feature",
@@ -97394,7 +97394,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Pennsylvania", "disitrict": "PA05"}
     },
     {
       "type": "Feature",
@@ -97617,7 +97617,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Pennsylvania", "disitrict": "PA06"}
     },
     {
       "type": "Feature",
@@ -97988,7 +97988,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Pennsylvania", "disitrict": "PA09"}
     },
     {
       "type": "Feature",
@@ -98155,7 +98155,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Pennsylvania", "disitrict": "PA11"}
     },
     {
       "type": "Feature",
@@ -98398,7 +98398,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Pennsylvania", "disitrict": "PA10"}
     },
     {
       "type": "Feature",
@@ -98533,7 +98533,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Pennsylvania", "disitrict": "PA17"}
     },
     {
       "type": "Feature",
@@ -98688,7 +98688,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Pennsylvania", "disitrict": "PA12"}
     },
     {
       "type": "Feature",
@@ -98943,7 +98943,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Pennsylvania", "disitrict": "PA14"}
     },
     {
       "type": "Feature",
@@ -99258,7 +99258,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Pennsylvania", "disitrict": "PA13"}
     },
     {
       "type": "Feature",
@@ -99445,7 +99445,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Pennsylvania", "disitrict": "PA16"}
     },
     {
       "type": "Feature",
@@ -99824,7 +99824,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Pennsylvania", "disitrict": "PA15"}
     },
     {
       "type": "Feature",
@@ -100475,7 +100475,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Virginia", "district": "VA01"}
     },
     {
       "type": "Feature",
@@ -100876,7 +100876,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Virginia", "district": "VA02"}
     },
     {
       "type": "Feature",
@@ -101057,7 +101057,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Virginia", "district": "VA03"}
     },
     {
       "type": "Feature",
@@ -101340,7 +101340,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Virginia", "district": "VA04"}
     },
     {
       "type": "Feature",
@@ -101799,7 +101799,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Virginia", "district": "VA05"}
     },
     {
       "type": "Feature",
@@ -102366,7 +102366,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Virginia", "district": "VA06"}
     },
     {
       "type": "Feature",
@@ -102789,7 +102789,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Virginia", "district": "VA07"}
     },
     {
       "type": "Feature",
@@ -102956,7 +102956,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Virginia", "district": "VA08"}
     },
     {
       "type": "Feature",
@@ -103531,7 +103531,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Virginia", "district": "VA09"}
     },
     {
       "type": "Feature",
@@ -103806,7 +103806,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Virginia", "district": "VA10"}
     },
     {
       "type": "Feature",
@@ -103913,7 +103913,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Virginia", "district": "VA11"}
     },
     {
       "type": "Feature",
@@ -125246,7 +125246,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Alaska", "district": "AKAL"}
     },
     {
       "type": "Feature",
@@ -125883,7 +125883,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Alabama", "district": "AL01"}
     },
     {
       "type": "Feature",
@@ -126518,7 +126518,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Alabama", "district": "AL02"}
     },
     {
       "type": "Feature",
@@ -126849,7 +126849,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Alabama", "district": "AL03"}
     },
     {
       "type": "Feature",
@@ -127344,7 +127344,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Alabama", "district": "AL04"}
     },
     {
       "type": "Feature",
@@ -127547,7 +127547,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Alabama", "district": "AL05"}
     },
     {
       "type": "Feature",
@@ -128006,7 +128006,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Alabama", "district": "AL06"}
     },
     {
       "type": "Feature",
@@ -128521,7 +128521,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Alabama", "district": "AL07"}
     },
     {
       "type": "Feature",
@@ -129712,7 +129712,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Arkansas", "district": "AR01"}
     },
     {
       "type": "Feature",
@@ -130071,7 +130071,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Arkansas", "district": "AR02"}
     },
     {
       "type": "Feature",
@@ -130238,7 +130238,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Arkansas", "district": "AR03"}
     },
     {
       "type": "Feature",
@@ -130821,7 +130821,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Arkansas", "district": "AR04"}
     },
     {
       "type": "Feature",
@@ -131584,7 +131584,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Vermont", "district": "VTAL"}
     },
     {
       "type": "Feature",
@@ -131791,7 +131791,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Illinois", "district": "IL01"}
     },
     {
       "type": "Feature",
@@ -132086,7 +132086,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Illinois", "district": "IL02"}
     },
     {
       "type": "Feature",
@@ -132241,7 +132241,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Illinois", "district": "IL03"}
     },
     {
       "type": "Feature",
@@ -132360,7 +132360,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Illinois", "district": "IL04"}
     },
     {
       "type": "Feature",
@@ -132519,7 +132519,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Illinois", "district": "IL05"}
     },
     {
       "type": "Feature",
@@ -132654,7 +132654,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Illinois", "district": "IL06"}
     },
     {
       "type": "Feature",
@@ -132749,7 +132749,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Illinois", "district": "IL07"}
     },
     {
       "type": "Feature",
@@ -132904,7 +132904,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Illinois", "district": "IL08"}
     },
     {
       "type": "Feature",
@@ -133047,7 +133047,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Illinois", "district": "IL09"}
     },
     {
       "type": "Feature",
@@ -133186,7 +133186,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Illinois", "district": "IL10"}
     },
     {
       "type": "Feature",
@@ -133413,7 +133413,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Illinois", "district": "IL11"}
     },
     {
       "type": "Feature",
@@ -134168,7 +134168,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Illinois", "district": "IL12"}
     },
     {
       "type": "Feature",
@@ -134563,7 +134563,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Illinois", "district": "IL13"}
     },
     {
       "type": "Feature",
@@ -134746,7 +134746,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Illinois", "district": "IL14"}
     },
     {
       "type": "Feature",
@@ -135561,7 +135561,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Illinois", "district": "IL15"}
     },
     {
       "type": "Feature",
@@ -136196,7 +136196,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Illinois", "district": "IL16"}
     },
     {
       "type": "Feature",
@@ -136699,7 +136699,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Illinois", "district": "IL17"}
     },
     {
       "type": "Feature",
@@ -136830,7 +136830,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Indiana", "district": "IN01"}
     },
     {
       "type": "Feature",
@@ -136957,7 +136957,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Indiana", "district": "IN02"}
     },
     {
       "type": "Feature",
@@ -137072,7 +137072,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Indiana", "district": "IN03"}
     },
     {
       "type": "Feature",
@@ -137327,7 +137327,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Indiana", "district": "IN04"}
     },
     {
       "type": "Feature",
@@ -137418,7 +137418,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Indiana", "district": "IN05"}
     },
     {
       "type": "Feature",
@@ -137569,7 +137569,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Indiana", "district": "IN06"}
     },
     {
       "type": "Feature",
@@ -137616,7 +137616,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Indiana", "district": "IN07"}
     },
     {
       "type": "Feature",
@@ -138191,7 +138191,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Indiana", "district": "IN08"}
     },
     {
       "type": "Feature",
@@ -138522,7 +138522,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Indiana", "district": "IN09"}
     },
     {
       "type": "Feature",
@@ -138913,7 +138913,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Iowa", "district": "IA01"}
     },
     {
       "type": "Feature",
@@ -139140,7 +139140,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Iowa", "district": "IA02"}
     },
     {
       "type": "Feature",
@@ -139303,7 +139303,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Iowa", "district": "IA03"}
     },
     {
       "type": "Feature",
@@ -139846,7 +139846,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Iowa", "district": "IA04"}
     },
     {
       "type": "Feature",
@@ -140033,7 +140033,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Arizona", "district": "AZ01"}
     },
     {
       "type": "Feature",
@@ -140812,7 +140812,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Arizona", "district": "AZ02"}
     },
     {
       "type": "Feature",
@@ -140911,7 +140911,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Arizona", "district": "AZ03"}
     },
     {
       "type": "Feature",
@@ -141006,7 +141006,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Arizona", "district": "AZ04"}
     },
     {
       "type": "Feature",
@@ -141117,7 +141117,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Arizona", "district": "AZ05"}
     },
     {
       "type": "Feature",
@@ -141636,7 +141636,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Arizona", "district": "AZ06"}
     },
     {
       "type": "Feature",
@@ -142239,7 +142239,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Arizona", "district": "AZ07"}
     },
     {
       "type": "Feature",
@@ -142370,7 +142370,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Arizona", "district": "AZ08"}
     },
     {
       "type": "Feature",
@@ -143325,7 +143325,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Arizona", "district": "AZ09"}
     },
     {
       "type": "Feature",
@@ -144432,7 +144432,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Idaho", "district": "ID01"}
     },
     {
       "type": "Feature",
@@ -145383,7 +145383,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Idaho", "district": "ID02"}
     },
     {
       "type": "Feature",
@@ -146036,7 +146036,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Maine", "district": "ME01"}
     },
     {
       "type": "Feature",
@@ -147253,7 +147253,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Maine", "district": "ME02"}
     },
     {
       "type": "Feature",
@@ -147894,7 +147894,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Maryland", "district": "MD01"}
     },
     {
       "type": "Feature",
@@ -148101,7 +148101,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Maryland", "district": "MD02"}
     },
     {
       "type": "Feature",
@@ -148288,7 +148288,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Maryland", "district": "MD03"}
     },
     {
       "type": "Feature",
@@ -148411,7 +148411,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Maryland", "district": "MD04"}
     },
     {
       "type": "Feature",
@@ -148738,7 +148738,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Maryland", "district": "MD05"}
     },
     {
       "type": "Feature",
@@ -149117,7 +149117,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Maryland", "district": "MD06"}
     },
     {
       "type": "Feature",
@@ -149212,7 +149212,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Maryland", "district": "MD07"}
     },
     {
       "type": "Feature",
@@ -149351,7 +149351,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Maryland", "district": "MD08"}
     },
     {
       "type": "Feature",
@@ -149590,7 +149590,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Massachusetts", "district": "MA01"}
     },
     {
       "type": "Feature",
@@ -149913,7 +149913,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Massachusetts", "district": "MA02"}
     },
     {
       "type": "Feature",
@@ -150120,7 +150120,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Massachusetts", "district": "MA03"}
     },
     {
       "type": "Feature",
@@ -150359,7 +150359,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Massachusetts", "district": "MA04"}
     },
     {
       "type": "Feature",
@@ -150510,7 +150510,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Massachusetts", "district": "MA05"}
     },
     {
       "type": "Feature",
@@ -150723,7 +150723,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Massachusetts", "district": "MA06"}
     },
     {
       "type": "Feature",
@@ -150864,7 +150864,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Massachusetts", "district": "MA07"}
     },
     {
       "type": "Feature",
@@ -151053,7 +151053,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Massachusetts", "district": "MA08"}
     },
     {
       "type": "Feature",
@@ -151626,7 +151626,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Massachusetts", "district": "MA09"}
     },
     {
       "type": "Feature",
@@ -151897,7 +151897,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Utah", "district": "UT01"}
     },
     {
       "type": "Feature",
@@ -152476,7 +152476,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Utah", "district": "UT02"}
     },
     {
       "type": "Feature",
@@ -153131,7 +153131,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Utah", "district": "UT03"}
     },
     {
       "type": "Feature",
@@ -153450,7 +153450,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Utah", "district": "UT04"}
     },
     {
       "type": "Feature",
@@ -153577,7 +153577,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Missouri", "district": "MO01"}
     },
     {
       "type": "Feature",
@@ -153784,7 +153784,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Missouri", "district": "MO02"}
     },
     {
       "type": "Feature",
@@ -154295,7 +154295,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Missouri", "district": "MO03"}
     },
     {
       "type": "Feature",
@@ -154774,7 +154774,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Missouri", "district": "MO04"}
     },
     {
       "type": "Feature",
@@ -154877,7 +154877,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Missouri", "district": "MO05"}
     },
     {
       "type": "Feature",
@@ -155672,7 +155672,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Missouri", "district": "MO06"}
     },
     {
       "type": "Feature",
@@ -155783,7 +155783,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Missouri", "district": "MO07"}
     },
     {
       "type": "Feature",
@@ -156458,7 +156458,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Missouri", "district": "MO08"}
     },
     {
       "type": "Feature",
@@ -156809,7 +156809,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Minnesota", "district": "MN01"}
     },
     {
       "type": "Feature",
@@ -157024,7 +157024,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Minnesota", "district": "MN02"}
     },
     {
       "type": "Feature",
@@ -157155,7 +157155,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Minnesota", "district": "MN03"}
     },
     {
       "type": "Feature",
@@ -157254,7 +157254,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Minnesota", "district": "MN04"}
     },
     {
       "type": "Feature",
@@ -157333,7 +157333,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Minnesota", "district": "MN05"}
     },
     {
       "type": "Feature",
@@ -157584,7 +157584,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Minnesota", "district": "MN06"}
     },
     {
       "type": "Feature",
@@ -158407,7 +158407,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Minnesota", "district": "MN07"}
     },
     {
       "type": "Feature",
@@ -159338,7 +159338,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Minnesota", "district": "MN08"}
     },
     {
       "type": "Feature",
@@ -161603,7 +161603,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Michigan", "district": "MI01"}
     },
     {
       "type": "Feature",
@@ -161858,7 +161858,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Michigan", "district": "MI02"}
     },
     {
       "type": "Feature",
@@ -161961,7 +161961,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Michigan", "district": "MI03"}
     },
     {
       "type": "Feature",
@@ -162140,7 +162140,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Michigan", "district": "MI04"}
     },
     {
       "type": "Feature",
@@ -162339,7 +162339,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Michigan", "district": "MI05"}
     },
     {
       "type": "Feature",
@@ -162454,7 +162454,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Michigan", "district": "MI06"}
     },
     {
       "type": "Feature",
@@ -162577,7 +162577,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Michigan", "district": "MI07"}
     },
     {
       "type": "Feature",
@@ -162724,7 +162724,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Michigan", "district": "MI08"}
     },
     {
       "type": "Feature",
@@ -163003,7 +163003,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Michigan", "district": "MI09"}
     },
     {
       "type": "Feature",
@@ -163078,7 +163078,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Michigan", "district": "MI10"}
     },
     {
       "type": "Feature",
@@ -163161,7 +163161,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Michigan", "district": "MI11"}
     },
     {
       "type": "Feature",
@@ -163236,7 +163236,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Michigan", "district": "MI12"}
     },
     {
       "type": "Feature",
@@ -163331,7 +163331,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Michigan", "district": "MI13"}
     },
     {
       "type": "Feature",
@@ -164538,7 +164538,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Montana", "district": "MT01"}
     },
     {
       "type": "Feature",
@@ -165517,7 +165517,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Montana", "district": "MT02"}
     },
     {
       "type": "Feature",
@@ -165748,7 +165748,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Mississippi", "district": "MS01"}
     },
     {
       "type": "Feature",
@@ -166987,7 +166987,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Mississippi", "district": "MS02"}
     },
     {
       "type": "Feature",
@@ -167358,7 +167358,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Mississippi", "district": "MS03"}
     },
     {
       "type": "Feature",
@@ -167669,7 +167669,7 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {"state": "Mississippi", "district": "MS04"}
     }
   ]
 }
