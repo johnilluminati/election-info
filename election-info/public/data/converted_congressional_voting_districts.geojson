@@ -166,7 +166,7 @@
           ]
         ]
       },
-      "properties": {"state": "Washigton", "district": "WA01"}
+      "properties": {"state": "Washington", "district": "WA01"}
     },
     {
       "type": "Feature",
@@ -403,7 +403,7 @@
           ]
         ]
       },
-      "properties": {"state": "Washigton", "district": "WA10"}
+      "properties": {"state": "Washington", "district": "WA10"}
     },
     {
       "type": "Feature",
@@ -1276,7 +1276,7 @@
           ]
         ]
       },
-      "properties": {"state": "Washigton", "district": "WA02"}
+      "properties": {"state": "Washington", "district": "WA02"}
     },
     {
       "type": "Feature",
@@ -1739,7 +1739,7 @@
           ]
         ]
       },
-      "properties": {"state": "Washigton", "district": "WA03"}
+      "properties": {"state": "Washington", "district": "WA03"}
     },
     {
       "type": "Feature",
@@ -2474,7 +2474,7 @@
           ]
         ]
       },
-      "properties": {"state": "Washigton", "district": "WA04"}
+      "properties": {"state": "Washington", "district": "WA04"}
     },
     {
       "type": "Feature",
@@ -2733,7 +2733,7 @@
           ]
         ]
       },
-      "properties": {"state": "Washigton", "district": "WA05"}
+      "properties": {"state": "Washington", "district": "WA05"}
     },
     {
       "type": "Feature",
@@ -3510,7 +3510,7 @@
           ]
         ]
       },
-      "properties": {"state": "Washigton", "district": "WA06"}
+      "properties": {"state": "Washington", "district": "WA06"}
     },
     {
       "type": "Feature",
@@ -3659,7 +3659,7 @@
           ]
         ]
       },
-      "properties": {"state": "Washigton", "district": "WA07"}
+      "properties": {"state": "Washington", "district": "WA07"}
     },
     {
       "type": "Feature",
@@ -4246,7 +4246,7 @@
           ]
         ]
       },
-      "properties": {"state": "Washigton", "district": "WA08"}
+      "properties": {"state": "Washington", "district": "WA08"}
     },
     {
       "type": "Feature",
@@ -4345,7 +4345,7 @@
           ]
         ]
       },
-      "properties": {"state": "Washigton", "district": "WA09"}
+      "properties": {"state": "Washington", "district": "WA09"}
     },
     {
       "type": "Feature",
@@ -20360,7 +20360,7 @@
           ]
         ]
       },
-      "properties": {"state": "New Hampshire", "district": "NC01"}
+      "properties": {"state": "North Carolina", "district": "NC01"}
     },
     {
       "type": "Feature",
@@ -20583,7 +20583,7 @@
           ]
         ]
       },
-      "properties": {"state": "New Hampshire", "district": "NC10"}
+      "properties": {"state": "North Carolina", "district": "NC10"}
     },
     {
       "type": "Feature",
@@ -21082,7 +21082,7 @@
           ]
         ]
       },
-      "properties": {"state": "New Hampshire", "district": "NC11"}
+      "properties": {"state": "North Carolina", "district": "NC11"}
     },
     {
       "type": "Feature",
@@ -21201,7 +21201,7 @@
           ]
         ]
       },
-      "properties": {"state": "New Hampshire", "district": "NC12"}
+      "properties": {"state": "North Carolina", "district": "NC12"}
     },
     {
       "type": "Feature",
@@ -21688,7 +21688,7 @@
           ]
         ]
       },
-      "properties": {"state": "New Hampshire", "district": "NC13"}
+      "properties": {"state": "North Carolina", "district": "NC13"}
     },
     {
       "type": "Feature",
@@ -22035,7 +22035,7 @@
           ]
         ]
       },
-      "properties": {"state": "New Hampshire", "district": "NC14"}
+      "properties": {"state": "North Carolina", "district": "NC14"}
     },
     {
       "type": "Feature",
@@ -22194,7 +22194,7 @@
           ]
         ]
       },
-      "properties": {"state": "New Hampshire", "district": "NC02"}
+      "properties": {"state": "North Carolina", "district": "NC02"}
     },
     {
       "type": "Feature",
@@ -23283,7 +23283,7 @@
           ]
         ]
       },
-      "properties": {"state": "New Hampshire", "district": "NC03"}
+      "properties": {"state": "North Carolina", "district": "NC03"}
     },
     {
       "type": "Feature",
@@ -23486,7 +23486,7 @@
           ]
         ]
       },
-      "properties": {"state": "New Hampshire", "district": "NC04"}
+      "properties": {"state": "North Carolina", "district": "NC04"}
     },
     {
       "type": "Feature",
@@ -23837,7 +23837,7 @@
           ]
         ]
       },
-      "properties": {"state": "New Hampshire", "district": "NC05"}
+      "properties": {"state": "North Carolina", "district": "NC05"}
     },
     {
       "type": "Feature",
@@ -24044,7 +24044,7 @@
           ]
         ]
       },
-      "properties": {"state": "New Hampshire", "district": "NC06"}
+      "properties": {"state": "North Carolina", "district": "NC06"}
     },
     {
       "type": "Feature",
@@ -24407,7 +24407,7 @@
           ]
         ]
       },
-      "properties": {"state": "New Hampshire", "district": "NC07"}
+      "properties": {"state": "North Carolina", "district": "NC07"}
     },
     {
       "type": "Feature",
@@ -24686,7 +24686,7 @@
           ]
         ]
       },
-      "properties": {"state": "New Hampshire", "district": "NC08"}
+      "properties": {"state": "North Carolina", "district": "NC08"}
     },
     {
       "type": "Feature",
@@ -25073,7 +25073,7 @@
           ]
         ]
       },
-      "properties": {"state": "New Hampshire", "district": "NC09"}
+      "properties": {"state": "North Carolina", "district": "NC09"}
     },
     {
       "type": "Feature",
@@ -87613,7 +87613,7 @@
           ]
         ]
       },
-      "properties": {"state": "Texas", "district": "LA01"}
+      "properties": {"state": "Louisiana", "district": "LA01"}
     },
     {
       "type": "Feature",
@@ -88088,7 +88088,7 @@
           ]
         ]
       },
-      "properties": {"state": "Texas", "district": "LA02"}
+      "properties": {"state": "Louisiana", "district": "LA02"}
     },
     {
       "type": "Feature",
@@ -89069,7 +89069,7 @@
           ]
         ]
       },
-      "properties": {"state": "Texas", "district": "LA03"}
+      "properties": {"state": "Louisiana", "district": "LA03"}
     },
     {
       "type": "Feature",
@@ -90208,7 +90208,7 @@
           ]
         ]
       },
-      "properties": {"state": "Texas", "district": "LA04"}
+      "properties": {"state": "Louisiana", "district": "LA04"}
     },
     {
       "type": "Feature",
@@ -91339,7 +91339,7 @@
           ]
         ]
       },
-      "properties": {"state": "Texas", "district": "LA05"}
+      "properties": {"state": "Louisiana", "district": "LA05"}
     },
     {
       "type": "Feature",
@@ -92310,7 +92310,7 @@
           ]
         ]
       },
-      "properties": {"state": "Texas", "district": "LA06"}
+      "properties": {"state": "Louisiana", "district": "LA06"}
     },
     {
       "type": "Feature",
