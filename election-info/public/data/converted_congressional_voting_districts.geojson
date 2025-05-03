@@ -96288,7 +96288,7 @@
           ]
         ]
       },
-      "properties": {"state": "Pennsylvania", "disitrict": "PA02"}
+      "properties": {"state": "Pennsylvania", "district": "PA02"}
     },
     {
       "type": "Feature",
@@ -96595,7 +96595,7 @@
           ]
         ]
       },
-      "properties": {"state": "Pennsylvania", "disitrict": "PA08"}
+      "properties": {"state": "Pennsylvania", "district": "PA08"}
     },
     {
       "type": "Feature",
@@ -96754,7 +96754,7 @@
           ]
         ]
       },
-      "properties": {"state": "Pennsylvania", "disitrict": "PA07"}
+      "properties": {"state": "Pennsylvania", "district": "PA07"}
     },
     {
       "type": "Feature",
@@ -96817,7 +96817,7 @@
           ]
         ]
       },
-      "properties": {"state": "Pennsylvania", "disitrict": "PA03"}
+      "properties": {"state": "Pennsylvania", "district": "PA03"}
     },
     {
       "type": "Feature",
@@ -96988,7 +96988,7 @@
           ]
         ]
       },
-      "properties": {"state": "Pennsylvania", "disitrict": "PA01"}
+      "properties": {"state": "Pennsylvania", "district": "PA01"}
     },
     {
       "type": "Feature",
@@ -97207,7 +97207,7 @@
           ]
         ]
       },
-      "properties": {"state": "Pennsylvania", "disitrict": "PA04"}
+      "properties": {"state": "Pennsylvania", "district": "PA04"}
     },
     {
       "type": "Feature",
@@ -97394,7 +97394,7 @@
           ]
         ]
       },
-      "properties": {"state": "Pennsylvania", "disitrict": "PA05"}
+      "properties": {"state": "Pennsylvania", "district": "PA05"}
     },
     {
       "type": "Feature",
@@ -97617,7 +97617,7 @@
           ]
         ]
       },
-      "properties": {"state": "Pennsylvania", "disitrict": "PA06"}
+      "properties": {"state": "Pennsylvania", "district": "PA06"}
     },
     {
       "type": "Feature",
@@ -97988,7 +97988,7 @@
           ]
         ]
       },
-      "properties": {"state": "Pennsylvania", "disitrict": "PA09"}
+      "properties": {"state": "Pennsylvania", "district": "PA09"}
     },
     {
       "type": "Feature",
@@ -98155,7 +98155,7 @@
           ]
         ]
       },
-      "properties": {"state": "Pennsylvania", "disitrict": "PA11"}
+      "properties": {"state": "Pennsylvania", "district": "PA11"}
     },
     {
       "type": "Feature",
@@ -98398,7 +98398,7 @@
           ]
         ]
       },
-      "properties": {"state": "Pennsylvania", "disitrict": "PA10"}
+      "properties": {"state": "Pennsylvania", "district": "PA10"}
     },
     {
       "type": "Feature",
@@ -98533,7 +98533,7 @@
           ]
         ]
       },
-      "properties": {"state": "Pennsylvania", "disitrict": "PA17"}
+      "properties": {"state": "Pennsylvania", "district": "PA17"}
     },
     {
       "type": "Feature",
@@ -98688,7 +98688,7 @@
           ]
         ]
       },
-      "properties": {"state": "Pennsylvania", "disitrict": "PA12"}
+      "properties": {"state": "Pennsylvania", "district": "PA12"}
     },
     {
       "type": "Feature",
@@ -98943,7 +98943,7 @@
           ]
         ]
       },
-      "properties": {"state": "Pennsylvania", "disitrict": "PA14"}
+      "properties": {"state": "Pennsylvania", "district": "PA14"}
     },
     {
       "type": "Feature",
@@ -99258,7 +99258,7 @@
           ]
         ]
       },
-      "properties": {"state": "Pennsylvania", "disitrict": "PA13"}
+      "properties": {"state": "Pennsylvania", "district": "PA13"}
     },
     {
       "type": "Feature",
@@ -99445,7 +99445,7 @@
           ]
         ]
       },
-      "properties": {"state": "Pennsylvania", "disitrict": "PA16"}
+      "properties": {"state": "Pennsylvania", "district": "PA16"}
     },
     {
       "type": "Feature",
@@ -99824,7 +99824,7 @@
           ]
         ]
       },
-      "properties": {"state": "Pennsylvania", "disitrict": "PA15"}
+      "properties": {"state": "Pennsylvania", "district": "PA15"}
     },
     {
       "type": "Feature",
