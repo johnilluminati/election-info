@@ -24,6 +24,25 @@ interface StateProperties {
 
 // Function to combine districts into states
 const createStateFeatures = (districtData: GeoJSON.FeatureCollection<GeoJSON.Polygon | GeoJSON.MultiPolygon, DistrictProperties>) => {
+  // List of distinct colors for states
+  const stateColors = [
+    '#FF6B6B', // Red
+    '#4ECDC4', // Teal
+    '#FFD93D', // Yellow
+    '#95E1D3', // Mint
+    '#FF8B94', // Pink
+    '#6C5CE7', // Purple
+    '#A8E6CF', // Light Green
+    '#FFB6B9', // Light Pink
+    '#B8F2E6', // Aqua
+    '#AED9E0', // Blue
+    '#FFA69E', // Coral
+    '#B5EAD7', // Sage
+    '#C7CEEA', // Lavender
+    '#E2F0CB', // Lime
+    '#FFDAC1'  // Peach
+  ];
+
   // Convert MultiPolygons to Polygons by taking their first polygon
   const normalizedFeatures = districtData.features.map(feature => {
     if (feature.geometry.type === 'MultiPolygon') {
@@ -45,7 +64,8 @@ const createStateFeatures = (districtData: GeoJSON.FeatureCollection<GeoJSON.Pol
     type: 'Feature',
     properties: {
       state: feature.properties?.state,
-      namelsad: feature.properties?.state
+      namelsad: feature.properties?.state,
+      color: stateColors[Math.floor(Math.random() * stateColors.length)]
     },
     geometry: feature.geometry
   }));
@@ -112,7 +132,7 @@ const CongressionalMap: React.FC<CongressionalMapProps> = ({ onDistrictSelect, o
             type: 'fill',
             source: 'states',
             paint: {
-              'fill-color': '#627BC1',
+              'fill-color': ['get', 'color'],
               'fill-opacity': [
                 'case',
                 ['boolean', ['feature-state', 'hover'], false],
@@ -126,7 +146,7 @@ const CongressionalMap: React.FC<CongressionalMapProps> = ({ onDistrictSelect, o
             type: 'fill',
             source: 'congressional-districts',
             paint: {
-              'fill-color': '#627BC1',
+              'fill-color': 'transparent',
               'fill-opacity': [
                 'case',
                 ['boolean', ['feature-state', 'hover'], false],
