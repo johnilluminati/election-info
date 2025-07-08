@@ -20,7 +20,7 @@ const HomeBanner = () => {
             To know of any conflicts of interest that a candidate may have.
           </p>
 
-          <div className="mt-4 flex justify-center gap-4 sm:mt-6">
+          {/* <div className="mt-4 flex justify-center gap-4 sm:mt-6">
             <a
               className="inline-block rounded border border-indigo-600 bg-indigo-600 px-5 py-3 font-medium text-white shadow-sm transition-colors hover:bg-indigo-700"
               href="#"
@@ -34,7 +34,7 @@ const HomeBanner = () => {
             >
               Learn More
             </a>
-          </div>
+          </div> */}
         </div>
       </div>
     </section>
