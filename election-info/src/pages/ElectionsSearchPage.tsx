@@ -13,12 +13,12 @@ const ElectionsSearchPage = () => {
   return (
     <>
       <section className="h-96 lg:h-[600px] overflow-hidden">
-        <div className="h-full border-b">
+        <div className="h-full">
           <div className="flex flex-row justify-center items-center w-full h-[calc(100%-2rem)]">
             <div className="flex basis-3/4 h-full">
               <CongressionalMap onDistrictSelect={handleDistrictSelect} />
             </div>
-            <div className="flex basis-1/4 border-l h-full flex-col">
+            <div className="flex basis-1/4 border-l h-full flex-col pl-4">
               <span className="text-2xl font-bold text-center w-full pb-4 border-b">
                 <u>Upcoming Elections {selectedDistrict ? `- District ${selectedDistrict}` : ''}</u>
               </span>
