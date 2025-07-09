@@ -96,7 +96,30 @@ const CongressionalMap: React.FC<CongressionalMapProps> = ({ onDistrictSelect, o
       .then(response => response.json())
       .then(data => {
         setDistrictData(data);
-        setStateData(createStateFeatures(data));
+        const stateDataWithColors = createStateFeatures(data);
+        setStateData(stateDataWithColors);
+        
+        // Create a map of state names to their colors
+        const stateColorMap = new Map<string, string>();
+        stateDataWithColors.features.forEach(feature => {
+          if (feature.properties?.state && feature.properties?.color) {
+            stateColorMap.set(feature.properties.state, feature.properties.color as string);
+          }
+        });
+        
+        // Add state colors to districts
+        const districtsWithStateColors = {
+          ...data,
+          features: data.features.map((feature: GeoJSON.Feature<GeoJSON.Polygon | GeoJSON.MultiPolygon, DistrictProperties>) => ({
+            ...feature,
+            properties: {
+              ...feature.properties,
+              stateColor: stateColorMap.get(feature.properties.state) || '#FF6B6B'
+            }
+          }))
+        };
+        
+        setDistrictData(districtsWithStateColors);
       })
       .catch(error => console.error('Error loading district data:', error));
   }, []);
@@ -153,13 +176,19 @@ const CongressionalMap: React.FC<CongressionalMapProps> = ({ onDistrictSelect, o
             id: 'district-fills',
             type: 'fill',
             source: 'congressional-districts',
+            minzoom: 4,
             paint: {
-              'fill-color': 'transparent',
+              'fill-color': [
+                'case',
+                ['boolean', ['feature-state', 'hover'], false],
+                ['get', 'stateColor'],
+                'transparent'
+              ],
               'fill-opacity': [
                 'case',
                 ['boolean', ['feature-state', 'hover'], false],
-                0.7,
-                0.5
+                0.8,
+                0.3
               ]
             }
           },
