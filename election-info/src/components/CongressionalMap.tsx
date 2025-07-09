@@ -22,6 +22,13 @@ interface StateProperties {
   [key: string]: string | number;
 }
 
+interface TooltipState {
+  show: boolean;
+  text: string;
+  x: number;
+  y: number;
+}
+
 // Function to combine districts into states
 const createStateFeatures = (districtData: GeoJSON.FeatureCollection<GeoJSON.Polygon | GeoJSON.MultiPolygon, DistrictProperties>) => {
   // List of distinct colors for states
@@ -81,6 +88,7 @@ const CongressionalMap: React.FC<CongressionalMapProps> = ({ onDistrictSelect, o
   const map = useRef<maplibregl.Map | null>(null);
   const [districtData, setDistrictData] = useState<GeoJSON.FeatureCollection<GeoJSON.Polygon | GeoJSON.MultiPolygon, DistrictProperties> | null>(null);
   const [stateData, setStateData] = useState<GeoJSON.FeatureCollection<GeoJSON.Polygon | GeoJSON.MultiPolygon, StateProperties> | null>(null);
+  const [tooltip, setTooltip] = useState<TooltipState>({ show: false, text: '', x: 0, y: 0 });
 
   useEffect(() => {
     // Fetch the GeoJSON data
@@ -159,6 +167,7 @@ const CongressionalMap: React.FC<CongressionalMapProps> = ({ onDistrictSelect, o
             id: 'district-borders',
             type: 'line',
             source: 'congressional-districts',
+            minzoom: 4,
             paint: {
               'line-color': '#627BC1',
               'line-width': 0.5
@@ -182,34 +191,107 @@ const CongressionalMap: React.FC<CongressionalMapProps> = ({ onDistrictSelect, o
     // Add navigation controls
     map.current.addControl(new maplibregl.NavigationControl());
 
-    let hoveredStateId: number | null = null;
+    // Add zoom level logging
+    // map.current.on('zoom', () => {
+    //   const currentZoom = map.current?.getZoom();
+    //   console.log('Current zoom level:', currentZoom);
+    // });
 
-    // Add hover effect
+    let hoveredStateId: number | null = null;
+    let hoveredDistrictId: number | null = null;
+
+    // Add hover effect for districts
     map.current.on('mousemove', 'district-fills', (e) => {
+      if (e.features && e.features.length > 0) {
+        if (hoveredDistrictId !== null) {
+          map.current?.setFeatureState(
+            { source: 'congressional-districts', id: hoveredDistrictId },
+            { hover: false }
+          );
+        }
+        hoveredDistrictId = e.features[0].id as number;
+        map.current?.setFeatureState(
+          { source: 'congressional-districts', id: hoveredDistrictId },
+          { hover: true }
+        );
+
+        // Show tooltip for district
+        const feature = e.features[0];
+        const currentZoom = map.current?.getZoom() || 0;
+        const stateName = feature.properties.state;
+        const districtNumber = feature.properties.district;
+        const districtName = feature.properties.namelsad || `District ${districtNumber}`;
+        
+        // Show state + district when zoomed in enough to see district lines (zoom >= 4)
+        const tooltipText = currentZoom >= 4 
+          ? `${stateName} - ${districtName}`
+          : districtName;
+        
+        setTooltip({
+          show: true,
+          text: tooltipText,
+          x: e.point.x,
+          y: e.point.y
+        });
+      }
+    });
+
+    // Remove hover effect when mouse leaves districts
+    map.current.on('mouseleave', 'district-fills', () => {
+      if (hoveredDistrictId !== null) {
+        map.current?.setFeatureState(
+          { source: 'congressional-districts', id: hoveredDistrictId },
+          { hover: false }
+        );
+      }
+      hoveredDistrictId = null;
+      setTooltip({ show: false, text: '', x: 0, y: 0 });
+    });
+
+    // Add hover effect for states
+    map.current.on('mousemove', 'state-fills', (e) => {
       if (e.features && e.features.length > 0) {
         if (hoveredStateId !== null) {
           map.current?.setFeatureState(
-            { source: 'congressional-districts', id: hoveredStateId },
+            { source: 'states', id: hoveredStateId },
             { hover: false }
           );
         }
         hoveredStateId = e.features[0].id as number;
         map.current?.setFeatureState(
-          { source: 'congressional-districts', id: hoveredStateId },
+          { source: 'states', id: hoveredStateId },
           { hover: true }
         );
+
+        // Show tooltip for state
+        const feature = e.features[0];
+        const currentZoom = map.current?.getZoom() || 0;
+        
+        // Don't show state tooltip when district lines are visible (zoom >= 4)
+        if (currentZoom >= 4) {
+          return;
+        }
+        
+        const stateName = feature.properties.namelsad || feature.properties.state;
+        setTooltip({
+          show: true,
+          text: stateName,
+          x: e.point.x,
+          y: e.point.y
+        });
       }
     });
 
-    // Remove hover effect when mouse leaves
-    map.current.on('mouseleave', 'district-fills', () => {
+    // Remove hover effect when mouse leaves states
+    map.current.on('mouseleave', 'state-fills', () => {
       if (hoveredStateId !== null) {
         map.current?.setFeatureState(
-          { source: 'congressional-districts', id: hoveredStateId },
+          { source: 'states', id: hoveredStateId },
           { hover: false }
         );
       }
       hoveredStateId = null;
+      setTooltip({ show: false, text: '', x: 0, y: 0 });
     });
 
     // Add click handler
@@ -262,15 +344,27 @@ const CongressionalMap: React.FC<CongressionalMapProps> = ({ onDistrictSelect, o
     return () => {
       map.current?.remove();
     };
-  }, [districtData, onDistrictSelect, onStateSelect, stateData]);
+  }, [districtData, stateData]);
 
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-full relative">
       <div 
         ref={mapContainer} 
         className="w-full h-full" 
         style={{ minHeight: '600px' }} 
       />
+      {tooltip.show && (
+        <div
+          className="absolute pointer-events-none bg-black bg-opacity-75 text-white px-2 py-1 rounded text-sm z-10"
+          style={{
+            left: tooltip.x + 10,
+            top: tooltip.y - 10,
+            transform: 'translate(0, -100%)'
+          }}
+        >
+          {tooltip.text}
+        </div>
+      )}
     </div>
   );
 };
