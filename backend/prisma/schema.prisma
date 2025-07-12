@@ -13,3 +13,224 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model USState {
+  id        BigInt   @id @default(autoincrement())
+  name      String
+  acronym   String
+  fips_code String   @unique
+  counties  USCounty[]
+  cities    USCity[]
+  districts VotingDistrict[]
+}
+
+model USCounty {
+  id         BigInt   @id @default(autoincrement())
+  us_state   USState  @relation(fields: [us_state_id], references: [id])
+  us_state_id BigInt
+  name       String
+  fips_code  String   @unique
+  cities     USCityCounty[]
+  districts  VotingDistrictCounty[]
+}
+
+model USCity {
+  id         BigInt   @id @default(autoincrement())
+  us_state   USState  @relation(fields: [us_state_id], references: [id])
+  us_state_id BigInt
+  name       String
+  fips_code  String   @unique
+  counties   USCityCounty[]
+  districts  VotingDistrictCity[]
+}
+
+model USCityCounty {
+  city    USCity  @relation(fields: [city_id], references: [id])
+  city_id BigInt
+  county  USCounty @relation(fields: [county_id], references: [id])
+  county_id BigInt
+
+  @@id([city_id, county_id])
+}
+
+model VotingDistrict {
+  id            BigInt   @id @default(autoincrement())
+  us_state      USState  @relation(fields: [us_state_id], references: [id])
+  us_state_id   BigInt
+  district_name String
+  fips_code     String   @unique
+  cities        VotingDistrictCity[]
+  counties      VotingDistrictCounty[]
+}
+
+model VotingDistrictCity {
+  district   VotingDistrict @relation(fields: [district_id], references: [id])
+  district_id BigInt
+  city      USCity @relation(fields: [city_id], references: [id])
+  city_id   BigInt
+
+  @@id([district_id, city_id])
+}
+
+model VotingDistrictCounty {
+  district   VotingDistrict @relation(fields: [district_id], references: [id])
+  district_id BigInt
+  county     USCounty @relation(fields: [county_id], references: [id])
+  county_id  BigInt
+
+  @@id([district_id, county_id])
+}
+
+model ElectionCycle {
+  id          BigInt   @id @default(autoincrement())
+  election_year Int
+  election_day DateTime
+  created_on   DateTime
+  created_by   String
+  updated_on   DateTime
+  updated_by   String?
+  elections    Election[]
+}
+
+model Election {
+  id              BigInt   @id @default(autoincrement())
+  election_cycle_id BigInt
+  election_type_id BigInt
+  created_on   DateTime
+  created_by   String
+  updated_on   DateTime
+  updated_by   String?
+  election_cycle   ElectionCycle @relation(fields: [election_cycle_id], references: [id])
+  geographies     ElectionGeography[]
+  election_candidates ElectionCandidate[]
+}
+
+model Candidate {
+  id           BigInt   @id @default(autoincrement())
+  first_name   String
+  last_name    String
+  nickname     String?
+  picture_link String?
+  created_on   DateTime
+  created_by   String
+  updated_on   DateTime
+  updated_by   String?
+  election_candidates ElectionCandidate[]
+  candidate_parties   CandidateParty[]
+  candidate_views     CandidateView[]
+  candidate_histories CandidateHistory[]
+}
+
+model PoliticalParty {
+  id         BigInt   @id @default(autoincrement())
+  name       String
+  party_code String
+  created_at DateTime
+  created_by String
+  updated_at DateTime
+  updated_by String?
+  candidate_parties CandidateParty[]
+  election_candidates ElectionCandidate[]
+}
+
+model CandidateParty {
+  id                BigInt   @id @default(autoincrement())
+  candidate_id      BigInt
+  political_party_id BigInt
+  start_date        DateTime
+  end_date          DateTime?
+  created_on   DateTime
+  created_by   String
+  updated_on   DateTime
+  updated_by   String?
+  candidate         Candidate      @relation(fields: [candidate_id], references: [id])
+  political_party   PoliticalParty @relation(fields: [political_party_id], references: [id])
+}
+
+model ElectionCandidate {
+  id           BigInt   @id @default(autoincrement())
+  election_id  BigInt
+  candidate_id BigInt
+  party_id     BigInt
+  website      String?
+  created_on   DateTime
+  created_by   String
+  updated_on   DateTime
+  updated_by   String?
+  election     Election      @relation(fields: [election_id], references: [id])
+  candidate    Candidate     @relation(fields: [candidate_id], references: [id])
+  party        PoliticalParty @relation(fields: [party_id], references: [id])
+  key_issues   CandidateKeyIssue[]
+  donations    ElectionCandidateDonation[]
+}
+
+model CandidateKeyIssue {
+  id                  BigInt   @id @default(autoincrement())
+  election_candidate_id BigInt
+  issue_text          String
+  order_of_important  Int
+  view_text           String?
+  created_on          DateTime
+  created_by          String
+  updated_on          DateTime
+  updated_by          String?
+  election_candidate  ElectionCandidate @relation(fields: [election_candidate_id], references: [id])
+}
+
+model CandidateView {
+  id            BigInt   @id @default(autoincrement())
+  candidate_id  BigInt
+  view_type_id  BigInt
+  view_text     String
+  created_on    DateTime
+  created_by    String
+  updated_on    DateTime
+  updated_by    String?
+  candidate     Candidate @relation(fields: [candidate_id], references: [id])
+  view_category CandidateViewCategory @relation(fields: [view_type_id], references: [id])
+}
+
+model CandidateViewCategory {
+  id    BigInt   @id @default(autoincrement())
+  title String
+  candidate_views CandidateView[]
+}
+
+model CandidateHistory {
+  id          BigInt   @id @default(autoincrement())
+  candidate_id BigInt
+  history_text String
+  created_on   DateTime
+  created_by   String
+  updated_on   DateTime
+  updated_by   String?
+  candidate    Candidate @relation(fields: [candidate_id], references: [id])
+}
+
+model ElectionCandidateDonation {
+  id                  BigInt   @id @default(autoincrement())
+  election_candidate_id BigInt
+  donor_name           String
+  donation_amount      Decimal
+  created_on   DateTime
+  created_by   String
+  updated_on   DateTime
+  updated_by   String?
+  election_candidate   ElectionCandidate @relation(fields: [election_candidate_id], references: [id])
+}
+
+enum GeographyType {
+  NATIONAL
+  STATE
+  COUNTY
+  CITY
+  DISTRICT
+}
+
+model ElectionGeography {
+  id           BigInt   @id @default(autoincrement())
+  election     Election @relation(fields: [election_id], references: [id])
+  election_id  BigInt
+  scope_type   GeographyType
+  scope_id     BigInt // references the id of the relevant table, depending on scope_type
+}
