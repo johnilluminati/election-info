@@ -57,8 +57,7 @@ model VotingDistrict {
   id            BigInt   @id @default(autoincrement())
   us_state      USState  @relation(fields: [us_state_id], references: [id])
   us_state_id   BigInt
-  district_name String
-  fips_code     String   @unique
+  district_code String   @unique // e.g., "CA01", "TX38", "WYAL"
   cities        VotingDistrictCity[]
   counties      VotingDistrictCounty[]
 }
