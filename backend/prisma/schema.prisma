@@ -17,7 +17,7 @@ datasource db {
 model USState {
   id        BigInt   @id @default(autoincrement())
   name      String
-  acronym   String
+  abbreviation   String
   fips_code String   @unique
   counties  USCounty[]
   cities    USCity[]
