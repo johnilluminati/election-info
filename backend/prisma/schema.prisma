@@ -224,7 +224,7 @@ model ElectionGeography {
   id          BigInt        @id @default(autoincrement())
   election_id BigInt
   scope_type  GeographyType
-  scope_id    BigInt
+  scope_id    String
   election    Election      @relation(fields: [election_id], references: [id])
 }
 

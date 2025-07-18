@@ -34,7 +34,7 @@ router.get('/', async (req, res, next) => {
       where.geographies = {
         some: {
           scope_type: geography_type,
-          scope_id: BigInt(geography_id)
+          scope_id: geography_id
         }
       };
     }
@@ -92,7 +92,7 @@ router.get('/', async (req, res, next) => {
     ]);
     
     res.json({
-      elections,
+      data: elections,
       pagination: {
         page: parseInt(page),
         limit: parseInt(limit),
