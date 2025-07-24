@@ -89,6 +89,8 @@ const CongressionalMap: React.FC<CongressionalMapProps> = ({ onDistrictSelect, o
   const [districtData, setDistrictData] = useState<GeoJSON.FeatureCollection<GeoJSON.Polygon | GeoJSON.MultiPolygon, DistrictProperties> | null>(null);
   const [stateData, setStateData] = useState<GeoJSON.FeatureCollection<GeoJSON.Polygon | GeoJSON.MultiPolygon, StateProperties> | null>(null);
   const [tooltip, setTooltip] = useState<TooltipState>({ show: false, text: '', x: 0, y: 0 });
+  const selectedDistrictIdRef = useRef<number | null>(null);
+  const selectedStateIdRef = useRef<number | null>(null);
 
   useEffect(() => {
     // Fetch the GeoJSON data
@@ -148,7 +150,8 @@ const CongressionalMap: React.FC<CongressionalMapProps> = ({ onDistrictSelect, o
             type: 'geojson',
             data: stateData,
             generateId: true
-          }
+          },
+
         },
         layers: [
           {
@@ -166,9 +169,13 @@ const CongressionalMap: React.FC<CongressionalMapProps> = ({ onDistrictSelect, o
               'fill-color': ['get', 'color'],
               'fill-opacity': [
                 'case',
-                ['boolean', ['feature-state', 'hover'], false],
-                0.3,
-                0.1
+                ['boolean', ['feature-state', 'selected'], false],
+                0.6,
+                ['case',
+                  ['boolean', ['feature-state', 'hover'], false],
+                  0.3,
+                  0.1
+                ]
               ]
             }
           },
@@ -180,15 +187,23 @@ const CongressionalMap: React.FC<CongressionalMapProps> = ({ onDistrictSelect, o
             paint: {
               'fill-color': [
                 'case',
-                ['boolean', ['feature-state', 'hover'], false],
+                ['boolean', ['feature-state', 'selected'], false],
                 ['get', 'stateColor'],
-                'transparent'
+                ['case',
+                  ['boolean', ['feature-state', 'hover'], false],
+                  ['get', 'stateColor'],
+                  'transparent'
+                ]
               ],
               'fill-opacity': [
                 'case',
-                ['boolean', ['feature-state', 'hover'], false],
-                0.8,
-                0.3
+                ['boolean', ['feature-state', 'selected'], false],
+                0.9,
+                ['case',
+                  ['boolean', ['feature-state', 'hover'], false],
+                  0.8,
+                  0.3
+                ]
               ]
             }
           },
@@ -210,7 +225,8 @@ const CongressionalMap: React.FC<CongressionalMapProps> = ({ onDistrictSelect, o
               'line-color': '#627BC1',
               'line-width': 1.5
             }
-          }
+          },
+
         ]
       },
       center: [-98.5795, 39.8283],
@@ -323,13 +339,139 @@ const CongressionalMap: React.FC<CongressionalMapProps> = ({ onDistrictSelect, o
       setTooltip({ show: false, text: '', x: 0, y: 0 });
     });
 
-    // Add click handler
-    map.current.on('click', 'district-fills', (e) => {
+    // Add click handler for districts (only when zoomed in enough to see district lines)
+    map.current.on('click', 'district-fills', async (e) => {
       if (e.features && e.features.length > 0) {
         const feature = e.features[0];
         const districtId = feature.properties.district;
+        const stateName = feature.properties.state;
         onDistrictSelect?.(districtId);
-        console.log(districtId);
+        
+        // Store current selection IDs before clearing
+        const currentSelectedDistrictId = selectedDistrictIdRef.current;
+        const currentSelectedStateId = selectedStateIdRef.current;
+        
+        // Clear previous selections with proper async handling
+        const clearSelections = async () => {
+          console.log('Starting async clearing of selections...');
+          console.log('Current selectedDistrictId:', currentSelectedDistrictId);
+          console.log('Current selectedStateId:', currentSelectedStateId);
+          
+          // Clear district selection
+          if (currentSelectedDistrictId !== null && currentSelectedDistrictId !== undefined) {
+            console.log('Clearing district selection:', currentSelectedDistrictId);
+            try {
+              const source = map.current?.getSource('congressional-districts');
+              if (source && 'serialize' in source) {
+                // Wait for removeFeatureState to complete
+                await map.current?.removeFeatureState(
+                  { source: 'congressional-districts', id: currentSelectedDistrictId },
+                  'selected'
+                );
+                console.log('Removed district feature state');
+                
+                // Wait for setFeatureState to complete
+                await map.current?.setFeatureState(
+                  { source: 'congressional-districts', id: currentSelectedDistrictId },
+                  { selected: false, hover: false }
+                );
+                console.log('Set district feature state to false');
+              } else {
+                console.log('Source not available for district clearing');
+              }
+            } catch (error) {
+              console.error('Failed to clear district selection:', error);
+            }
+          } else {
+            console.log('No district selection to clear (currentSelectedDistrictId is null/undefined)');
+          }
+          
+          // Clear state selection
+          if (currentSelectedStateId !== null && currentSelectedStateId !== undefined) {
+            console.log('Clearing state selection:', currentSelectedStateId);
+            try {
+              const source = map.current?.getSource('states');
+              if (source && 'serialize' in source) {
+                // Wait for removeFeatureState to complete
+                await map.current?.removeFeatureState(
+                  { source: 'states', id: currentSelectedStateId },
+                  'selected'
+                );
+                console.log('Removed state feature state');
+                
+                // Wait for setFeatureState to complete
+                await map.current?.setFeatureState(
+                  { source: 'states', id: currentSelectedStateId },
+                  { selected: false, hover: false }
+                );
+                console.log('Set state feature state to false');
+              } else {
+                console.log('Source not available for state clearing');
+              }
+            } catch (error) {
+              console.error('Failed to clear state selection:', error);
+            }
+          } else {
+            console.log('No state selection to clear (currentSelectedStateId is null/undefined)');
+          }
+          
+          // Force repaint after all async operations complete
+          if (map.current) {
+            map.current.triggerRepaint();
+            console.log('Triggered repaint after clearing selections');
+          }
+        };
+        
+        // Execute clearing and wait for it to complete before setting new selections
+        await clearSelections();
+        
+        // Find and select the parent state
+        const parentState = stateData.features.find(state => 
+          state.properties.state === stateName
+        );
+        
+        if (parentState && parentState.id !== null && parentState.id !== undefined) {
+          const newStateId = parentState.id as number;
+          console.log('Setting new state selection:', newStateId);
+          selectedStateIdRef.current = newStateId;
+          try {
+            await map.current?.setFeatureState(
+              { source: 'states', id: newStateId },
+              { selected: true }
+            );
+            console.log('Successfully set state selection');
+          } catch (error) {
+            console.error('Failed to set state selection:', error);
+          }
+        } else {
+          console.log('Parent state not found or has invalid ID:', parentState?.id);
+        }
+        
+        // Set new district selection
+        const newDistrictId = feature.id as number;
+        if (newDistrictId !== null && newDistrictId !== undefined) {
+          console.log('Setting new district selection:', newDistrictId);
+          selectedDistrictIdRef.current = newDistrictId;
+          try {
+            await map.current?.setFeatureState(
+              { source: 'congressional-districts', id: newDistrictId },
+              { selected: true }
+            );
+            console.log('Successfully set district selection');
+          } catch (error) {
+            console.error('Failed to set district selection:', error);
+          }
+        } else {
+          console.log('District feature has invalid ID:', feature.id);
+        }
+        
+        // Zoom to district
+        const bbox = turf.bbox(feature);
+        map.current?.fitBounds(bbox as [number, number, number, number], {
+          padding: 50,
+          duration: 1000,
+          maxZoom: 12
+        });
       }
     });
 
@@ -346,13 +488,123 @@ const CongressionalMap: React.FC<CongressionalMapProps> = ({ onDistrictSelect, o
       }
     });
 
-    // Add click handler for states
-    map.current.on('click', 'state-fills', (e) => {
+    // Add click handler for states (only when zoomed out enough that district lines are not visible)
+    map.current.on('click', 'state-fills', async (e) => {
       if (e.features && e.features.length > 0) {
         const feature = e.features[0];
         const stateName = feature.properties.state;
         onStateSelect?.(stateName);
-        console.log(stateName);
+        
+        // Only handle state selection when zoomed out (district lines not visible)
+        const currentZoom = map.current?.getZoom() || 0;
+        if (currentZoom >= 4) {
+          return; // Don't handle state clicks when district lines are visible
+        }
+        
+        // Store current selection IDs before clearing
+        const currentSelectedDistrictId = selectedDistrictIdRef.current;
+        const currentSelectedStateId = selectedStateIdRef.current;
+        
+        // Clear previous selections with proper async handling
+        const clearSelections = async () => {
+          console.log('Starting async clearing of selections...');
+          console.log('Current selectedDistrictId:', currentSelectedDistrictId);
+          console.log('Current selectedStateId:', currentSelectedStateId);
+          
+          // Clear state selection
+          if (currentSelectedStateId !== null && currentSelectedStateId !== undefined) {
+            console.log('Clearing state selection:', currentSelectedStateId);
+            try {
+              const source = map.current?.getSource('states');
+              if (source && 'serialize' in source) {
+                // Wait for removeFeatureState to complete
+                await map.current?.removeFeatureState(
+                  { source: 'states', id: currentSelectedStateId },
+                  'selected'
+                );
+                console.log('Removed state feature state');
+                
+                // Wait for setFeatureState to complete
+                await map.current?.setFeatureState(
+                  { source: 'states', id: currentSelectedStateId },
+                  { selected: false, hover: false }
+                );
+                console.log('Set state feature state to false');
+              } else {
+                console.log('Source not available for state clearing');
+              }
+            } catch (error) {
+              console.error('Failed to clear state selection:', error);
+            }
+          } else {
+            console.log('No state selection to clear (currentSelectedStateId is null/undefined)');
+          }
+          
+          // Clear district selection
+          if (currentSelectedDistrictId !== null && currentSelectedDistrictId !== undefined) {
+            console.log('Clearing district selection:', currentSelectedDistrictId);
+            try {
+              const source = map.current?.getSource('congressional-districts');
+              if (source && 'serialize' in source) {
+                // Wait for removeFeatureState to complete
+                await map.current?.removeFeatureState(
+                  { source: 'congressional-districts', id: currentSelectedDistrictId },
+                  'selected'
+                );
+                console.log('Removed district feature state');
+                
+                // Wait for setFeatureState to complete
+                await map.current?.setFeatureState(
+                  { source: 'congressional-districts', id: currentSelectedDistrictId },
+                  { selected: false, hover: false }
+                );
+                console.log('Set district feature state to false');
+              } else {
+                console.log('Source not available for district clearing');
+              }
+            } catch (error) {
+              console.error('Failed to clear district selection:', error);
+            }
+            selectedDistrictIdRef.current = null;
+          } else {
+            console.log('No district selection to clear (currentSelectedDistrictId is null/undefined)');
+          }
+          
+          // Force repaint after all async operations complete
+          if (map.current) {
+            map.current.triggerRepaint();
+            console.log('Triggered repaint after clearing selections');
+          }
+        };
+        
+        // Execute clearing and wait for it to complete before setting new selections
+        await clearSelections();
+        
+        // Set new state selection
+        const newStateId = feature.id as number;
+        if (newStateId !== null && newStateId !== undefined) {
+          console.log('Setting new state selection:', newStateId);
+          selectedStateIdRef.current = newStateId;
+          try {
+            await map.current?.setFeatureState(
+              { source: 'states', id: newStateId },
+              { selected: true }
+            );
+            console.log('Successfully set state selection');
+          } catch (error) {
+            console.error('Failed to set state selection:', error);
+          }
+        } else {
+          console.log('State feature has invalid ID:', feature.id);
+        }
+        
+        // Zoom in and center on state
+        const bbox = turf.bbox(feature);
+        map.current?.fitBounds(bbox as [number, number, number, number], {
+          padding: 50,
+          duration: 1000,
+          maxZoom: 6 // Allow zooming in much closer to see the state better
+        });
       }
     });
 
@@ -394,6 +646,7 @@ const CongressionalMap: React.FC<CongressionalMapProps> = ({ onDistrictSelect, o
           {tooltip.text}
         </div>
       )}
+
     </div>
   );
 };
