@@ -493,8 +493,9 @@ const CongressionalMap: React.FC<CongressionalMapProps> = ({ onDistrictSelect, o
       if (e.features && e.features.length > 0) {
         const feature = e.features[0];
         const stateName = feature.properties.state;
-        onStateSelect?.(stateName);
-        
+        if (onStateSelect) {
+          onStateSelect(stateName);
+        }
         // Only handle state selection when zoomed out (district lines not visible)
         const currentZoom = map.current?.getZoom() || 0;
         if (currentZoom >= 4) {

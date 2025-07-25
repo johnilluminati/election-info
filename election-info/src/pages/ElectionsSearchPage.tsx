@@ -1,21 +1,43 @@
 import { useState } from 'react';
 import CandidateComparison from "../components/CandidateComparison";
 import CongressionalMap from "../components/CongressionalMap";
+import { useElections } from "../hooks/useElections";
+import type { Election } from "../types/api";
+import CongressionalMapNav from '../components/CongressionalMapNav';
 
 const ElectionsSearchPage = () => {
   const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
 
-  const handleDistrictSelect = (districtId: string) => {
-    setSelectedDistrict(districtId);
-    // Here you can add logic to fetch and display district-specific election information
+  const handleDistrictSelect = (districtNumber: string) => {
+    setSelectedDistrict(districtNumber);
   };
+
+  const { data: electionsData, isLoading: electionsLoading, error: electionsError } = useElections({
+    geography_type: 'DISTRICT',
+    geography_id: selectedDistrict || undefined,
+    limit: 50 // Get more elections to display
+  });
+
+  // Handle paginated response structure
+  const elections: Election[] = electionsData?.data || [];
+
+  // Group elections by type
+  const groupedElections = elections.reduce((acc, election) => {
+    const typeName = election.election_type?.name || 'Unknown';
+    if (!acc[typeName]) {
+      acc[typeName] = [];
+    }
+    acc[typeName].push(election);
+    return acc;
+  }, {} as Record<string, Election[]>);
 
   return (
     <>
       <section className="h-96 lg:h-[600px] overflow-hidden">
         <div className="h-full">
           <div className="flex flex-row justify-center items-center w-full h-[calc(100%-2rem)]">
-            <div className="flex basis-3/4 h-full">
+            <div className="flex flex-col basis-3/4 h-full">
+              <CongressionalMapNav />
               <CongressionalMap onDistrictSelect={handleDistrictSelect} />
             </div>
             <div className="flex basis-1/4 border-l h-full flex-col pl-4">
@@ -23,37 +45,51 @@ const ElectionsSearchPage = () => {
                 <u>Upcoming Elections {selectedDistrict ? `- District ${selectedDistrict}` : ''}</u>
               </span>
               <div className="overflow-y-auto p-4">
-                <div className="space-y-4">
-                  <div className="border-b pb-2">
-                    <h3 className="font-semibold text-lg">U.S. Senate</h3>
-                    <ul className="list-disc pl-5 mt-1">
-                      <li>John Smith (D)</li>
-                      <li>Sarah Johnson (R)</li>
-                      <li>Michael Brown (I)</li>
-                    </ul>
+                {!selectedDistrict ? (
+                  <div className="text-center text-gray-500 mt-8">
+                    Select a district on the map to view elections
                   </div>
-                  <div className="border-b pb-2">
-                    <h3 className="font-semibold text-lg">Governor</h3>
-                    <ul className="list-disc pl-5 mt-1">
-                      <li>Person McLastname (D)</li>
-                      <li>Firstname McStupidface (R)</li>
-                    </ul>
+
+                ) : electionsLoading ? (
+                  <div className="text-center text-gray-500 mt-8">
+                    Loading elections...
                   </div>
-                  <div className="border-b pb-2">
-                    <h3 className="font-semibold text-lg">PA House District 5</h3>
-                    <ul className="list-disc pl-5 mt-1">
-                      <li>David Miller (D)</li>
-                      <li>Jennifer Wilson (R)</li>
-                    </ul>
+                ) : electionsError ? (
+                  <div className="text-center text-red-500 mt-8">
+                    Error loading elections. Please try again.
                   </div>
-                  <div>
-                    <h3 className="font-semibold text-lg">PA Senate District 3</h3>
-                    <ul className="list-disc pl-5 mt-1">
-                      <li>Thomas Anderson (D)</li>
-                      <li>Patricia White (R)</li>
-                    </ul>
+                ) : elections.length === 0 ? (
+                  <div className="text-center text-gray-500 mt-8">
+                    No elections found for this district
                   </div>
-                </div>
+                ) : (
+                  <div className="space-y-4">
+                    {Object.entries(groupedElections).map(([typeName, elections]) => (
+                      <div key={typeName} className="border-b pb-2">
+                        <h3 className="font-semibold text-lg">{typeName}</h3>
+                        {elections?.map((election) => (
+                          <div key={election.id} className="mt-2">
+                            <div className="text-sm text-gray-600 mb-1">
+                              {election.election_cycle?.election_year} - {election.election_cycle?.election_day}
+                            </div>
+                            {election.election_candidates && election.election_candidates.length > 0 ? (
+                              <ul className="list-disc pl-5 mt-1">
+                                {election.election_candidates.map((candidate) => (
+                                  <li key={candidate.id}>
+                                    {candidate.candidate?.first_name} {candidate.candidate?.last_name}
+                                    {candidate.party && ` (${candidate.party.name})`}
+                                  </li>
+                                ))}
+                              </ul>
+                            ) : (
+                              <div className="text-sm text-gray-500 italic">No candidates listed</div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           </div>
