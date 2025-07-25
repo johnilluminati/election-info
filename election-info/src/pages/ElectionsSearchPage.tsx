@@ -7,14 +7,32 @@ import CongressionalMapNav from '../components/CongressionalMapNav';
 
 const ElectionsSearchPage = () => {
   const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
+  const [selectedState, setSelectedState] = useState<string | null>(null);
 
   const handleDistrictSelect = (districtNumber: string) => {
-    setSelectedDistrict(districtNumber);
+    const newValue = districtNumber || null;
+    setSelectedDistrict(newValue);
   };
 
+  const handleStateSelect = (stateName: string) => {
+    setSelectedState(stateName || null);
+    setSelectedDistrict(null); // Clear district selection when a new state is selected
+  };
+
+  // Determine which geography to use for fetching elections
+  let geography_type: 'DISTRICT' | 'STATE' | undefined = undefined;
+  let geography_id: string | undefined = undefined;
+  if (selectedDistrict) {
+    geography_type = 'DISTRICT';
+    geography_id = selectedDistrict;
+  } else if (selectedState) {
+    geography_type = 'STATE';
+    geography_id = selectedState;
+  }
+
   const { data: electionsData, isLoading: electionsLoading, error: electionsError } = useElections({
-    geography_type: 'DISTRICT',
-    geography_id: selectedDistrict || undefined,
+    geography_type,
+    geography_id,
     limit: 50 // Get more elections to display
   });
 
@@ -33,23 +51,29 @@ const ElectionsSearchPage = () => {
 
   return (
     <>
-      <section className="h-96 lg:h-[600px] overflow-hidden">
+      <section className="h-96 lg:h-[620px] overflow-hidden">
         <div className="h-full">
           <div className="flex flex-row justify-center items-center w-full h-[calc(100%-2rem)]">
             <div className="flex flex-col basis-3/4 h-full">
-              <CongressionalMapNav />
-              <CongressionalMap onDistrictSelect={handleDistrictSelect} />
+              <CongressionalMapNav 
+                onDistrictSelect={handleDistrictSelect} 
+                onStateSelect={handleStateSelect} 
+                selectedState={selectedState}
+                selectedDistrict={selectedDistrict}
+              />
+              <CongressionalMap onDistrictSelect={handleDistrictSelect} onStateSelect={handleStateSelect} />
             </div>
-            <div className="flex basis-1/4 border-l h-full flex-col pl-4">
+            <div className="flex basis-1/4 h-full flex-col pl-4">
               <span className="text-2xl font-bold text-center w-full pb-4 border-b">
-                <u>Upcoming Elections {selectedDistrict ? `- District ${selectedDistrict}` : ''}</u>
+                <u>Upcoming Elections
+                  {selectedDistrict ? ` - District ${selectedDistrict}` : selectedState ? ` - ${selectedState}` : ''}
+                </u>
               </span>
               <div className="overflow-y-auto p-4">
-                {!selectedDistrict ? (
+                {!selectedDistrict && !selectedState ? (
                   <div className="text-center text-gray-500 mt-8">
-                    Select a district on the map to view elections
+                    Select a state or district on the map to view elections
                   </div>
-
                 ) : electionsLoading ? (
                   <div className="text-center text-gray-500 mt-8">
                     Loading elections...
@@ -60,7 +84,7 @@ const ElectionsSearchPage = () => {
                   </div>
                 ) : elections.length === 0 ? (
                   <div className="text-center text-gray-500 mt-8">
-                    No elections found for this district
+                    No elections found for this {selectedDistrict ? 'district' : 'state'}
                   </div>
                 ) : (
                   <div className="space-y-4">
