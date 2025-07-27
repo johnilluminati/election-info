@@ -1,33 +1,38 @@
 import { useState } from 'react';
 import CandidateComparison from "../components/CandidateComparison";
 import CongressionalMap from "../components/CongressionalMap";
-import { useElections } from "../hooks/useElections";
+import { useElections } from "../hooks";
 import type { Election } from "../types/api";
 import CongressionalMapNav from '../components/CongressionalMapNav';
+import { STATE_ABBREVIATION } from '../lib/constants';
 
 const ElectionsSearchPage = () => {
   const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
   const [selectedState, setSelectedState] = useState<string | null>(null);
 
-  const handleDistrictSelect = (districtNumber: string) => {
-    const newValue = districtNumber || null;
-    setSelectedDistrict(newValue);
-  };
-
-  const handleStateSelect = (stateName: string) => {
-    setSelectedState(stateName || null);
-    setSelectedDistrict(null); // Clear district selection when a new state is selected
+  const handleSelection = (districtId?: string, stateName?: string) => {
+    if (districtId && stateName) {
+      // District selection
+      setSelectedDistrict(districtId);
+      setSelectedState(stateName);
+    } else if (stateName) {
+      // State selection only
+      setSelectedState(stateName);
+      setSelectedDistrict(null);
+    }
   };
 
   // Determine which geography to use for fetching elections
   let geography_type: 'DISTRICT' | 'STATE' | undefined = undefined;
   let geography_id: string | undefined = undefined;
+  
   if (selectedDistrict) {
     geography_type = 'DISTRICT';
     geography_id = selectedDistrict;
   } else if (selectedState) {
     geography_type = 'STATE';
-    geography_id = selectedState;
+    // Convert state name to abbreviation for the API query
+    geography_id = STATE_ABBREVIATION[selectedState];
   }
 
   const { data: electionsData, isLoading: electionsLoading, error: electionsError } = useElections({
@@ -56,12 +61,11 @@ const ElectionsSearchPage = () => {
           <div className="flex flex-row justify-center items-center w-full h-[calc(100%-2rem)]">
             <div className="flex flex-col basis-3/4 h-full">
               <CongressionalMapNav 
-                onDistrictSelect={handleDistrictSelect} 
-                onStateSelect={handleStateSelect} 
+                onMapSelection={handleSelection} 
                 selectedState={selectedState}
                 selectedDistrict={selectedDistrict}
               />
-              <CongressionalMap onDistrictSelect={handleDistrictSelect} onStateSelect={handleStateSelect} />
+              <CongressionalMap onMapSelection={handleSelection} />
             </div>
             <div className="flex basis-1/4 h-full flex-col pl-4">
               <span className="text-2xl font-bold text-center w-full pb-4 border-b">

@@ -4,8 +4,7 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 import * as turf from '@turf/turf';
 
 interface CongressionalMapProps {
-  onDistrictSelect?: (districtId: string) => void;
-  onStateSelect?: (stateName: string) => void;
+  onMapSelection?: (districtId?: string, stateName?: string) => void;
 }
 
 interface DistrictProperties {
@@ -83,7 +82,7 @@ const createStateFeatures = (districtData: GeoJSON.FeatureCollection<GeoJSON.Pol
   } as GeoJSON.FeatureCollection<GeoJSON.Polygon | GeoJSON.MultiPolygon, StateProperties>;
 };
 
-const CongressionalMap: React.FC<CongressionalMapProps> = ({ onDistrictSelect, onStateSelect }) => {
+const CongressionalMap: React.FC<CongressionalMapProps> = ({ onMapSelection }) => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<maplibregl.Map | null>(null);
   const [districtData, setDistrictData] = useState<GeoJSON.FeatureCollection<GeoJSON.Polygon | GeoJSON.MultiPolygon, DistrictProperties> | null>(null);
@@ -339,7 +338,7 @@ const CongressionalMap: React.FC<CongressionalMapProps> = ({ onDistrictSelect, o
         const feature = e.features[0];
         const districtId = feature.properties.district;
         const stateName = feature.properties.state;
-        onDistrictSelect?.(districtId);
+        onMapSelection?.(districtId, stateName);
         
         // Store current selection IDs before clearing
         const currentSelectedDistrictId = selectedDistrictIdRef.current;
@@ -467,9 +466,7 @@ const CongressionalMap: React.FC<CongressionalMapProps> = ({ onDistrictSelect, o
       if (e.features && e.features.length > 0) {
         const feature = e.features[0];
         const stateName = feature.properties.state;
-        if (onStateSelect) {
-          onStateSelect(stateName);
-        }
+        onMapSelection?.(undefined, stateName);
         // Only handle state selection when zoomed out (district lines not visible)
         const currentZoom = map.current?.getZoom() || 0;
         if (currentZoom >= 4) {

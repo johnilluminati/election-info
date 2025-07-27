@@ -1,11 +1,9 @@
 const CongressionalMapNav = ({ 
-  onDistrictSelect, 
-  onStateSelect, 
+  onMapSelection, 
   selectedState, 
   selectedDistrict 
 }: { 
-  onDistrictSelect: (district: string) => void, 
-  onStateSelect: (state: string) => void,
+  onMapSelection?: (districtId?: string, stateName?: string) => void,
   selectedState?: string | null,
   selectedDistrict?: string | null
 }) => {
@@ -13,15 +11,11 @@ const CongressionalMapNav = ({
     switch (type) {
       case 'home':
         // Clear all selections - go back to United States view
-        if (onStateSelect) {
-          onStateSelect(''); // This will set selectedState to empty string
-        }
+        onMapSelection?.(); // Clear both district and state
         break;
       case 'state':
         // Clear district selection but keep state
-        if (onDistrictSelect) {
-          onDistrictSelect(''); // This will set selectedDistrict to empty string
-        }
+        onMapSelection?.(undefined, selectedState!); // Keep state, clear district
         break;
       case 'district':
         // Already at district level, no action needed
