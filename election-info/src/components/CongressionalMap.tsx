@@ -5,6 +5,9 @@ import * as turf from '@turf/turf';
 
 interface CongressionalMapProps {
   onMapSelection?: (districtId?: string, stateName?: string) => void;
+  zoomToState?: string | null;
+  zoomToDistrict?: string | null;
+  zoomToHome?: boolean;
 }
 
 interface DistrictProperties {
@@ -66,8 +69,9 @@ const createStateFeatures = (districtData: GeoJSON.FeatureCollection<GeoJSON.Pol
   });
 
   // Transform the dissolved features to match our desired format
-  const stateFeatures = dissolved.features.map(feature => ({
+  const stateFeatures = dissolved.features.map((feature, index) => ({
     type: 'Feature',
+    id: index, // Add explicit ID for MapLibre GL feature state
     properties: {
       state: feature.properties?.state,
       namelsad: feature.properties?.state,
@@ -82,7 +86,12 @@ const createStateFeatures = (districtData: GeoJSON.FeatureCollection<GeoJSON.Pol
   } as GeoJSON.FeatureCollection<GeoJSON.Polygon | GeoJSON.MultiPolygon, StateProperties>;
 };
 
-const CongressionalMap: React.FC<CongressionalMapProps> = ({ onMapSelection }) => {
+const CongressionalMap: React.FC<CongressionalMapProps> = ({ 
+  onMapSelection, 
+  zoomToState, 
+  zoomToDistrict, 
+  zoomToHome 
+}) => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<maplibregl.Map | null>(null);
   const [districtData, setDistrictData] = useState<GeoJSON.FeatureCollection<GeoJSON.Polygon | GeoJSON.MultiPolygon, DistrictProperties> | null>(null);
@@ -576,6 +585,120 @@ const CongressionalMap: React.FC<CongressionalMapProps> = ({ onMapSelection }) =
       map.current?.remove();
     };
   }, [districtData, stateData]);
+
+  // Handle zoom commands from breadcrumbs
+  useEffect(() => {
+    if (!map.current || !districtData || !stateData) return;
+
+    if (zoomToHome) {
+      // Clear all selections before zooming to home
+      const clearAllSelections = async () => {
+        // Clear district selection
+        if (selectedDistrictIdRef.current !== null) {
+          try {
+            await map.current?.setFeatureState(
+              { source: 'congressional-districts', id: selectedDistrictIdRef.current },
+              { selected: false, hover: false }
+            );
+            selectedDistrictIdRef.current = null;
+          } catch (error) {
+            console.error('Failed to clear district selection:', error);
+          }
+        }
+        
+        // Clear state selection
+        if (selectedStateIdRef.current !== null) {
+          try {
+            await map.current?.setFeatureState(
+              { source: 'states', id: selectedStateIdRef.current },
+              { selected: false, hover: false }
+            );
+            selectedStateIdRef.current = null;
+          } catch (error) {
+            console.error('Failed to clear state selection:', error);
+          }
+        }
+      };
+      
+      clearAllSelections().then(() => {
+        // Zoom to full United States view
+        map.current?.fitBounds([-125, 24, -66, 50], {
+          padding: 50,
+          duration: 1000
+        });
+      });
+      return;
+    }
+
+    if (zoomToState) {
+      // Clear district selection and set state selection before zooming
+      const clearDistrictAndSetState = async () => {
+        // Clear district selection
+        if (selectedDistrictIdRef.current !== null) {
+          try {
+            await map.current?.setFeatureState(
+              { source: 'congressional-districts', id: selectedDistrictIdRef.current },
+              { selected: false, hover: false }
+            );
+            selectedDistrictIdRef.current = null;
+          } catch (error) {
+            console.error('Failed to clear district selection:', error);
+          }
+        }
+        
+        // Find and set the state selection
+        const stateFeature = stateData.features.find(
+          feature => feature.properties.state === zoomToState
+        );
+        
+        if (stateFeature && stateFeature.id !== null && stateFeature.id !== undefined) {
+          const newStateId = stateFeature.id as number;
+          selectedStateIdRef.current = newStateId;
+          
+          try {
+            await map.current?.setFeatureState(
+              { source: 'states', id: newStateId },
+              { selected: true }
+            );
+          } catch (error) {
+            console.error('Failed to set state selection:', error);
+          }
+        }
+      };
+      
+      clearDistrictAndSetState().then(() => {
+        // Find the state feature and zoom to it
+        const stateFeature = stateData.features.find(
+          feature => feature.properties.state === zoomToState
+        );
+        if (stateFeature) {
+          const bbox = turf.bbox(stateFeature);
+          map.current?.fitBounds(bbox as [number, number, number, number], {
+            padding: 50,
+            duration: 1000,
+            maxZoom: 6
+          });
+        }
+      });
+      return;
+    }
+
+    if (zoomToDistrict) {
+      // Find the district feature and zoom to it
+      const districtFeature = districtData.features.find(
+        feature => feature.properties.district === zoomToDistrict
+      );
+      if (districtFeature) {
+        const bbox = turf.bbox(districtFeature);
+        map.current?.fitBounds(bbox as [number, number, number, number], {
+          padding: 50,
+          duration: 1000,
+          maxZoom: 12
+        });
+      }
+      return;
+    }
+  }, [zoomToHome, zoomToState, zoomToDistrict, districtData, stateData]);
 
   return (
     <div className="w-full h-full relative">

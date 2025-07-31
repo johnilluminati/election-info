@@ -9,6 +9,9 @@ import { STATE_ABBREVIATION } from '../lib/constants';
 const ElectionsSearchPage = () => {
   const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
   const [selectedState, setSelectedState] = useState<string | null>(null);
+  const [zoomToHome, setZoomToHome] = useState<boolean>(false);
+  const [zoomToState, setZoomToState] = useState<string | null>(null);
+  const [zoomToDistrict, setZoomToDistrict] = useState<string | null>(null);
 
   const handleSelection = (districtId?: string, stateName?: string) => {
     if (districtId && stateName) {
@@ -19,7 +22,29 @@ const ElectionsSearchPage = () => {
       // State selection only
       setSelectedState(stateName);
       setSelectedDistrict(null);
+    } else {
+      // Clear all selections (when both are undefined)
+      setSelectedState(null);
+      setSelectedDistrict(null);
     }
+  };
+
+  const handleZoomToHome = () => {
+    setZoomToHome(true);
+    // Reset zoom flags after a short delay
+    setTimeout(() => setZoomToHome(false), 100);
+  };
+
+  const handleZoomToState = (stateName: string) => {
+    setZoomToState(stateName);
+    // Reset zoom flags after a short delay
+    setTimeout(() => setZoomToState(null), 100);
+  };
+
+  const handleZoomToDistrict = (districtId: string) => {
+    setZoomToDistrict(districtId);
+    // Reset zoom flags after a short delay
+    setTimeout(() => setZoomToDistrict(null), 100);
   };
 
   // Determine which geography to use for fetching elections
@@ -64,8 +89,16 @@ const ElectionsSearchPage = () => {
                 onMapSelection={handleSelection} 
                 selectedState={selectedState}
                 selectedDistrict={selectedDistrict}
+                onZoomToHome={handleZoomToHome}
+                onZoomToState={handleZoomToState}
+                onZoomToDistrict={handleZoomToDistrict}
               />
-              <CongressionalMap onMapSelection={handleSelection} />
+              <CongressionalMap 
+                onMapSelection={handleSelection}
+                zoomToHome={zoomToHome}
+                zoomToState={zoomToState}
+                zoomToDistrict={zoomToDistrict}
+              />
             </div>
             <div className="flex basis-1/4 h-full flex-col pl-4">
               <span className="text-2xl font-bold text-center w-full pb-4 border-b">

@@ -1,24 +1,33 @@
 const CongressionalMapNav = ({ 
   onMapSelection, 
   selectedState, 
-  selectedDistrict 
+  selectedDistrict,
+  onZoomToHome,
+  onZoomToState,
+  onZoomToDistrict
 }: { 
   onMapSelection?: (districtId?: string, stateName?: string) => void,
   selectedState?: string | null,
-  selectedDistrict?: string | null
+  selectedDistrict?: string | null,
+  onZoomToHome?: () => void,
+  onZoomToState?: (stateName: string) => void,
+  onZoomToDistrict?: (districtId: string) => void
 }) => {
   const handleBreadcrumbClick = (type: 'home' | 'state' | 'district') => {
     switch (type) {
       case 'home':
-        // Clear all selections - go back to United States view
+        // Clear all selections and zoom to United States view
         onMapSelection?.(); // Clear both district and state
+        onZoomToHome?.(); // Zoom to full US view
         break;
       case 'state':
-        // Clear district selection but keep state
+        // Clear district selection but keep state and zoom to state
         onMapSelection?.(undefined, selectedState!); // Keep state, clear district
+        onZoomToState?.(selectedState!); // Zoom to state
         break;
       case 'district':
-        // Already at district level, no action needed
+        // Zoom to district (already selected)
+        onZoomToDistrict?.(selectedDistrict!);
         break;
     }
   };
