@@ -684,10 +684,23 @@ const CongressionalMap: React.FC<CongressionalMapProps> = ({
     }
 
     if (zoomToDistrict) {
-      // Find the district feature and zoom to it
+      // Find the district feature and highlight it (same as map click)
       const districtFeature = districtData.features.find(
         feature => feature.properties.district === zoomToDistrict
       );
+      
+      if (districtFeature && districtFeature.id !== null && districtFeature.id !== undefined) {
+        const newDistrictId = districtFeature.id as number;
+        selectedDistrictIdRef.current = newDistrictId;
+        
+        // Set the district highlighting (exactly like map click)
+        map.current?.setFeatureState(
+          { source: 'congressional-districts', id: newDistrictId },
+          { selected: true }
+        );
+      }
+      
+      // Zoom to district
       if (districtFeature) {
         const bbox = turf.bbox(districtFeature);
         map.current?.fitBounds(bbox as [number, number, number, number], {
