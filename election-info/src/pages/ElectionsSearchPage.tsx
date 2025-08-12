@@ -63,7 +63,8 @@ const ElectionsSearchPage = () => {
   const { data: electionsData, isLoading: electionsLoading, error: electionsError } = useElections({
     geography_type,
     geography_id,
-    limit: 50 // Get more elections to display
+    limit: 50, // Get more elections to display
+    include_past: false // Only get future elections
   });
 
   // Handle paginated response structure
@@ -131,7 +132,14 @@ const ElectionsSearchPage = () => {
                         {elections?.map((election) => (
                           <div key={election.id} className="mt-2">
                             <div className="text-sm text-gray-600 mb-1">
-                              {election.election_cycle?.election_year} - {election.election_cycle?.election_day}
+                              {election.election_cycle?.election_day ? 
+                                new Date(election.election_cycle.election_day).toLocaleDateString('en-US', {
+                                  year: 'numeric',
+                                  month: 'long',
+                                  day: 'numeric'
+                                }) : 
+                                `${election.election_cycle?.election_year || 'Unknown'}`
+                              }
                             </div>
                             {election.election_candidates && election.election_candidates.length > 0 ? (
                               <ul className="list-disc pl-5 mt-1">

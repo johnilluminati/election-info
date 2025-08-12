@@ -13,15 +13,26 @@ router.get('/', async (req, res, next) => {
       page = 1, 
       limit = 20,
       geography_type,
-      geography_id 
+      geography_id,
+      include_past = 'false'
     } = req.query;
     
     const skip = (parseInt(page) - 1) * parseInt(limit);
     
     const where = {};
     
+    // Filter for upcoming elections unless include_past is true
+    if (include_past !== 'true') {
+      where.election_cycle = {
+        election_day: {
+          gt: new Date()
+        }
+      };
+    }
+    
     if (year) {
       where.election_cycle = {
+        ...where.election_cycle,
         election_year: parseInt(year)
       };
     }
@@ -78,12 +89,12 @@ router.get('/', async (req, res, next) => {
         orderBy: [
           {
             election_cycle: {
-              election_year: 'desc'
+              election_day: 'asc'
             }
           },
           {
             election_cycle: {
-              election_day: 'desc'
+              election_year: 'asc'
             }
           }
         ]
@@ -108,7 +119,17 @@ router.get('/', async (req, res, next) => {
 // GET /api/elections/cycles/all - Get all election cycles (MUST come before /:id)
 router.get('/cycles/all', async (req, res, next) => {
   try {
+    const { include_past = 'false' } = req.query;
+    const where = {};
+    
+    if (include_past !== 'true') {
+      where.election_day = {
+        gt: new Date()
+      };
+    }
+    
     const cycles = await prisma.electionCycle.findMany({
+      where,
       include: {
         _count: {
           select: {
@@ -116,9 +137,10 @@ router.get('/cycles/all', async (req, res, next) => {
           }
         }
       },
-      orderBy: {
-        election_year: 'desc'
-      }
+      orderBy: [
+        { election_day: 'asc' },
+        { election_year: 'asc' }
+      ]
     });
     
     res.json(cycles);

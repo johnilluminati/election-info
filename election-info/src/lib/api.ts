@@ -130,6 +130,7 @@ export const api = {
     limit?: number;
     geography_type?: string;
     geography_id?: string;
+    include_past?: boolean;
   }) => {
     const searchParams = new URLSearchParams()
     if (params?.year) searchParams.append('year', params.year.toString())
@@ -138,12 +139,16 @@ export const api = {
     if (params?.limit) searchParams.append('limit', params.limit.toString())
     if (params?.geography_type) searchParams.append('geography_type', params.geography_type)
     if (params?.geography_id) searchParams.append('geography_id', params.geography_id)
+    if (params?.include_past) searchParams.append('include_past', params.include_past.toString())
     
     const query = searchParams.toString()
     return apiRequest<PaginatedResponse<Election>>(`/api/elections${query ? `?${query}` : ''}`)
   },
   getElection: (id: string) => apiRequest<Election>(`/api/elections/${id}`),
-  getElectionCycles: () => apiRequest<ElectionCycle[]>('/api/elections/cycles/all'),
+  getElectionCycles: (include_past?: boolean) => {
+    const params = include_past ? `?include_past=${include_past}` : '';
+    return apiRequest<ElectionCycle[]>(`/api/elections/cycles/all${params}`);
+  },
   getElectionTypes: () => apiRequest<ElectionType[]>('/api/elections/types/all'),
   getElectionCandidates: (id: string) => apiRequest<ElectionCandidate[]>(`/api/elections/${id}/candidates`),
 

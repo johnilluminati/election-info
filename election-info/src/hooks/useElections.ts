@@ -9,6 +9,7 @@ export const useElections = (params?: {
   limit?: number;
   geography_type?: string;
   geography_id?: string;
+  include_past?: boolean;
 }) => {
   return useQuery<PaginatedResponse<Election>>({
     queryKey: ['elections', params],
@@ -24,10 +25,10 @@ export const useElection = (id: string) => {
   })
 }
 
-export const useElectionCycles = () => {
+export const useElectionCycles = (include_past?: boolean) => {
   return useQuery<ElectionCycle[]>({
-    queryKey: ['elections', 'cycles'],
-    queryFn: api.getElectionCycles,
+    queryKey: ['elections', 'cycles', include_past],
+    queryFn: () => api.getElectionCycles(include_past),
   })
 }
 
