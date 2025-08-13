@@ -80,6 +80,34 @@ const ElectionsSearchPage = () => {
     return acc;
   }, {} as Record<string, Election[]>);
 
+  // Hierarchical order of election types
+  const electionTypeOrder = [
+    'Presidential',
+    'Senate', 
+    'Gubernatorial',
+    'Congressional',
+    'State Legislature',
+    'Local'
+  ];
+
+  // Sort the grouped elections by hierarchical importance
+  const sortedElectionTypes = Object.keys(groupedElections).sort((a, b) => {
+    const aIndex = electionTypeOrder.indexOf(a);
+    const bIndex = electionTypeOrder.indexOf(b);
+    
+    // If both types are in our defined order, sort by that order
+    if (aIndex !== -1 && bIndex !== -1) {
+      return aIndex - bIndex;
+    }
+    
+    // If only one is in our defined order, prioritize it
+    if (aIndex !== -1) return -1;
+    if (bIndex !== -1) return 1;
+    
+    // If neither is in our defined order, sort alphabetically
+    return a.localeCompare(b);
+  });
+
   return (
     <>
       <section className="h-96 lg:h-[620px] overflow-hidden">
@@ -126,37 +154,42 @@ const ElectionsSearchPage = () => {
                   </div>
                 ) : (
                   <div className="space-y-4">
-                    {Object.entries(groupedElections).map(([typeName, elections]) => (
-                      <div key={typeName} className="border-b pb-2">
-                        <h3 className="font-semibold text-lg">{typeName}</h3>
-                        {elections?.map((election) => (
-                          <div key={election.id} className="mt-2">
-                            <div className="text-sm text-gray-600 mb-1">
-                              {election.election_cycle?.election_day ? 
-                                new Date(election.election_cycle.election_day).toLocaleDateString('en-US', {
-                                  year: 'numeric',
-                                  month: 'long',
-                                  day: 'numeric'
-                                }) : 
-                                `${election.election_cycle?.election_year || 'Unknown'}`
-                              }
+                    {sortedElectionTypes.map((typeName) => {
+                      const elections = groupedElections[typeName];
+                      if (!elections || elections.length === 0) return null;
+                      
+                      return (
+                        <div key={typeName} className="border-b pb-2">
+                          <h3 className="font-semibold text-lg">{typeName}</h3>
+                          {elections?.map((election) => (
+                            <div key={election.id} className="mt-2">
+                              <div className="text-sm text-gray-600 mb-1">
+                                {election.election_cycle?.election_day ? 
+                                  new Date(election.election_cycle.election_day).toLocaleDateString('en-US', {
+                                    year: 'numeric',
+                                    month: 'long',
+                                    day: 'numeric'
+                                  }) : 
+                                  `${election.election_cycle?.election_year || 'Unknown'}`
+                                }
+                              </div>
+                              {election.election_candidates && election.election_candidates.length > 0 ? (
+                                <ul className="list-disc pl-5 mt-1">
+                                  {election.election_candidates.map((candidate) => (
+                                    <li key={candidate.id}>
+                                      {candidate.candidate?.first_name} {candidate.candidate?.last_name}
+                                      {candidate.party && ` (${candidate.party.name})`}
+                                    </li>
+                                  ))}
+                                </ul>
+                              ) : (
+                                <div className="text-sm text-gray-500 italic">No candidates listed</div>
+                              )}
                             </div>
-                            {election.election_candidates && election.election_candidates.length > 0 ? (
-                              <ul className="list-disc pl-5 mt-1">
-                                {election.election_candidates.map((candidate) => (
-                                  <li key={candidate.id}>
-                                    {candidate.candidate?.first_name} {candidate.candidate?.last_name}
-                                    {candidate.party && ` (${candidate.party.name})`}
-                                  </li>
-                                ))}
-                              </ul>
-                            ) : (
-                              <div className="text-sm text-gray-500 italic">No candidates listed</div>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    ))}
+                          ))}
+                        </div>
+                      );
+                    })}
                   </div>
                 )}
               </div>
