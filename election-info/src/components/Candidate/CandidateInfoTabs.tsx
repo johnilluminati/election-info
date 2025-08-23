@@ -1,17 +1,30 @@
-import { CandidateInfoTab } from "../../types"
 import { useState } from "react"
 
-const CandidateInfoTabs = ({ tabs }: { tabs: CandidateInfoTab[] }) => {
-  const [activeTab, setActiveTab] = useState(tabs[0]);
+interface TabData {
+  title: string;
+  link: string;
+  component: React.ReactNode;
+}
+
+const CandidateInfoTabs = ({ tabs }: { tabs: TabData[] }) => {
+  const [activeTabTitle, setActiveTabTitle] = useState<string>(tabs[0]?.title || '');
+  
+  if (!tabs || tabs.length === 0) {
+    return null;
+  }
+  
+  // Find the currently active tab based on title
+  const activeTab = tabs.find(tab => tab.title === activeTabTitle) || tabs[0];
+  
   return (
     <>
-      <div className="flex flex-row gap-4">
+      <div className="flex flex-row gap-4 justify-center">
         {tabs.map((tab, key) => {
           return (
             <div key={key}>
               <button
-                className={activeTab === tab ? "text-[1.25rem] text-dark-mode-blue font-bold underline" : "text-[1.25rem]"}
-                onClick={() => setActiveTab(tab)}
+                className={activeTab.title === tab.title ? "text-[1.25rem] text-dark-mode-blue font-bold underline" : "text-[1.25rem]"}
+                onClick={() => setActiveTabTitle(tab.title)}
               >
                 {tab.title}
               </button>

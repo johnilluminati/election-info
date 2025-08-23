@@ -9,6 +9,7 @@ import { STATE_ABBREVIATION } from '../lib/constants';
 const ElectionsSearchPage = () => {
   const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
   const [selectedState, setSelectedState] = useState<string | null>(null);
+  const [selectedElection, setSelectedElection] = useState<Election | null>(null);
   const [zoomToHome, setZoomToHome] = useState<boolean>(false);
   const [zoomToState, setZoomToState] = useState<string | null>(null);
   const [zoomToDistrict, setZoomToDistrict] = useState<string | null>(null);
@@ -27,6 +28,12 @@ const ElectionsSearchPage = () => {
       setSelectedState(null);
       setSelectedDistrict(null);
     }
+    // Clear selected election when geography changes
+    setSelectedElection(null);
+  };
+
+  const handleElectionClick = (election: Election) => {
+    setSelectedElection(election);
   };
 
   const handleZoomToHome = () => {
@@ -173,18 +180,27 @@ const ElectionsSearchPage = () => {
                                   `${election.election_cycle?.election_year || 'Unknown'}`
                                 }
                               </div>
-                              {election.election_candidates && election.election_candidates.length > 0 ? (
-                                <ul className="list-disc pl-5 mt-1">
-                                  {election.election_candidates.map((candidate) => (
-                                    <li key={candidate.id}>
-                                      {candidate.candidate?.first_name} {candidate.candidate?.last_name}
-                                      {candidate.party && ` (${candidate.party.name})`}
-                                    </li>
-                                  ))}
-                                </ul>
-                              ) : (
-                                <div className="text-sm text-gray-500 italic">No candidates listed</div>
-                              )}
+                              <button
+                                onClick={() => handleElectionClick(election)}
+                                className={`w-full text-left p-2 rounded hover:bg-blue-50 transition-colors ${
+                                  selectedElection?.id === election.id 
+                                    ? 'bg-blue-100 border-l-4 border-blue-500' 
+                                    : 'hover:bg-gray-50'
+                                }`}
+                              >
+                                {election.election_candidates && election.election_candidates.length > 0 ? (
+                                  <ul className="list-disc pl-5 mt-1">
+                                    {election.election_candidates.map((candidate) => (
+                                      <li key={candidate.id}>
+                                        {candidate.candidate?.first_name} {candidate.candidate?.last_name}
+                                        {candidate.party && ` (${candidate.party.name})`}
+                                      </li>
+                                    ))}
+                                  </ul>
+                                ) : (
+                                  <div className="text-sm text-gray-500 italic">No candidates listed</div>
+                                )}
+                              </button>
                             </div>
                           ))}
                         </div>
@@ -197,7 +213,11 @@ const ElectionsSearchPage = () => {
           </div>
         </div>
       </section>
-      <CandidateComparison />
+      <CandidateComparison 
+        selectedElection={selectedElection}
+        selectedState={selectedState}
+        selectedDistrict={selectedDistrict}
+      />
     </>
   );
 };
