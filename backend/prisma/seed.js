@@ -90,59 +90,21 @@ function generateDistrictsForState(stateAbbr) {
   return districts;
 }
 
-// Generate sample counties for each state
-function generateCountiesForState(stateAbbr, stateId) {
-  const countyCounts = {
-    'TX': 254, 'GA': 159, 'VA': 133, 'KY': 120, 'MO': 115, 'KS': 105, 'IL': 102, 'NC': 100, 'IA': 99, 'TN': 95,
-    'NE': 93, 'IN': 92, 'OH': 88, 'MN': 87, 'MI': 83, 'MS': 82, 'AR': 75, 'WI': 72, 'OK': 77, 'PA': 67,
-    'FL': 67, 'NY': 62, 'AL': 67, 'LA': 64, 'SC': 46, 'WV': 55, 'MD': 23, 'WA': 39, 'OR': 36, 'CA': 58,
-    'CO': 64, 'NV': 16, 'UT': 29, 'AZ': 15, 'ID': 44, 'MT': 56, 'WY': 23, 'ND': 53, 'SD': 66, 'KS': 105,
-    'OK': 77, 'NM': 33, 'TX': 254, 'LA': 64, 'AR': 75, 'MS': 82, 'TN': 95, 'KY': 120, 'VA': 133, 'NC': 100,
-    'SC': 46, 'GA': 159, 'FL': 67, 'AL': 67, 'MS': 82, 'TN': 95, 'KY': 120, 'OH': 88, 'IN': 92, 'IL': 102,
-    'MI': 83, 'WI': 72, 'MN': 87, 'IA': 99, 'MO': 115, 'AR': 75, 'LA': 64, 'OK': 77, 'TX': 254, 'KS': 105,
-    'NE': 93, 'SD': 66, 'ND': 53, 'MT': 56, 'WY': 23, 'CO': 64, 'NM': 33, 'AZ': 15, 'UT': 29, 'ID': 44,
-    'NV': 16, 'WA': 39, 'OR': 36, 'CA': 58, 'HI': 5, 'AK': 19
-  };
-  
-  const count = Math.min(countyCounts[stateAbbr] || 10, 20); // Limit to 20 for performance
-  const counties = [];
-  
-  for (let i = 1; i <= count; i++) {
-    counties.push({
-      name: `${stateAbbr} County ${i}`,
-      fips_code: `${stateAbbr}${i.toString().padStart(3, '0')}`,
-      us_state_id: stateId
-    });
-  }
-  
-  return counties;
-}
-
 // Generate unique candidate names
 function generateCandidateNames(count) {
   const firstNames = [
     'Marcus', 'Elizabeth', 'James', 'Aisha', 'Robert', 'Sofia', 'David', 'Jennifer', 'Christopher', 'Maria',
     'Michael', 'Sarah', 'William', 'Emily', 'John', 'Jessica', 'Richard', 'Ashley', 'Joseph', 'Amanda',
-    'Thomas', 'Nicole', 'Charles', 'Stephanie', 'Christopher', 'Rachel', 'Daniel', 'Lauren', 'Matthew', 'Megan',
-    'Anthony', 'Heather', 'Mark', 'Brittany', 'Donald', 'Danielle', 'Steven', 'Melissa', 'Paul', 'Christina',
-    'Andrew', 'Kelly', 'Joshua', 'Tiffany', 'Kenneth', 'Crystal', 'Kevin', 'Amber', 'Brian', 'Stephanie',
-    'George', 'Natalie', 'Timothy', 'Heather', 'Ronald', 'Melissa', 'Jason', 'Nicole', 'Edward', 'Christina',
-    'Jeffrey', 'Amanda', 'Ryan', 'Brittany', 'Jacob', 'Danielle', 'Gary', 'Megan', 'Nicholas', 'Lauren',
-    'Eric', 'Rachel', 'Jonathan', 'Stephanie', 'Stephen', 'Ashley', 'Larry', 'Jessica', 'Justin', 'Emily',
-    'Scott', 'Sarah', 'Brandon', 'Nicole', 'Benjamin', 'Amanda', 'Samuel', 'Brittany', 'Frank', 'Danielle',
-    'Gregory', 'Megan', 'Raymond', 'Lauren', 'Alexander', 'Rachel', 'Patrick', 'Stephanie', 'Jack', 'Ashley',
-    'Dennis', 'Jessica', 'Jerry', 'Emily', 'Tyler', 'Sarah', 'Aaron', 'Nicole', 'Jose', 'Amanda',
-    'Adam', 'Brittany', 'Nathan', 'Danielle', 'Henry', 'Megan', 'Douglas', 'Lauren', 'Zachary', 'Rachel',
-    'Peter', 'Stephanie', 'Kyle', 'Ashley', 'Walter', 'Jessica', 'Ethan', 'Emily', 'Jeremy', 'Sarah',
-    'Harold', 'Nicole', 'Carl', 'Amanda', 'Keith', 'Brittany', 'Roger', 'Danielle', 'Gerald', 'Megan',
-    'Christian', 'Lauren', 'Terry', 'Rachel', 'Sean', 'Stephanie', 'Gavin', 'Ashley', 'Austin', 'Jessica',
-    'Noah', 'Emily', 'Lucas', 'Sarah', 'Mason', 'Nicole', 'Oliver', 'Amanda', 'Carter', 'Brittany',
-    'Elijah', 'Danielle', 'Sebastian', 'Megan', 'William', 'Lauren', 'James', 'Rachel', 'Benjamin', 'Stephanie',
-    'Lucas', 'Ashley', 'Mason', 'Jessica', 'Ethan', 'Emily', 'Alexander', 'Sarah', 'Henry', 'Nicole',
-    'Jacob', 'Amanda', 'Michael', 'Brittany', 'Daniel', 'Danielle', 'Logan', 'Megan', 'Jackson', 'Lauren',
-    'Sebastian', 'Rachel', 'Jack', 'Stephanie', 'Owen', 'Ashley', 'Dylan', 'Jessica', 'Nathan', 'Emily',
-    'Isaac', 'Sarah', 'Ryan', 'Nicole', 'Adam', 'Amanda', 'Robert', 'Brittany', 'Tyler', 'Danielle',
-    'Nicholas', 'Megan', 'Evan', 'Lauren', 'Gavin', 'Rachel', 'Miles', 'Stephanie', 'Jace', 'Ashley'
+    'Thomas', 'Nicole', 'Charles', 'Stephanie', 'Daniel', 'Lauren', 'Matthew', 'Megan', 'Anthony', 'Heather',
+    'Mark', 'Brittany', 'Donald', 'Danielle', 'Steven', 'Melissa', 'Paul', 'Christina', 'Andrew', 'Kelly',
+    'Joshua', 'Tiffany', 'Kenneth', 'Crystal', 'Kevin', 'Amber', 'Brian', 'George', 'Natalie', 'Timothy',
+    'Ronald', 'Jason', 'Edward', 'Jeffrey', 'Ryan', 'Jacob', 'Gary', 'Nicholas', 'Eric', 'Jonathan',
+    'Stephen', 'Larry', 'Justin', 'Scott', 'Brandon', 'Benjamin', 'Samuel', 'Frank', 'Gregory', 'Raymond',
+    'Alexander', 'Patrick', 'Jack', 'Dennis', 'Jerry', 'Tyler', 'Aaron', 'Jose', 'Adam', 'Nathan',
+    'Henry', 'Douglas', 'Zachary', 'Peter', 'Kyle', 'Walter', 'Ethan', 'Jeremy', 'Harold', 'Carl',
+    'Keith', 'Roger', 'Gerald', 'Christian', 'Terry', 'Sean', 'Gavin', 'Austin', 'Noah', 'Lucas',
+    'Mason', 'Oliver', 'Carter', 'Elijah', 'Sebastian', 'Jackson', 'Owen', 'Dylan', 'Isaac', 'Evan',
+    'Miles', 'Jace', 'Cooper', 'Parker', 'Xavier', 'Chase', 'Colton', 'Blake', 'Carson', 'Brody'
   ];
   
   const lastNames = [
@@ -163,16 +125,7 @@ function generateCandidateNames(count) {
     'Fernandez', 'Mcdonald', 'Woods', 'Washington', 'Kennedy', 'Wells', 'Vargas', 'Henry', 'Chen', 'Freeman',
     'Webb', 'Tucker', 'Guzman', 'Burns', 'Crawford', 'Olson', 'Simpson', 'Porter', 'Hunter', 'Gordon',
     'Mendez', 'Silva', 'Shaw', 'Snyder', 'Mason', 'Dixon', 'Munoz', 'Hunt', 'Hicks', 'Holmes',
-    'Palmer', 'Wagner', 'Black', 'Robertson', 'Boyd', 'Rose', 'Stone', 'Spencer', 'Grant', 'Ward',
-    'Torres', 'Peterson', 'Gray', 'Ramirez', 'James', 'Watson', 'Brooks', 'Kelly', 'Sanders', 'Price',
-    'Bennett', 'Wood', 'Barnes', 'Ross', 'Henderson', 'Coleman', 'Jenkins', 'Perry', 'Powell', 'Long',
-    'Patterson', 'Hughes', 'Flores', 'Washington', 'Butler', 'Simmons', 'Foster', 'Gonzales', 'Bryant', 'Alexander',
-    'Russell', 'Griffin', 'Diaz', 'Hayes', 'Myers', 'Ford', 'Hamilton', 'Graham', 'Sullivan', 'Wallace',
-    'Woods', 'Cole', 'West', 'Jordan', 'Owens', 'Reynolds', 'Fisher', 'Ellis', 'Harrison', 'Gibson',
-    'Mcdonald', 'Cruz', 'Marshall', 'Ortiz', 'Gomez', 'Murray', 'Freeman', 'Wells', 'Webb', 'Simpson',
-    'Stevens', 'Tucker', 'Porter', 'Hunter', 'Hicks', 'Crawford', 'Henry', 'Boyd', 'Mason', 'Morris',
-    'Morgan', 'Hunt', 'Cooper', 'Peterson', 'Bailey', 'Reed', 'Kelly', 'Howard', 'Ramos', 'Kim',
-    'Cox', 'Ward', 'Richardson', 'Watson', 'Brooks', 'Chavez', 'Wood', 'James', 'Bennett', 'Gray'
+    'Palmer', 'Wagner', 'Black', 'Robertson', 'Boyd', 'Rose', 'Stone', 'Spencer', 'Grant', 'Ward'
   ];
   
   const candidates = [];
@@ -259,21 +212,6 @@ async function main() {
   }
   console.log(`✅ Created ${totalDistricts} Voting Districts`);
 
-  // Create Counties for all states
-  console.log('Creating Counties for all states...');
-  let totalCounties = 0;
-  
-  for (const state of createdStates) {
-    const counties = generateCountiesForState(state.abbreviation, state.id);
-    for (const county of counties) {
-      await prisma.uSCounty.create({
-        data: county
-      });
-      totalCounties++;
-    }
-  }
-  console.log(`✅ Created ${totalCounties} Counties`);
-
   // Create Election Types
   console.log('Creating Election Types...');
   const electionTypes = [
@@ -294,7 +232,7 @@ async function main() {
   }
   console.log(`✅ Created ${electionTypes.length} Election Types`);
 
-  // Create Election Cycle for November 3, 2026
+  // Create Election Cycle for November 3, 2026 ONLY
   console.log('Creating Election Cycle for November 3, 2026...');
   const electionCycle = await prisma.electionCycle.create({
     data: {
@@ -334,9 +272,9 @@ async function main() {
   }
   console.log(`✅ Created ${parties.length} Political Parties`);
 
-  // Generate candidates for all elections (need many more for comprehensive coverage)
+  // Generate candidates for all elections
   console.log('Generating comprehensive candidate list...');
-  const candidateCount = 5000; // Generate 5000 unique candidates to cover all elections
+  const candidateCount = 2000; // Generate 2000 unique candidates
   const candidateData = generateCandidateNames(candidateCount);
   
   console.log('Creating Candidates with random dog images...');
@@ -360,8 +298,8 @@ async function main() {
   }
   console.log(`✅ Created ${candidateData.length} Candidates`);
 
-  // Create comprehensive elections for all states
-  console.log('Creating comprehensive elections for all states...');
+  // Create comprehensive elections for November 3, 2026 ONLY
+  console.log('Creating comprehensive elections for November 3, 2026...');
   let totalElections = 0;
   let totalElectionCandidates = 0;
   let candidateIndex = 0;
@@ -550,8 +488,36 @@ async function main() {
 
   console.log(`✅ Created ${totalElections} Elections with ${totalElectionCandidates} Election Candidates`);
 
-  // Create sample key issues for some candidates
-  console.log('Creating sample key issues...');
+  // Create candidate view categories
+  console.log('Creating candidate view categories...');
+  const viewCategories = [
+    'Economic Policy', 'Social Issues', 'Foreign Policy', 'Environmental Policy', 
+    'Healthcare', 'Education', 'Immigration', 'National Security', 'Tax Policy',
+    'Infrastructure', 'Criminal Justice', 'Veterans Affairs', 'Agriculture',
+    'Technology', 'Labor Rights', 'Gun Policy', 'Abortion', 'LGBTQ Rights'
+  ];
+
+  const createdViewCategories = [];
+  for (const category of viewCategories) {
+    const createdCategory = await prisma.candidateViewCategory.create({
+      data: {
+        title: category
+      }
+    });
+    createdViewCategories.push(createdCategory);
+  }
+  console.log(`✅ Created ${viewCategories.length} candidate view categories`);
+
+  // Get ALL election candidates to create comprehensive data
+  console.log('Fetching all election candidates for comprehensive data creation...');
+  const allElectionCandidates = await prisma.electionCandidate.findMany();
+  console.log(`Found ${allElectionCandidates.length} election candidates`);
+
+  // Create comprehensive data for ALL candidates
+  console.log('Creating comprehensive data for all candidates...');
+
+  // 1. Key Issues for ALL candidates
+  console.log('Creating key issues for all candidates...');
   const keyIssueTemplates = [
     'Economic Growth and Job Creation',
     'Healthcare Reform and Access',
@@ -576,12 +542,8 @@ async function main() {
   ];
 
   let totalKeyIssues = 0;
-  const electionCandidates = await prisma.electionCandidate.findMany({
-    take: 100 // Limit to first 100 for performance
-  });
-
-  for (const candidate of electionCandidates) {
-    const issueCount = Math.floor(Math.random() * 3) + 1;
+  for (const candidate of allElectionCandidates) {
+    const issueCount = Math.floor(Math.random() * 3) + 1; // 1-3 issues per candidate
     for (let i = 0; i < issueCount; i++) {
       const randomIssue = keyIssueTemplates[Math.floor(Math.random() * keyIssueTemplates.length)];
       await prisma.candidateKeyIssue.create({
@@ -598,44 +560,121 @@ async function main() {
       totalKeyIssues++;
     }
   }
-  console.log(`✅ Created ${totalKeyIssues} sample key issues`);
+  console.log(`✅ Created ${totalKeyIssues} key issues for all candidates`);
 
-  // Create sample donations
-  console.log('Creating sample campaign donations...');
+  // 2. Views for ALL candidates
+  console.log('Creating candidate views for all candidates...');
+  let totalViews = 0;
+  for (const candidate of allElectionCandidates) {
+    const viewCount = Math.floor(Math.random() * 4) + 2; // 2-5 views per candidate
+    for (let i = 0; i < viewCount; i++) {
+      const randomCategory = createdViewCategories[Math.floor(Math.random() * createdViewCategories.length)];
+      const viewTexts = [
+        `Strong advocate for ${randomCategory.title.toLowerCase()} with proven track record.`,
+        `Committed to advancing ${randomCategory.title.toLowerCase()} through bipartisan cooperation.`,
+        `Leading voice on ${randomCategory.title.toLowerCase()} with innovative policy solutions.`,
+        `Dedicated to protecting ${randomCategory.title.toLowerCase()} for future generations.`,
+        `Experienced leader in ${randomCategory.title.toLowerCase()} with measurable results.`
+      ];
+      const randomViewText = viewTexts[Math.floor(Math.random() * viewTexts.length)];
+      
+      await prisma.candidateView.create({
+        data: {
+          candidate_id: candidate.candidate_id,
+          view_type_id: randomCategory.id,
+          view_text: randomViewText,
+          created_on: new Date(),
+          created_by: 'seed',
+          updated_on: new Date()
+        }
+      });
+      totalViews++;
+    }
+  }
+  console.log(`✅ Created ${totalViews} candidate views for all candidates`);
+
+  // 3. History for ALL candidates
+  console.log('Creating candidate histories for all candidates...');
+  const historyTemplates = [
+    'Served as State Representative for 8 years, focusing on economic development and job creation.',
+    'Former Mayor with 12 years of experience in municipal government and infrastructure projects.',
+    'Business leader with 20+ years in private sector, specializing in small business growth.',
+    'Military veteran with 15 years of service, including deployments to multiple conflict zones.',
+    'Educator with 18 years of experience in public schools, advocating for education reform.',
+    'Healthcare professional with 14 years of clinical practice and healthcare policy expertise.',
+    'Environmental scientist with 16 years of research experience in climate change mitigation.',
+    'Law enforcement officer with 22 years of service, including leadership roles in community policing.',
+    'Non-profit executive with 19 years of experience in social services and community development.',
+    'Technology entrepreneur with 13 years of experience in software development and digital innovation.',
+    'Agricultural expert with 17 years of experience in sustainable farming and rural development.',
+    'Legal professional with 21 years of experience in constitutional law and civil rights.',
+    'Financial advisor with 16 years of experience in economic policy and fiscal responsibility.',
+    'Transportation engineer with 15 years of experience in infrastructure planning and development.',
+    'Public health official with 18 years of experience in disease prevention and health policy.'
+  ];
+
+  let totalHistories = 0;
+  for (const candidate of allElectionCandidates) {
+    const historyCount = Math.floor(Math.random() * 3) + 1; // 1-3 histories per candidate
+    for (let i = 0; i < historyCount; i++) {
+      const randomHistory = historyTemplates[Math.floor(Math.random() * historyTemplates.length)];
+      
+      await prisma.candidateHistory.create({
+        data: {
+          candidate_id: candidate.candidate_id,
+          history_text: randomHistory,
+          created_on: new Date(),
+          created_by: 'seed',
+          updated_on: new Date()
+        }
+      });
+      totalHistories++;
+    }
+  }
+  console.log(`✅ Created ${totalHistories} candidate histories for all candidates`);
+
+  // 4. Donations for ALL candidates
+  console.log('Creating campaign donations for all candidates...');
   const donorNames = [
     'Progressive PAC', 'Conservative Coalition', 'Liberty Fund', 'Labor Union Local 123', 'Business Roundtable',
     'Environmental Action Fund', 'Veterans for America', 'Small Business Alliance', 'Healthcare Reform PAC',
     'Education First Coalition', 'Infrastructure Now', 'National Security PAC', 'Immigration Reform Fund',
     'Taxpayers Alliance', 'Social Justice PAC', 'Law Enforcement Support', 'Climate Action Fund',
-    'Rural Development PAC', 'Veterans Affairs Fund', 'Mental Health Coalition', 'Affordable Housing PAC'
+    'Rural Development PAC', 'Veterans Affairs Fund', 'Mental Health Coalition', 'Affordable Housing PAC',
+    'Technology Innovation Fund', 'Agricultural PAC', 'Transportation PAC', 'Energy Independence Fund',
+    'Criminal Justice Reform PAC', 'Workforce Development Fund', 'Small Business PAC', 'Manufacturing PAC',
+    'Retail PAC', 'Healthcare PAC', 'Education PAC', 'Defense PAC', 'Homeland Security PAC'
   ];
 
   let totalDonations = 0;
-  for (let i = 0; i < 200; i++) {
-    const randomCandidate = electionCandidates[Math.floor(Math.random() * electionCandidates.length)];
-    const randomDonor = donorNames[Math.floor(Math.random() * donorNames.length)];
-    const amount = (Math.random() * 10000 + 1000).toFixed(2);
-    
-    await prisma.electionCandidateDonation.create({
-      data: {
-        election_candidate_id: randomCandidate.id,
-        donor_name: randomDonor,
-        donation_amount: amount,
-        created_on: new Date(),
-        created_by: 'seed',
-        updated_on: new Date()
-      }
-    });
-    totalDonations++;
+  for (const candidate of allElectionCandidates) {
+    const donationCount = Math.floor(Math.random() * 5) + 2; // 2-6 donations per candidate
+    for (let i = 0; i < donationCount; i++) {
+      const randomDonor = donorNames[Math.floor(Math.random() * donorNames.length)];
+      const amount = (Math.random() * 10000 + 1000).toFixed(2);
+      
+      await prisma.electionCandidateDonation.create({
+        data: {
+          election_candidate_id: candidate.id,
+          donor_name: randomDonor,
+          donation_amount: amount,
+          created_on: new Date(),
+          created_by: 'seed',
+          updated_on: new Date()
+        }
+      });
+      totalDonations++;
+    }
   }
-  console.log(`✅ Created ${totalDonations} sample donations`);
+  console.log(`✅ Created ${totalDonations} campaign donations for all candidates`);
 
   console.log('🎉 Database seeding completed successfully!');
-  console.log(`📊 Summary: ${states.length} states, ${totalDistricts} districts, ${totalCounties} counties, ${candidateCount} candidates, ${parties.length} parties, ${totalElections} elections, ${totalElectionCandidates} election candidates, ${totalKeyIssues} key issues, ${totalDonations} donations`);
-  console.log('🗓️  All elections are scheduled for November 3, 2026 (future date)');
+  console.log(`📊 Summary: ${states.length} states, ${totalDistricts} districts, ${candidateCount} candidates, ${parties.length} parties, ${totalElections} elections, ${totalElectionCandidates} election candidates`);
+  console.log(`📊 Comprehensive Data: ${totalKeyIssues} key issues, ${totalViews} views, ${totalHistories} histories, ${totalDonations} donations`);
+  console.log('🗓️  All elections are scheduled for November 3, 2026 ONLY');
   console.log('🐕 Candidate profile pictures are random dog images from dog.ceo API');
   console.log('🌍 Comprehensive coverage: Presidential, Congressional (all districts), Senate (all states), Gubernatorial (all states)');
-  console.log('🔄 Candidates are reused across elections to ensure comprehensive coverage');
+  console.log('✅ EVERY candidate has Key Issues, Views, History, and Donations data');
 }
 
 main()
