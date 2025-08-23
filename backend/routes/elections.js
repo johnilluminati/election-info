@@ -195,7 +195,13 @@ router.get('/:id', async (req, res, next) => {
                       { end_date: { gt: new Date() } }
                     ]
                   }
-                }
+                },
+                candidate_views: {
+                  include: {
+                    view_category: true
+                  }
+                },
+                candidate_histories: true
               }
             },
             party: true,
@@ -243,7 +249,13 @@ router.get('/:id/candidates', async (req, res, next) => {
                   { end_date: { gt: new Date() } }
                 ]
               }
-            }
+            },
+            candidate_views: {
+              include: {
+                view_category: true
+              }
+            },
+            candidate_histories: true
           }
         },
         party: true,
