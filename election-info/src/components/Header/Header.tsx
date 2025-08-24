@@ -9,7 +9,7 @@ const headerLinks: HeaderLink[] = [
 
 const Header = () => {
   return (
-    <header className="bg-white dark:bg-nav-bg-color border-b border-gray-200">
+    <header className="sticky top-0 z-50 bg-white dark:bg-nav-bg-color border-b border-gray-200 shadow-sm">
       <Navbar links={headerLinks} />
     </header>
   )
