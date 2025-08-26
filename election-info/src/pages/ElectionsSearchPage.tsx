@@ -139,7 +139,7 @@ const ElectionsSearchPage = () => {
             <div className="flex basis-1/4 h-full flex-col pl-4">
               <span className="text-2xl font-bold text-center w-full pb-4 border-b">
                 <u>Upcoming Elections
-                  {selectedDistrict ? ` - District ${selectedDistrict}` : selectedState ? ` - ${selectedState}` : ''}
+                  {selectedDistrict ? ` - ${selectedDistrict}` : selectedState ? ` - ${selectedState}` : ''}
                 </u>
               </span>
               <div className="overflow-y-auto p-4">
