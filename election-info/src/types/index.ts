@@ -1,6 +1,7 @@
 export interface HeaderLink {
   text: string,
-  routerLink: string
+  routerLink: string,
+  alignment: 'left' | 'right'
 }
 
 export interface Candidate {
