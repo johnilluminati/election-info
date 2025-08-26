@@ -24,7 +24,10 @@ const CandidateComparison = ({ selectedElection, selectedState, selectedDistrict
   const candidateSectionRef = useRef<HTMLDivElement>(null);
 
   // Use detailed candidates if available, otherwise fall back to basic data
-  const candidates = detailedCandidates || selectedElection?.election_candidates || [];
+  const candidates = useMemo(() => 
+    detailedCandidates || selectedElection?.election_candidates || [], 
+    [detailedCandidates, selectedElection?.election_candidates]
+  );
 
   // Randomize candidate order to eliminate bias
   const randomizedCandidates = useMemo(() => {
