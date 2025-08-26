@@ -1,7 +1,7 @@
 import type { Election } from '../types/api';
 import { useElectionCandidates } from '../hooks';
 import Candidate from "./Candidate/Candidate";
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useRef } from 'react';
 
 interface CandidateComparisonProps {
   selectedElection: Election | null;
@@ -19,6 +19,9 @@ const CandidateComparison = ({ selectedElection, selectedState, selectedDistrict
 
   // State for selected candidates - now supports multiple selection
   const [selectedCandidateIndexes, setSelectedCandidateIndexes] = useState<number[]>([]);
+
+  // Ref for the candidate section to scroll to
+  const candidateSectionRef = useRef<HTMLDivElement>(null);
 
   // Use detailed candidates if available, otherwise fall back to basic data
   const candidates = detailedCandidates || selectedElection?.election_candidates || [];
@@ -39,6 +42,19 @@ const CandidateComparison = ({ selectedElection, selectedState, selectedDistrict
   useEffect(() => {
     setSelectedCandidateIndexes([]);
   }, [randomizedCandidates]);
+
+  // Auto-scroll when candidates are selected
+  useEffect(() => {
+    if (selectedCandidates.length > 0 && candidateSectionRef.current) {
+      // Use setTimeout to ensure the DOM has updated with the candidate content
+      setTimeout(() => {
+        candidateSectionRef.current?.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'start' 
+        });
+      }, 100);
+    }
+  }, [selectedCandidates.length]);
 
   // Debug logging to see what data we're getting
   useEffect(() => {
@@ -118,8 +134,6 @@ const CandidateComparison = ({ selectedElection, selectedState, selectedDistrict
     });
   };
 
-
-
   return (
     <>
       <section>
@@ -167,8 +181,8 @@ const CandidateComparison = ({ selectedElection, selectedState, selectedDistrict
                       <div
                         key={electionCandidate.id}
                         className={`flex items-center space-x-2 px-3 py-2 rounded-lg border-2 transition-all cursor-pointer ${isSelected
-                            ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 shadow-md'
-                            : 'border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/10'
+                          ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 shadow-md'
+                          : 'border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/10'
                           }`}
                         onClick={() => selectCandidate(index)}
                       >
@@ -200,7 +214,7 @@ const CandidateComparison = ({ selectedElection, selectedState, selectedDistrict
 
               {/* Candidate Comparison Area - Shown when candidates are selected */}
               {selectedCandidates.length > 0 && (
-                <div className="flex flex-col">
+                <div ref={candidateSectionRef} className="flex flex-col">
                   <div className="text-center mb-4">
                     <h3 className="text-lg font-semibold">
                       {selectedCandidates.length === 1 ? 'Candidate Details' : 'Candidate Comparison'}
