@@ -182,10 +182,10 @@ const ElectionsSearchPage = () => {
                               </div>
                               <button
                                 onClick={() => handleElectionClick(election)}
-                                className={`w-full text-left p-2 rounded hover:bg-blue-50 transition-colors ${
+                                className={`w-full text-left p-2 rounded transition-colors ${
                                   selectedElection?.id === election.id 
-                                    ? 'bg-blue-100 border-l-4 border-blue-500' 
-                                    : 'hover:bg-gray-50'
+                                    ? 'bg-blue-100 dark:bg-blue-900/30 border-l-4 border-blue-500 dark:border-blue-400' 
+                                    : 'hover:bg-gray-50 dark:hover:bg-gray-800'
                                 }`}
                               >
                                 {election.election_candidates && election.election_candidates.length > 0 ? (
