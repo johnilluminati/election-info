@@ -3,7 +3,7 @@ import Navbar from "./Navbar"
 
 const headerLinks: HeaderLink[] = [
   { text: 'Search Candidates', routerLink: '/candidates' },
-  { text: 'Elections (Dropdown?)', routerLink: '/elections' },
+  { text: 'Search Elections', routerLink: '/elections' },
   { text: `Parties' Stances`, routerLink: '/party-stances' },
 ]
 
