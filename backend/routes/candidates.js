@@ -7,7 +7,18 @@ const prisma = new PrismaClient();
 // GET /api/candidates - Get all candidates with pagination
 router.get('/', async (req, res, next) => {
   try {
-    const { page = 1, limit = 20, search } = req.query;
+    const { page = 1, limit = 20, search, state, election_type, party } = req.query;
+    
+    // Debug logging
+    console.log('API Request Query Parameters:', req.query);
+    console.log('Filter check - state:', state, 'election_type:', election_type, 'party:', party);
+    
+    // If any of the new filter parameters are provided, use the election candidates endpoint
+    if (state || election_type || party) {
+      console.log('Using election candidates endpoint');
+      return await getElectionCandidates(req, res, next);
+    }
+    
     const skip = (parseInt(page) - 1) * parseInt(limit);
     
     const where = search ? {
@@ -64,6 +75,137 @@ router.get('/', async (req, res, next) => {
     next(error);
   }
 });
+
+// Helper function to get election candidates with filtering
+async function getElectionCandidates(req, res, next) {
+  try {
+    const { search, state, election_type, party, page = 1, limit = 50 } = req.query;
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+    
+    console.log('getElectionCandidates called with:', { search, state, election_type, party, page, limit });
+    
+    // Build where clause for filtering
+    const where = {};
+    
+    if (search) {
+      where.OR = [
+        { candidate: { first_name: { contains: search, mode: 'insensitive' } } },
+        { candidate: { last_name: { contains: search, mode: 'insensitive' } } },
+        { candidate: { nickname: { contains: search, mode: 'insensitive' } } }
+      ];
+    }
+    
+    if (election_type) {
+      console.log('Adding election_type filter:', election_type);
+      where.election = {
+        election_type: {
+          name: { contains: election_type, mode: 'insensitive' }
+        }
+      };
+    }
+    
+    if (party) {
+      console.log('Adding party filter:', party);
+      where.party = {
+        name: { contains: party, mode: 'insensitive' }
+      };
+    }
+    
+         if (state) {
+       console.log('Adding state filter:', state);
+       
+       // Try to find the state in the geographies
+       // Since we don't know the exact structure yet, let's try a few approaches
+       if (!where.election) {
+         where.election = {};
+       }
+       
+       where.election.geographies = {
+         some: {
+           OR: [
+             // Try exact match first
+             { scope_id: { equals: state } },
+             // Try contains match
+             { scope_id: { contains: state, mode: 'insensitive' } },
+             // Try with state abbreviation (e.g., "DE" for "Delaware")
+             { scope_id: { contains: state.substring(0, 2).toUpperCase(), mode: 'insensitive' } },
+             // Try with state abbreviation (e.g., "Del" for "Delaware")
+             { scope_id: { contains: state.substring(0, 3).toLowerCase(), mode: 'insensitive' } }
+           ]
+         }
+       };
+       
+       console.log('State filter applied:', JSON.stringify(where.election.geographies, null, 2));
+     }
+    
+    console.log('Final where clause:', JSON.stringify(where, null, 2));
+    
+    const [electionCandidates, total] = await Promise.all([
+      prisma.electionCandidate.findMany({
+        where,
+        include: {
+          candidate: true,
+          party: true,
+          election: {
+            include: {
+              election_cycle: true,
+              election_type: true,
+              geographies: {
+                include: {
+                  // Include state information for debugging
+                }
+              }
+            }
+          }
+        },
+        skip,
+        take: parseInt(limit),
+        orderBy: [
+          { candidate: { last_name: 'asc' } },
+          { candidate: { first_name: 'asc' } }
+        ]
+      }),
+      prisma.electionCandidate.count({ where })
+    ]);
+    
+    console.log(`Found ${electionCandidates.length} election candidates, total: ${total}`);
+    
+    if (electionCandidates.length > 0) {
+      console.log('Sample candidate data structure:', {
+        candidate: electionCandidates[0].candidate?.first_name + ' ' + electionCandidates[0].candidate?.last_name,
+        party: electionCandidates[0].party?.name,
+        electionType: electionCandidates[0].election?.election_type?.name,
+        geographies: electionCandidates[0].election?.geographies,
+        geographyCount: electionCandidates[0].election?.geographies?.length || 0
+      });
+      
+      // Log all geography data for debugging
+      if (electionCandidates[0].election?.geographies?.length > 0) {
+        console.log('All geography entries:', electionCandidates[0].election.geographies.map(g => ({
+          scope_type: g.scope_type,
+          scope_id: g.scope_id
+        })));
+      } else {
+        console.log('No geography data found for this candidate');
+      }
+    } else {
+      console.log('No candidates found');
+    }
+    
+    res.json({
+      data: electionCandidates,
+      pagination: {
+        page: parseInt(page),
+        limit: parseInt(limit),
+        total,
+        pages: Math.ceil(total / parseInt(limit))
+      }
+    });
+  } catch (error) {
+    console.error('Error in getElectionCandidates:', error);
+    next(error);
+  }
+}
 
 // GET /api/candidates/:id/elections - Get elections for a candidate (MUST come before /:id)
 router.get('/:id/elections', async (req, res, next) => {
@@ -263,6 +405,41 @@ router.get('/:id', async (req, res, next) => {
     
     res.json(candidate);
   } catch (error) {
+    next(error);
+  }
+});
+
+// GET /api/candidates/debug/geography - Debug endpoint to see geography data structure
+router.get('/debug/geography', async (req, res, next) => {
+  try {
+    const { state, election_type, party } = req.query;
+    
+    console.log('Debug geography request:', { state, election_type, party });
+    
+    // Get a sample of election candidates with their geography data
+    const sampleData = await prisma.electionCandidate.findMany({
+      take: 5,
+      include: {
+        candidate: true,
+        party: true,
+        election: {
+          include: {
+            election_type: true,
+            geographies: true
+          }
+        }
+      }
+    });
+    
+    console.log('Sample data structure:', JSON.stringify(sampleData, null, 2));
+    
+    res.json({
+      message: 'Check server console for sample data structure',
+      sampleCount: sampleData.length,
+      sampleData
+    });
+  } catch (error) {
+    console.error('Error in debug endpoint:', error);
     next(error);
   }
 });
