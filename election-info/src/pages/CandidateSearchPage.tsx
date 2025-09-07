@@ -1,7 +1,8 @@
 import { useState, useMemo, useEffect, useCallback } from 'react';
-import { FaSearch, FaMapMarkerAlt, FaCalendarAlt, FaUserTie } from 'react-icons/fa';
+import { FaSearch, FaMapMarkerAlt, FaCalendarAlt, FaUserTie, FaChevronDown, FaChevronRight } from 'react-icons/fa';
 import type { ElectionCandidate } from '../types/api';
 import { useStates } from '../hooks';
+import { STATE_ABBREVIATION } from '../lib/constants';
 import CandidateModal from '../components/Candidate/CandidateModal';
 
 const CandidateSearchPage = () => {
@@ -19,6 +20,9 @@ const CandidateSearchPage = () => {
   const [selectedCandidate, setSelectedCandidate] = useState<ElectionCandidate | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalLoading, setIsModalLoading] = useState(false);
+  
+  // Collapsible sections state
+  const [collapsedSections, setCollapsedSections] = useState<Set<string>>(new Set());
 
      // Fetch states for the filter
    const { data: states } = useStates();
@@ -43,6 +47,39 @@ const CandidateSearchPage = () => {
   // Available filter options
   const electionTypes = ['Presidential', 'Senate', 'Gubernatorial', 'Congressional', 'State Legislature', 'Local'];
   const parties = ['Democratic Party', 'Republican Party', 'Independent', 'Green Party', 'Libertarian Party'];
+
+  // Helper function to extract state name from candidate geography data
+  const getStateFromCandidate = (candidate: ElectionCandidate): string => {
+    const geographies = candidate.election?.geographies || [];
+    const stateGeo = geographies.find(g => g.scope_type === 'STATE');
+    return stateGeo?.scope_id || 'Unknown State';
+  };
+
+  // Create reverse mapping from abbreviation to full state name
+  const stateAbbreviationToName = useMemo(() => {
+    const reverse: Record<string, string> = {};
+    Object.entries(STATE_ABBREVIATION).forEach(([fullName, abbreviation]) => {
+      reverse[abbreviation] = fullName;
+    });
+    return reverse;
+  }, []);
+
+  // Helper function to format state display name
+  const formatStateDisplayName = useCallback((stateName: string): string => {
+    // If it's already a full state name, return as is
+    if (STATE_ABBREVIATION[stateName]) {
+      return `${stateName} - ${STATE_ABBREVIATION[stateName]}`;
+    }
+    
+    // If it's an abbreviation, convert to full name
+    const fullName = stateAbbreviationToName[stateName];
+    if (fullName) {
+      return `${fullName} - ${stateName}`;
+    }
+    
+    // If we can't determine, return as is
+    return stateName;
+  }, [stateAbbreviationToName]);
 
      // Check if any filters are active
    const hasActiveFilters = useMemo(() => {
@@ -96,6 +133,19 @@ const CandidateSearchPage = () => {
    const handleCloseModal = useCallback(() => {
      setIsModalOpen(false);
      setSelectedCandidate(null);
+   }, []);
+   
+   // Toggle collapsible section
+   const toggleSection = useCallback((sectionName: string) => {
+     setCollapsedSections(prev => {
+       const newSet = new Set(prev);
+       if (newSet.has(sectionName)) {
+         newSet.delete(sectionName);
+       } else {
+         newSet.add(sectionName);
+       }
+       return newSet;
+     });
    }, []);
    
    // Generate cache key from current filters
@@ -219,7 +269,7 @@ const CandidateSearchPage = () => {
      };
 
      fetchCandidates();
-      }, [getCacheKey, hasActiveFilters, searchCache]);
+      }, [getCacheKey, hasActiveFilters, searchCache, addToCache, searchQuery, selectedElectionType, selectedParty, selectedState]);
 
    // Determine grouping strategy based on current filter combinations
    const groupingStrategy = useMemo(() => {
@@ -269,17 +319,25 @@ const CandidateSearchPage = () => {
      }
      
      if (groupingStrategy === 'by_state') {
-       // Group by state - for now, we'll use a placeholder since state info isn't directly available
-       // This would need to be enhanced when state geography data is available
+       // Group by state using geography data
        const grouped = candidates.reduce((acc, candidate) => {
-         const state = 'All States'; // Placeholder - would need to be extracted from geography data
+         const state = getStateFromCandidate(candidate);
          if (!acc[state]) acc[state] = [];
          acc[state].push(candidate);
          return acc;
        }, {} as Record<string, typeof candidates>);
        
        const result = Object.entries(grouped)
-         .map(([state, candidates]) => ({ group: state, candidates }));
+         .sort(([a], [b]) => {
+           // Sort by the original state name for consistent ordering
+           const stateA = stateAbbreviationToName[a] || a;
+           const stateB = stateAbbreviationToName[b] || b;
+           return stateA.localeCompare(stateB);
+         })
+         .map(([state, candidates]) => ({ 
+           group: formatStateDisplayName(state), 
+           candidates 
+         }));
        
        console.log('State grouping result:', result);
        return result;
@@ -320,7 +378,7 @@ const CandidateSearchPage = () => {
      
      console.log('Election type grouping result:', result);
      return result;
-   }, [candidates, groupingStrategy]);
+   }, [candidates, groupingStrategy, formatStateDisplayName, stateAbbreviationToName]);
 
    // Filter and sort candidates within groups
    const processedCandidates = useMemo(() => {
@@ -569,21 +627,41 @@ const CandidateSearchPage = () => {
 
          {!isLoading && !error && hasActiveFilters && candidates.length > 0 && (
            <div className="space-y-8">
-             {processedCandidates.map((group) => (
-               <div key={group.group} className="space-y-4">
-                 {/* Group Header */}
-                 <div className="border-b border-gray-200 dark:border-gray-700 pb-2">
-                   <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-                     {group.group}
-                   </h3>
-                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                     {group.candidates.length} candidate{group.candidates.length !== 1 ? 's' : ''}
-                   </p>
-                 </div>
+             {processedCandidates.map((group) => {
+               const isCollapsed = collapsedSections.has(group.group);
+               return (
+                 <div key={group.group} className="space-y-4">
+                   {/* Group Header */}
+                   <div className="border-b border-gray-200 dark:border-gray-700 pb-2">
+                     <div className="flex items-center justify-between">
+                       <div className="flex-1">
+                         <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+                           {group.group}
+                         </h3>
+                         <p className="text-sm text-gray-600 dark:text-gray-400">
+                           {group.candidates.length} candidate{group.candidates.length !== 1 ? 's' : ''}
+                         </p>
+                       </div>
+                       {groupingStrategy === 'by_state' && (
+                         <button
+                           onClick={() => toggleSection(group.group)}
+                           className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
+                           aria-label={isCollapsed ? 'Expand section' : 'Collapse section'}
+                         >
+                           {isCollapsed ? (
+                             <FaChevronRight className="w-4 h-4" />
+                           ) : (
+                             <FaChevronDown className="w-4 h-4" />
+                           )}
+                         </button>
+                       )}
+                     </div>
+                   </div>
 
                  {/* Candidates Grid */}
-                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                   {group.candidates.map((candidate) => (
+                 {!isCollapsed && (
+                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                     {group.candidates.map((candidate) => (
                      <div
                        key={candidate.id}
                        className="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow border border-gray-200 dark:border-gray-700 overflow-hidden"
@@ -651,10 +729,12 @@ const CandidateSearchPage = () => {
                          </button>
                        </div>
                      </div>
-                   ))}
-                 </div>
+                     ))}
+                   </div>
+                 )}
                </div>
-             ))}
+             );
+             })}
            </div>
          )}
       </div>
