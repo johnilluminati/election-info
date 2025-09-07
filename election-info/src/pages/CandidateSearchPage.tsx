@@ -2,6 +2,7 @@ import { useState, useMemo, useEffect, useCallback } from 'react';
 import { FaSearch, FaMapMarkerAlt, FaCalendarAlt, FaUserTie } from 'react-icons/fa';
 import type { ElectionCandidate } from '../types/api';
 import { useStates } from '../hooks';
+import CandidateModal from '../components/Candidate/CandidateModal';
 
 const CandidateSearchPage = () => {
   // Search and filter state
@@ -13,6 +14,11 @@ const CandidateSearchPage = () => {
   const [candidates, setCandidates] = useState<ElectionCandidate[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  
+  // Modal state
+  const [selectedCandidate, setSelectedCandidate] = useState<ElectionCandidate | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalLoading, setIsModalLoading] = useState(false);
 
      // Fetch states for the filter
    const { data: states } = useStates();
@@ -63,6 +69,33 @@ const CandidateSearchPage = () => {
        
        return newCache;
      });
+   }, []);
+   
+   // Modal handlers
+   const handleViewDetails = useCallback(async (candidate: ElectionCandidate) => {
+     try {
+       setIsModalLoading(true);
+       setIsModalOpen(true);
+       
+       // Use the candidate data from search results
+       setSelectedCandidate(candidate);
+       
+       // TODO: Fetch detailed candidate information when the detailed API is ready
+       // const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+       // const response = await fetch(`${API_BASE_URL}/api/candidates/${candidate.candidate?.id}`);
+       // ... detailed data fetching logic
+       
+     } catch (error) {
+       console.error('Error in handleViewDetails:', error);
+       setSelectedCandidate(candidate);
+     } finally {
+       setIsModalLoading(false);
+     }
+   }, []);
+   
+   const handleCloseModal = useCallback(() => {
+     setIsModalOpen(false);
+     setSelectedCandidate(null);
    }, []);
    
    // Generate cache key from current filters
@@ -610,7 +643,10 @@ const CandidateSearchPage = () => {
 
                        {/* Action Button */}
                        <div className="px-6 pb-6">
-                         <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors">
+                         <button 
+                           onClick={() => handleViewDetails(candidate)}
+                           className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors"
+                         >
                            View Details
                          </button>
                        </div>
@@ -622,6 +658,14 @@ const CandidateSearchPage = () => {
            </div>
          )}
       </div>
+      
+      {/* Candidate Modal */}
+      <CandidateModal
+        candidate={selectedCandidate}
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        isLoading={isModalLoading}
+      />
     </div>
   );
 };

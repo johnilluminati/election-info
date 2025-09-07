@@ -1,0 +1,254 @@
+import { useEffect } from 'react';
+import { FaTimes, FaExternalLinkAlt } from 'react-icons/fa';
+import type { ElectionCandidate } from '../../types/api';
+import CandidateInfoTabs from './CandidateInfoTabs';
+
+interface CandidateModalProps {
+  candidate: ElectionCandidate | null;
+  isOpen: boolean;
+  onClose: () => void;
+  isLoading?: boolean;
+}
+
+const CandidateModal = ({ candidate, isOpen, onClose, isLoading = false }: CandidateModalProps) => {
+  // Close modal on Escape key press
+  useEffect(() => {
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('keydown', handleEscape);
+      // Prevent body scroll when modal is open
+      document.body.style.overflow = 'hidden';
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen, onClose]);
+
+  // Create tab data for the modal
+  const tabData = candidate ? [
+    {
+      title: "Key Issues",
+      link: "/key_issues",
+      component: (
+        <div className="flex flex-col p-2">
+          {candidate.key_issues && candidate.key_issues.length > 0 ? (
+            candidate.key_issues.map((issue) => (
+              <div key={issue.id} className="border p-2 mb-2">
+                <div className="font-semibold text-sm text-gray-600 mb-1">
+                  Issue #{issue.order_of_important}
+                </div>
+                <div className="text-base">{issue.issue_text}</div>
+                {issue.view_text && (
+                  <div className="text-sm text-gray-600 mt-1 italic">
+                    {issue.view_text}
+                  </div>
+                )}
+              </div>
+            ))
+          ) : (
+            <div className="text-gray-500 italic">No key issues available for this election</div>
+          )}
+        </div>
+      )
+    },
+    {
+      title: "Views",
+      link: "/views",
+      component: (
+        <div className="flex flex-col p-2">
+          {candidate.candidate?.candidate_views && candidate.candidate.candidate_views.length > 0 ? (
+            candidate.candidate.candidate_views.map((view) => (
+              <div key={view.id} className="border p-2 mb-2">
+                <div className="font-semibold text-sm text-gray-600 mb-1">
+                  {view.view_category?.title || 'General View'}
+                </div>
+                <div className="text-base">{view.view_text}</div>
+              </div>
+            ))
+          ) : (
+            <div className="text-gray-500 italic">No candidate views available</div>
+          )}
+        </div>
+      )
+    },
+    {
+      title: "History",
+      link: "/history",
+      component: (
+        <div className="flex flex-col p-2">
+          {candidate.candidate?.candidate_histories && candidate.candidate.candidate_histories.length > 0 ? (
+            candidate.candidate.candidate_histories.map((history) => (
+              <div key={history.id} className="border p-2 mb-2">
+                <div className="text-base">{history.history_text}</div>
+              </div>
+            ))
+          ) : (
+            <div className="text-gray-500 italic">No candidate history available</div>
+          )}
+        </div>
+      )
+    },
+    {
+      title: "Donations",
+      link: "/donations",
+      component: (
+        <div className="flex flex-col p-2">
+          {candidate.donations && candidate.donations.length > 0 ? (
+            candidate.donations.map((donation) => (
+              <div key={donation.id} className="border p-2 mb-2">
+                <div className="flex justify-between items-center">
+                  <div className="font-semibold">{donation.donor_name}</div>
+                  <div className="text-green-600 font-mono">
+                    ${parseFloat(donation.donation_amount).toLocaleString()}
+                  </div>
+                </div>
+                <div className="text-xs text-gray-500 mt-1">
+                  {new Date(donation.created_on).toLocaleDateString()}
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="text-gray-500 italic">No donation records available for this election</div>
+          )}
+        </div>
+      )
+    }
+  ] : [];
+
+  // Close modal when clicking outside
+  const handleBackdropClick = (event: React.MouseEvent) => {
+    if (event.target === event.currentTarget) {
+      onClose();
+    }
+  };
+
+  // Prevent modal content clicks from closing the modal
+  const handleModalContentClick = (event: React.MouseEvent) => {
+    event.stopPropagation();
+  };
+
+  if (!isOpen || !candidate) {
+    return null;
+  }
+
+  return (
+    <div 
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray/20 backdrop-blur-sm"
+      onClick={handleBackdropClick}
+    >
+      <div 
+        className="relative w-full max-w-4xl max-h-[90vh] bg-white dark:bg-gray-800 rounded-lg shadow-xl overflow-hidden"
+        onClick={handleModalContentClick}
+      >
+        {/* Modal Header */}
+        <div className="p-6 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700">
+          <div className="flex items-start justify-between">
+            <div className="flex items-start space-x-6">
+              <div className="w-20 h-20 rounded-full bg-gray-200 dark:bg-gray-600 flex items-center justify-center flex-shrink-0">
+                {candidate.candidate?.picture_link ? (
+                  <img
+                    src={candidate.candidate.picture_link}
+                    alt={`${candidate.candidate.first_name} ${candidate.candidate.last_name}`}
+                    className="w-full h-full rounded-full object-cover"
+                  />
+                ) : (
+                  <span className="text-2xl text-gray-500 dark:text-gray-400">
+                    {candidate.candidate?.first_name?.[0]}{candidate.candidate?.last_name?.[0]}
+                  </span>
+                )}
+              </div>
+              <div className="flex-1">
+                <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+                  {candidate.candidate?.first_name} {candidate.candidate?.last_name}
+                  {candidate.candidate?.nickname && (
+                    <span className="text-xl font-normal text-gray-600 dark:text-gray-400 ml-3">
+                      "{candidate.candidate.nickname}"
+                    </span>
+                  )}
+                </h2>
+                <div className="space-y-1">
+                  <p className="text-lg text-gray-700 dark:text-gray-300">
+                    <span className="font-semibold">{candidate.party?.name || 'Independent'}</span>
+                    <span className="mx-2">•</span>
+                    <span>
+                      {(() => {
+                        const electionType = candidate.election?.election_type?.name;
+                        const geographies = candidate.election?.geographies || [];
+                        
+                        // Find state geography if available
+                        const stateGeo = geographies.find(g => g.scope_type === 'STATE');
+                        const stateName = stateGeo?.scope_id || 'Unknown State';
+                        
+                        // Map election types to position titles
+                        const positionMap: Record<string, string> = {
+                          'Presidential': 'President of the United States',
+                          'Senate': 'U.S. Senator',
+                          'Gubernatorial': 'Governor',
+                          'Congressional': 'U.S. Representative',
+                          'State Legislature': 'State Legislator',
+                          'Local': 'Local Office'
+                        };
+                        
+                        const position = positionMap[electionType || ''] || electionType || 'Public Office';
+                        
+                        return `Running for ${position}${stateGeo ? ` in ${stateName}` : ''}`;
+                      })()}
+                    </span>
+                  </p>
+                  {candidate.website && (
+                    <a
+                      href={candidate.website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center space-x-2 text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 text-sm font-medium transition-colors"
+                    >
+                      <FaExternalLinkAlt className="text-xs" />
+                      <span>{candidate.website}</span>
+                    </a>
+                  )}
+                </div>
+              </div>
+            </div>
+            
+            <button
+              onClick={onClose}
+              className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors flex-shrink-0"
+              aria-label="Close modal"
+            >
+              <FaTimes className="w-6 h-6" />
+            </button>
+          </div>
+        </div>
+
+        {/* Modal Content */}
+        <div className="overflow-y-auto max-h-[calc(90vh-120px)]">
+          <div className="p-6">
+            {isLoading ? (
+              <div className="flex items-center justify-center py-12">
+                <div className="text-center">
+                  <div className="text-blue-600 dark:text-blue-400 text-lg mb-2">
+                    Loading candidate details...
+                  </div>
+                  <p className="text-sm text-gray-400 dark:text-gray-500">
+                    Please wait while we fetch the latest information.
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <CandidateInfoTabs tabs={tabData} />
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default CandidateModal;

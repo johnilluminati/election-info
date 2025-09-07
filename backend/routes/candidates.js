@@ -144,8 +144,31 @@ async function getElectionCandidates(req, res, next) {
       prisma.electionCandidate.findMany({
         where,
         include: {
-          candidate: true,
+          candidate: {
+            include: {
+              candidate_views: {
+                include: {
+                  view_category: true
+                }
+              },
+              candidate_histories: {
+                orderBy: {
+                  created_on: 'desc'
+                }
+              }
+            }
+          },
           party: true,
+          key_issues: {
+            orderBy: {
+              order_of_important: 'asc'
+            }
+          },
+          donations: {
+            orderBy: {
+              donation_amount: 'desc'
+            }
+          },
           election: {
             include: {
               election_cycle: true,
