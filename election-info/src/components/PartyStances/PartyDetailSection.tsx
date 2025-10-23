@@ -2,6 +2,8 @@ import { useState } from 'react'
 import type { PoliticalParty } from '../../types/api'
 import PartyCandidatesSection from './PartyCandidatesSection'
 import PartyLeadership from './PartyLeadership'
+import { useParty } from '../../hooks/useParties'
+import { useStates } from '../../hooks'
 import { FaTimes } from 'react-icons/fa'
 
 interface PartyDetailSectionProps {
@@ -11,6 +13,12 @@ interface PartyDetailSectionProps {
 
 const PartyDetailSection = ({ selectedParty, onClose }: PartyDetailSectionProps) => {
   const [isLeadershipExpanded, setIsLeadershipExpanded] = useState(false)
+  
+  // Fetch complete party data including candidates
+  const { data: fullPartyData, isLoading: partyLoading } = useParty(selectedParty?.id || '')
+  
+  // Fetch states data for filtering
+  const { data: states } = useStates()
 
   if (!selectedParty) return null
 
@@ -229,10 +237,18 @@ const PartyDetailSection = ({ selectedParty, onClose }: PartyDetailSectionProps)
       {/* Candidates */}
       <div>
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Active Candidates</h3>
-        <PartyCandidatesSection 
-          candidates={selectedParty.candidate_parties || []}
-          electionCandidates={selectedParty.election_candidates}
-        />
+        {partyLoading ? (
+          <div className="text-center py-4 text-gray-500 dark:text-gray-400 text-sm">
+            Loading candidates...
+          </div>
+        ) : (
+          <PartyCandidatesSection 
+            candidates={fullPartyData?.candidate_parties || []}
+            electionCandidates={fullPartyData?.election_candidates}
+            states={states}
+            selectedPartyName={selectedParty.name}
+          />
+        )}
       </div>
     </div>
   )

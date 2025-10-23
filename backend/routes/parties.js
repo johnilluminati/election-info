@@ -81,6 +81,13 @@ router.get('/:id', async (req, res, next) => {
                 nickname: true,
                 picture_link: true
               }
+            },
+            political_party: {
+              select: {
+                id: true,
+                name: true,
+                party_code: true
+              }
             }
           },
           where: {
@@ -101,10 +108,18 @@ router.get('/:id', async (req, res, next) => {
                 picture_link: true
               }
             },
+            party: {
+              select: {
+                id: true,
+                name: true,
+                party_code: true
+              }
+            },
             election: {
               include: {
                 election_cycle: true,
-                election_type: true
+                election_type: true,
+                geographies: true
               }
             }
           },
