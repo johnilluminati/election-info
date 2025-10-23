@@ -118,10 +118,10 @@ const PartyCandidatesSection = ({
   
   const toggleCandidateExpansion = (candidateId: string) => {
     setExpandedCandidates(prev => {
-      const newSet = new Set(prev)
-      if (newSet.has(candidateId)) {
-        newSet.delete(candidateId)
-      } else {
+      const newSet = new Set<string>()
+      // If the clicked candidate is already expanded, collapse it
+      // If it's not expanded, expand it and collapse all others
+      if (!prev.has(candidateId)) {
         newSet.add(candidateId)
       }
       return newSet
@@ -235,92 +235,99 @@ const PartyCandidatesSection = ({
         {displayCandidates.map((candidate, index) => (
           <div key={`candidate-${candidate.id}-${index}`}>
             <div 
-              className="flex items-center space-x-3 p-3 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-sm transition-shadow cursor-pointer"
+              className={`bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-sm transition-shadow cursor-pointer ${
+                expandedCandidates.has(candidate.id) ? 'rounded-b-none' : ''
+              }`}
               onClick={() => toggleCandidateExpansion(candidate.id)}
             >
-              {/* Candidate Photo */}
-              <div className="flex-shrink-0">
-                {candidate.picture ? (
-                  <img
-                    src={candidate.picture}
-                    alt={candidate.name}
-                    className="w-10 h-10 rounded-full object-cover"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.style.display = 'none';
-                      target.nextElementSibling?.classList.remove('hidden');
-                    }}
-                  />
-                ) : null}
-                <div className={`w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center ${candidate.picture ? 'hidden' : ''}`}>
-                  <FaUser className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+              <div className="flex items-center space-x-3 p-3">
+                {/* Candidate Photo */}
+                <div className="flex-shrink-0">
+                  {candidate.picture ? (
+                    <img
+                      src={candidate.picture}
+                      alt={candidate.name}
+                      className="w-10 h-10 rounded-full object-cover"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.style.display = 'none';
+                        target.nextElementSibling?.classList.remove('hidden');
+                      }}
+                    />
+                  ) : null}
+                  <div className={`w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center ${candidate.picture ? 'hidden' : ''}`}>
+                    <FaUser className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                  </div>
                 </div>
-              </div>
-              
-              {/* Candidate Info */}
-              <div className="flex-1 min-w-0">
-                <h5 className="text-sm font-medium text-gray-900 dark:text-white truncate">
-                  {candidate.nickname ? `${candidate.name} (${candidate.nickname})` : candidate.name}
-                </h5>
                 
-                {candidate.type === 'running' && candidate.election && (() => {
-                  const stateGeo = candidate.election.geographies?.find(geo => geo.scope_type === 'STATE')
+                {/* Candidate Info */}
+                <div className="flex-1 min-w-0">
+                  <h5 className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                    {candidate.nickname ? `${candidate.name} (${candidate.nickname})` : candidate.name}
+                  </h5>
                   
-                  // Map election types to proper office names
-                  const officeMap: Record<string, string> = {
-                    'Presidential': 'President',
-                    'Senate': 'Senate',
-                    'Gubernatorial': 'Governor',
-                    'Congressional': 'Congress',
-                    'State Legislature': 'State Legislature',
-                    'Local': 'Local Office'
-                  }
-                  
-                  const officeName = officeMap[candidate.election.election_type?.name || ''] || candidate.election.election_type?.name || 'Office'
-                  
-                  // Special handling for Presidential elections
-                  if (candidate.election.election_type?.name === 'Presidential') {
+                  {candidate.type === 'running' && candidate.election && (() => {
+                    const stateGeo = candidate.election.geographies?.find(geo => geo.scope_type === 'STATE')
+                    
+                    // Map election types to proper office names
+                    const officeMap: Record<string, string> = {
+                      'Presidential': 'President',
+                      'Senate': 'Senate',
+                      'Gubernatorial': 'Governor',
+                      'Congressional': 'Congress',
+                      'State Legislature': 'State Legislature',
+                      'Local': 'Local Office'
+                    }
+                    
+                    const officeName = officeMap[candidate.election.election_type?.name || ''] || candidate.election.election_type?.name || 'Office'
+                    
+                    // Special handling for Presidential elections
+                    if (candidate.election.election_type?.name === 'Presidential') {
+                      return (
+                        <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                          Running for President of the United States
+                        </p>
+                      )
+                    }
+                    
+                    // For all other elections, show state
+                    const stateName = stateGeo ? 
+                      states?.find(state => state.id === stateGeo.scope_id)?.name || stateGeo.scope_id : 
+                      'Unknown State'
+                    
                     return (
                       <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
-                        Running for President of the United States
+                        Running for {officeName} in {stateName}
                       </p>
                     )
-                  }
-                  
-                  // For all other elections, show state
-                  const stateName = stateGeo ? 
-                    states?.find(state => state.id === stateGeo.scope_id)?.name || stateGeo.scope_id : 
-                    'Unknown State'
-                  
-                  return (
-                    <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
-                      Running for {officeName} in {stateName}
-                    </p>
-                  )
-                })()}
-              </div>
-              
-              {/* Expand/Collapse Button */}
-              <div className="flex-shrink-0">
-                <div className="text-gray-400">
-                  {expandedCandidates.has(candidate.id) ? (
-                    <FaChevronDown className="w-4 h-4" />
-                  ) : (
-                    <FaChevronRight className="w-4 h-4" />
-                  )}
+                  })()}
+                </div>
+                
+                {/* Expand/Collapse Button */}
+                <div className="flex-shrink-0">
+                  <div className="text-gray-400">
+                    {expandedCandidates.has(candidate.id) ? (
+                      <FaChevronDown className="w-4 h-4" />
+                    ) : (
+                      <FaChevronRight className="w-4 h-4" />
+                    )}
+                  </div>
                 </div>
               </div>
+              
+              {/* Expanded Content */}
+              {expandedCandidates.has(candidate.id) && (
+                <div 
+                  className="px-3 pb-3 bg-gray-50 dark:bg-gray-700 rounded-b-lg border-t border-gray-200 dark:border-gray-600"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  {/* Expanded content will go here */}
+                  <p className="text-sm text-gray-500 dark:text-gray-400 italic">
+                    More candidate information will be displayed here...
+                  </p>
+                </div>
+              )}
             </div>
-            
-            {/* Expanded Content */}
-            {expandedCandidates.has(candidate.id) && (
-              <div className="mt-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
-                {/* Expanded content will go here */}
-                <p className="text-sm text-gray-500 dark:text-gray-400 italic">
-                  More candidate information will be displayed here...
-                </p>
-              </div>
-            )}
           </div>
         ))}
       </div>
