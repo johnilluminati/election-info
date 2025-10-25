@@ -8,14 +8,6 @@ const prisma = new PrismaClient();
 router.get('/', async (req, res, next) => {
   try {
     const parties = await prisma.politicalParty.findMany({
-      include: {
-        _count: {
-          select: {
-            candidate_parties: true,
-            election_candidates: true
-          }
-        }
-      },
       orderBy: {
         name: 'asc'
       }
@@ -40,17 +32,7 @@ router.get('/:id/candidates', async (req, res, next) => {
         ]
       },
       include: {
-        candidate: {
-          include: {
-            _count: {
-              select: {
-                election_candidates: true,
-                candidate_histories: true,
-                candidate_views: true
-              }
-            }
-          }
-        }
+        candidate: true
       },
       orderBy: [
         { candidate: { last_name: 'asc' } },
@@ -116,10 +98,46 @@ router.get('/:id', async (req, res, next) => {
               }
             },
             election: {
-              include: {
-                election_cycle: true,
-                election_type: true,
-                geographies: true
+              select: {
+                id: true,
+                election_cycle: {
+                  select: {
+                    election_year: true,
+                    election_day: true
+                  }
+                },
+                election_type: {
+                  select: {
+                    name: true
+                  }
+                },
+                geographies: {
+                  select: {
+                    scope_type: true,
+                    scope_id: true
+                  }
+                }
+              }
+            },
+            key_issues: {
+              select: {
+                id: true,
+                issue_text: true,
+                order_of_important: true,
+                view_text: true
+              },
+              orderBy: {
+                order_of_important: 'asc'
+              }
+            },
+            donations: {
+              select: {
+                id: true,
+                donor_name: true,
+                donation_amount: true
+              },
+              orderBy: {
+                donation_amount: 'desc'
               }
             }
           },

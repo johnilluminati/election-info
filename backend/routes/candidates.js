@@ -9,13 +9,8 @@ router.get('/', async (req, res, next) => {
   try {
     const { page = 1, limit = 20, search, state, election_type, party } = req.query;
     
-    // Debug logging
-    console.log('API Request Query Parameters:', req.query);
-    console.log('Filter check - state:', state, 'election_type:', election_type, 'party:', party);
-    
     // If any of the new filter parameters are provided, use the election candidates endpoint
     if (state || election_type || party) {
-      console.log('Using election candidates endpoint');
       return await getElectionCandidates(req, res, next);
     }
     
@@ -44,13 +39,6 @@ router.get('/', async (req, res, next) => {
               ]
             }
           },
-          _count: {
-            select: {
-              election_candidates: true,
-              candidate_histories: true,
-              candidate_views: true
-            }
-          }
         },
         skip,
         take: parseInt(limit),
@@ -134,50 +122,31 @@ async function getElectionCandidates(req, res, next) {
            ]
          }
        };
-       
-       console.log('State filter applied:', JSON.stringify(where.election.geographies, null, 2));
      }
-    
-    console.log('Final where clause:', JSON.stringify(where, null, 2));
     
     const [electionCandidates, total] = await Promise.all([
       prisma.electionCandidate.findMany({
         where,
         include: {
           candidate: {
-            include: {
-              candidate_views: {
-                include: {
-                  view_category: true
-                }
-              },
-              candidate_histories: {
-                orderBy: {
-                  created_on: 'desc'
-                }
-              }
+            select: {
+              id: true,
+              first_name: true,
+              last_name: true,
+              nickname: true,
+              picture_link: true,
+              created_on: true,
+              created_by: true,
+              updated_on: true,
+              updated_by: true
             }
           },
           party: true,
-          key_issues: {
-            orderBy: {
-              order_of_important: 'asc'
-            }
-          },
-          donations: {
-            orderBy: {
-              donation_amount: 'desc'
-            }
-          },
           election: {
             include: {
               election_cycle: true,
               election_type: true,
-              geographies: {
-                include: {
-                  // Include state information for debugging
-                }
-              }
+              geographies: true
             }
           }
         },
@@ -190,30 +159,6 @@ async function getElectionCandidates(req, res, next) {
       }),
       prisma.electionCandidate.count({ where })
     ]);
-    
-    console.log(`Found ${electionCandidates.length} election candidates, total: ${total}`);
-    
-    if (electionCandidates.length > 0) {
-      console.log('Sample candidate data structure:', {
-        candidate: electionCandidates[0].candidate?.first_name + ' ' + electionCandidates[0].candidate?.last_name,
-        party: electionCandidates[0].party?.name,
-        electionType: electionCandidates[0].election?.election_type?.name,
-        geographies: electionCandidates[0].election?.geographies,
-        geographyCount: electionCandidates[0].election?.geographies?.length || 0
-      });
-      
-      // Log all geography data for debugging
-      if (electionCandidates[0].election?.geographies?.length > 0) {
-        console.log('All geography entries:', electionCandidates[0].election.geographies.map(g => ({
-          scope_type: g.scope_type,
-          scope_id: g.scope_id
-        })));
-      } else {
-        console.log('No geography data found for this candidate');
-      }
-    } else {
-      console.log('No candidates found');
-    }
     
     res.json({
       data: electionCandidates,

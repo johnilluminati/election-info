@@ -68,19 +68,7 @@ router.get('/', async (req, res, next) => {
                   picture_link: true
                 }
               },
-              party: true,
-              _count: {
-                select: {
-                  key_issues: true,
-                  donations: true
-                }
-              }
-            }
-          },
-          _count: {
-            select: {
-              election_candidates: true,
-              geographies: true
+              party: true
             }
           }
         },
