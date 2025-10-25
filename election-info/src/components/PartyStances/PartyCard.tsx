@@ -189,20 +189,14 @@ const PartyCard = ({ party, onSelect }: PartyCardProps) => {
     >
       {/* Header */}
       <div className="p-4">
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center space-x-2">
-            <div className={`w-3 h-3 rounded-full ${colors.accent}`}></div>
-            <h3 className={`text-lg font-bold ${colors.text}`}>
-              {party.name}
-            </h3>
-            <span className={`px-2 py-0.5 text-xs font-medium rounded ${colors.accent} text-white`}>
-              {party.party_code}
-            </span>
-          </div>
-          
-          <div className="text-xs text-gray-600 dark:text-gray-400">
-            {party._count?.election_candidates || 0} candidates
-          </div>
+        <div className="flex items-center space-x-2 mb-3">
+          <div className={`w-3 h-3 rounded-full ${colors.accent}`}></div>
+          <h3 className={`text-lg font-bold ${colors.text}`}>
+            {party.name}
+          </h3>
+          <span className={`px-2 py-0.5 text-xs font-medium rounded ${colors.accent} text-white`}>
+            {party.party_code}
+          </span>
         </div>
         
         {/* Political Spectrum Position */}
