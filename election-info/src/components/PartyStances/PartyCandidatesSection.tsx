@@ -237,12 +237,14 @@ const PartyCandidatesSection = ({
         {displayCandidates.map((candidate, index) => (
           <div key={`candidate-${candidate.id}-${index}`}>
             <div 
-              className={`bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-sm transition-shadow cursor-pointer ${
+              className={`bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-sm transition-shadow ${
                 expandedCandidates.has(candidate.id) ? 'rounded-b-none' : ''
               }`}
-              onClick={() => toggleCandidateExpansion(candidate.id)}
             >
-              <div className="flex items-center space-x-3 p-3">
+              <div 
+                className="flex items-center space-x-3 p-3 cursor-pointer"
+                onClick={() => toggleCandidateExpansion(candidate.id)}
+              >
                 {/* Candidate Photo */}
                 <div className="flex-shrink-0">
                   {candidate.picture ? (
