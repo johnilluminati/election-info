@@ -9,8 +9,9 @@ router.get('/', async (req, res, next) => {
   try {
     const { page = 1, limit = 20, search, state, election_type, party } = req.query;
     
-    // If any of the new filter parameters are provided, use the election candidates endpoint
-    if (state || election_type || party) {
+    // If any of the filter parameters (including search) are provided, use the election candidates endpoint
+    // This ensures we return ElectionCandidate objects with all nested relations
+    if (state || election_type || party || search) {
       return await getElectionCandidates(req, res, next);
     }
     

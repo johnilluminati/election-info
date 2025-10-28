@@ -258,6 +258,7 @@ export const useCandidateGrouping = ({
     // Sort by predefined election type order and create hierarchical structure for Congressional
     const result: CandidateGroup[] = [];
     
+    // First, process election types in the predefined order
     electionTypeOrder
       .filter(type => grouped[type])
       .forEach(type => {
@@ -313,6 +314,14 @@ export const useCandidateGrouping = ({
           // For non-Congressional elections, add as-is
           result.push({ group: type, candidates: grouped[type] });
         }
+      });
+    
+    // Then, add any other election types that weren't in the predefined order
+    Object.entries(grouped)
+      .filter(([type]) => !electionTypeOrder.includes(type))
+      .sort(([a], [b]) => a.localeCompare(b))
+      .forEach(([type, candidates]) => {
+        result.push({ group: type, candidates });
       });
     
     console.log('Election type grouping result:', result);
