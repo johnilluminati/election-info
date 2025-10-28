@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, useLayoutEffect } from 'react'
 import { useParties } from '../hooks'
 import PartyCard from '../components/PartyStances/PartyCard'
 import PartyDetailSection from '../components/PartyStances/PartyDetailSection'
@@ -8,6 +8,26 @@ import { FaInfoCircle } from 'react-icons/fa'
 const PartyStancesPage = () => {
   const { data: parties, isLoading, error } = useParties()
   const [selectedParty, setSelectedParty] = useState<PoliticalParty | null>(null)
+  const detailSectionRef = useRef<HTMLDivElement>(null)
+
+  // Scroll to detail section when a party is selected
+  useLayoutEffect(() => {
+    if (selectedParty && detailSectionRef.current) {
+      // Use requestAnimationFrame to wait for the browser to paint the new content
+      requestAnimationFrame(() => {
+        const element = detailSectionRef.current
+        if (element) {
+          const elementPosition = element.getBoundingClientRect().top + window.pageYOffset
+          const offsetPosition = elementPosition - 80 // Account for sticky header
+          
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+          })
+        }
+      })
+    }
+  }, [selectedParty])
 
   if (isLoading) {
     return (
@@ -69,7 +89,7 @@ const PartyStancesPage = () => {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 pb-8">
         {/* Two-Party System Explanation */}
         <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-8 mb-12">
           <div className="text-center mb-8">
@@ -158,7 +178,7 @@ const PartyStancesPage = () => {
 
         {/* Party Detail Section */}
         {selectedParty && (
-          <div className="mt-8">
+          <div ref={detailSectionRef} className="mt-8">
             <PartyDetailSection 
               selectedParty={selectedParty}
               onClose={() => setSelectedParty(null)}
