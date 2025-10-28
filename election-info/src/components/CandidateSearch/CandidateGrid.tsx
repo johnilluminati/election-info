@@ -58,19 +58,18 @@ const CandidateGrid = ({
                     {group.candidates.length} candidate{group.candidates.length !== 1 ? 's' : ''}
                   </p>
                 </div>
-                {groupingStrategy === 'by_state' && (
-                  <button
-                    onClick={() => onToggleSection(group.group)}
-                    className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
-                    aria-label={isCollapsed ? 'Expand section' : 'Collapse section'}
-                  >
-                    {isCollapsed ? (
-                      <FaChevronRight className="w-4 h-4" />
-                    ) : (
-                      <FaChevronDown className="w-4 h-4" />
-                    )}
-                  </button>
-                )}
+                {/* Add collapse button for all groups (not just when grouping by state) */}
+                <button
+                  onClick={() => onToggleSection(group.group)}
+                  className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
+                  aria-label={isCollapsed ? 'Expand section' : 'Collapse section'}
+                >
+                  {isCollapsed ? (
+                    <FaChevronRight className="w-4 h-4" />
+                  ) : (
+                    <FaChevronDown className="w-4 h-4" />
+                  )}
+                </button>
               </div>
             </div>
 
