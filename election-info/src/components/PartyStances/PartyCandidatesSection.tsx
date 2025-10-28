@@ -13,12 +13,11 @@ interface PartyCandidatesSectionProps {
 const PartyCandidatesSection = ({ 
   candidates, 
   electionCandidates, 
-  maxDisplay = 5,
   states = [],
   selectedPartyName
 }: PartyCandidatesSectionProps) => {
-  const [showAll, setShowAll] = useState(false)
   const [expandedCandidates, setExpandedCandidates] = useState<Set<string>>(new Set())
+  const [collapsedElectionTypes, setCollapsedElectionTypes] = useState<Set<string>>(new Set())
   const [filters, setFilters] = useState({
     name: '',
     state: '',
@@ -107,8 +106,30 @@ const PartyCandidatesSection = ({
     }
   }, [states])
   
-  const displayCandidates = showAll ? filteredCandidates : filteredCandidates.slice(0, maxDisplay)
-  const hasMore = filteredCandidates.length > maxDisplay
+  // Group candidates by election type
+  const groupedByElectionType = useMemo(() => {
+    const grouped: Record<string, typeof filteredCandidates> = {}
+    
+    filteredCandidates.forEach(candidate => {
+      if (candidate.type === 'running' && candidate.election?.election_type) {
+        const electionType = candidate.election.election_type.name
+        if (!grouped[electionType]) {
+          grouped[electionType] = []
+        }
+        grouped[electionType].push(candidate)
+      } else {
+        // Handle non-running candidates (party members) - group them separately
+        if (!grouped['Party Members']) {
+          grouped['Party Members'] = []
+        }
+        grouped['Party Members'].push(candidate)
+      }
+    })
+    
+    return grouped
+  }, [filteredCandidates])
+
+  const electionTypeOrder = ['Presidential', 'Senate', 'Gubernatorial', 'Congressional', 'State Legislature', 'Local', 'Party Members']
   
   const resetFilters = () => {
     setFilters({
@@ -125,6 +146,18 @@ const PartyCandidatesSection = ({
       // If it's not expanded, expand it and collapse all others
       if (!prev.has(candidateId)) {
         newSet.add(candidateId)
+      }
+      return newSet
+    })
+  }
+
+  const toggleElectionTypeCollapse = (electionType: string) => {
+    setCollapsedElectionTypes(prev => {
+      const newSet = new Set(prev)
+      if (newSet.has(electionType)) {
+        newSet.delete(electionType)
+      } else {
+        newSet.add(electionType)
       }
       return newSet
     })
@@ -233,9 +266,43 @@ const PartyCandidatesSection = ({
         </div>
       </div>
 
-      <div className="grid gap-3">
-        {displayCandidates.map((candidate, index) => (
-          <div key={`candidate-${candidate.id}-${index}`}>
+      <div className="space-y-6">
+        {electionTypeOrder
+          .filter(type => groupedByElectionType[type] && groupedByElectionType[type].length > 0)
+          .map((electionType) => {
+            const candidatesInType = groupedByElectionType[electionType]
+            const isCollapsed = collapsedElectionTypes.has(electionType)
+            
+            return (
+              <div key={electionType} className="border-b border-gray-200 dark:border-gray-700 pb-6 last:border-b-0 last:pb-0">
+                {/* Election Type Header */}
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex-1">
+                    <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+                      {electionType}
+                    </h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      {candidatesInType.length} candidate{candidatesInType.length !== 1 ? 's' : ''}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => toggleElectionTypeCollapse(electionType)}
+                    className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
+                    aria-label={isCollapsed ? 'Expand section' : 'Collapse section'}
+                  >
+                    {isCollapsed ? (
+                      <FaChevronRight className="w-5 h-5" />
+                    ) : (
+                      <FaChevronDown className="w-5 h-5" />
+                    )}
+                  </button>
+                </div>
+
+                {/* Candidates Grid */}
+                {!isCollapsed && (
+                  <div className="grid gap-3">
+                    {candidatesInType.map((candidate, index) => (
+                      <div key={`candidate-${candidate.id}-${index}`}>
             <div 
               className={`bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-sm transition-shadow ${
                 expandedCandidates.has(candidate.id) ? 'rounded-b-none' : ''
@@ -705,27 +772,14 @@ const PartyCandidatesSection = ({
                 </div>
               )}
             </div>
-          </div>
-        ))}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )
+          })}
       </div>
-      
-      {/* Show More/Less Button */}
-      {hasMore && (
-        <button
-          onClick={() => setShowAll(!showAll)}
-          className="w-full flex items-center justify-center space-x-2 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors"
-        >
-          <span>
-            {showAll 
-              ? `Show Less` 
-              : `Show ${activeCandidates.length - maxDisplay} More Candidates`
-            }
-          </span>
-          <FaChevronRight 
-            className={`w-3 h-3 transition-transform ${showAll ? 'rotate-90' : ''}`} 
-          />
-        </button>
-      )}
       
       {/* Summary */}
       <div className="text-xs text-gray-500 dark:text-gray-400 text-center pt-2 border-t border-gray-200 dark:border-gray-700">
