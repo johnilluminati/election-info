@@ -71,8 +71,6 @@ async function getElectionCandidates(req, res, next) {
     const { search, state, election_type, party, page = 1, limit = 50 } = req.query;
     const skip = (parseInt(page) - 1) * parseInt(limit);
     
-    console.log('getElectionCandidates called with:', { search, state, election_type, party, page, limit });
-    
     // Build where clause for filtering
     const where = {};
     
@@ -85,7 +83,6 @@ async function getElectionCandidates(req, res, next) {
     }
     
     if (election_type) {
-      console.log('Adding election_type filter:', election_type);
       where.election = {
         election_type: {
           name: { contains: election_type, mode: 'insensitive' }
@@ -94,15 +91,12 @@ async function getElectionCandidates(req, res, next) {
     }
     
     if (party) {
-      console.log('Adding party filter:', party);
       where.party = {
         name: { contains: party, mode: 'insensitive' }
       };
     }
     
          if (state) {
-       console.log('Adding state filter:', state);
-       
        // Try to find the state in the geographies
        // Since we don't know the exact structure yet, let's try a few approaches
        if (!where.election) {
@@ -171,7 +165,6 @@ async function getElectionCandidates(req, res, next) {
       }
     });
   } catch (error) {
-    console.error('Error in getElectionCandidates:', error);
     next(error);
   }
 }
@@ -383,8 +376,6 @@ router.get('/debug/geography', async (req, res, next) => {
   try {
     const { state, election_type, party } = req.query;
     
-    console.log('Debug geography request:', { state, election_type, party });
-    
     // Get a sample of election candidates with their geography data
     const sampleData = await prisma.electionCandidate.findMany({
       take: 5,
@@ -400,15 +391,12 @@ router.get('/debug/geography', async (req, res, next) => {
       }
     });
     
-    console.log('Sample data structure:', JSON.stringify(sampleData, null, 2));
-    
     res.json({
-      message: 'Check server console for sample data structure',
+      message: 'Sample geography data structure',
       sampleCount: sampleData.length,
       sampleData
     });
   } catch (error) {
-    console.error('Error in debug endpoint:', error);
     next(error);
   }
 });

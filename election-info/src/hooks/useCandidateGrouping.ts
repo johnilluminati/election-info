@@ -129,12 +129,6 @@ export const useCandidateGrouping = ({
 
   // Group candidates based on strategy
   const groupedCandidates = useMemo((): CandidateGroup[] => {
-    console.log('groupedCandidates useMemo triggered with:', {
-      candidatesLength: candidates.length,
-      groupingStrategy,
-      firstCandidate: candidates[0]
-    });
-    
     if (groupingStrategy === 'none') {
       return [];
     }
@@ -190,7 +184,6 @@ export const useCandidateGrouping = ({
             });
         });
       
-      console.log('State and district grouping result:', result);
       return result;
     }
     
@@ -215,7 +208,6 @@ export const useCandidateGrouping = ({
           candidates 
         }));
       
-      console.log('State grouping result:', result);
       return result;
     }
     
@@ -240,7 +232,6 @@ export const useCandidateGrouping = ({
         })
         .map(([district, candidates]) => ({ group: `District ${district}`, candidates }));
       
-      console.log('District grouping result:', result);
       return result;
     }
     
@@ -252,8 +243,6 @@ export const useCandidateGrouping = ({
       acc[electionType].push(candidate);
       return acc;
     }, {} as Record<string, typeof candidates>);
-    
-    console.log('Election type grouping intermediate:', grouped);
     
     // Sort by predefined election type order and create hierarchical structure for Congressional
     const result: CandidateGroup[] = [];
@@ -324,18 +313,11 @@ export const useCandidateGrouping = ({
         result.push({ group: type, candidates });
       });
     
-    console.log('Election type grouping result:', result);
     return result;
   }, [candidates, groupingStrategy, formatStateDisplayName, stateAbbreviationToName, getDistrictFromCandidate, getStateFromCandidate]);
 
   // Filter and sort candidates within groups
   const processedCandidates = useMemo(() => {
-    console.log('processedCandidates useMemo triggered with:', {
-      groupedCandidatesLength: groupedCandidates.length,
-      groupedCandidates,
-      sortBy
-    });
-    
     const result = groupedCandidates.map(group => ({
       ...group,
       candidates: group.candidates.sort((a, b) => {
@@ -353,7 +335,6 @@ export const useCandidateGrouping = ({
       })
     }));
     
-    console.log('Final processedCandidates result:', result);
     return result;
   }, [groupedCandidates, sortBy]);
 

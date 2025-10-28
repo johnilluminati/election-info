@@ -20,8 +20,6 @@ const CongressionalMapNav = ({
   const [showStateDropdown, setShowStateDropdown] = useState(false);
   const [showDistrictDropdown, setShowDistrictDropdown] = useState(false);
   
-  // Debug logging
-  console.log('Dropdown states:', { showStateDropdown, showDistrictDropdown });
   const navRef = useRef<HTMLElement>(null);
   
   // Fetch states and districts data
@@ -65,7 +63,6 @@ const CongressionalMapNav = ({
   };
 
   const handleStateSelect = (state: USState) => {
-    console.log('State selected:', state.name);
     onMapSelection?.(undefined, state.name);
     onZoomToState?.(state.name);
     setShowStateDropdown(false);
@@ -98,7 +95,6 @@ const CongressionalMapNav = ({
          <button
            onClick={(e) => {
              e.stopPropagation();
-             console.log('Dropdown toggle clicked, current state:', showDropdown);
              onDropdownToggle?.();
            }}
            className="text-xs text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"

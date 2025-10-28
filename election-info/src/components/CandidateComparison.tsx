@@ -59,34 +59,6 @@ const CandidateComparison = ({ selectedElection, selectedState, selectedDistrict
     }
   }, [selectedCandidates.length]);
 
-  // Debug logging to see what data we're getting
-  useEffect(() => {
-    if (selectedElection) {
-      console.log('🔍 Selected Election:', selectedElection);
-      console.log('🔍 Basic election candidates:', selectedElection.election_candidates);
-    }
-  }, [selectedElection]);
-
-  useEffect(() => {
-    if (detailedCandidates) {
-      console.log('🔍 Detailed candidates from API:', detailedCandidates);
-      // Log details about each candidate's data
-      detailedCandidates.forEach((candidate, index) => {
-        console.log(`🔍 Candidate ${index + 1}:`, {
-          id: candidate.id,
-          name: `${candidate.candidate?.first_name} ${candidate.candidate?.last_name}`,
-          keyIssuesCount: candidate.key_issues?.length || 0,
-          donationsCount: candidate.donations?.length || 0,
-          viewsCount: candidate.candidate?.candidate_views?.length || 0,
-          historyCount: candidate.candidate?.candidate_histories?.length || 0,
-          keyIssues: candidate.key_issues,
-          donations: candidate.donations,
-          views: candidate.candidate?.candidate_views,
-          history: candidate.candidate?.candidate_histories
-        });
-      });
-    }
-  }, [detailedCandidates]);
 
   // Don't render anything if no election is selected
   if (!selectedElection) {

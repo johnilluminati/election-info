@@ -35,7 +35,7 @@ const CongressionalGroup = ({
       <div className="border-b-2 border-gray-300 dark:border-gray-600 pb-2">
         <div className="flex items-center justify-between">
           <div className="flex-1">
-            <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
               {group.group}
             </h3>
             <p className="text-sm text-gray-600 dark:text-gray-400">
@@ -48,9 +48,9 @@ const CongressionalGroup = ({
             aria-label={isCollapsed ? 'Expand section' : 'Collapse section'}
           >
             {isCollapsed ? (
-              <FaChevronRight className="w-5 h-5" />
+              <FaChevronRight className="w-4 h-4" />
             ) : (
-              <FaChevronDown className="w-5 h-5" />
+              <FaChevronDown className="w-4 h-4" />
             )}
           </button>
         </div>
