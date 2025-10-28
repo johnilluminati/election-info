@@ -41,7 +41,6 @@ const CandidateSearchPage = () => {
 
   // Cache for storing search results (limit to 50 entries to prevent memory issues)
   const [searchCache, setSearchCache] = useState<Record<string, ElectionCandidate[]>>({});
-  const [isUsingCache, setIsUsingCache] = useState(false);
   
   // Manage cache size to prevent memory issues
   const addToCache = useCallback((key: string, data: ElectionCandidate[]) => {
@@ -76,7 +75,6 @@ const CandidateSearchPage = () => {
   // Clear cache when page loads to ensure fresh results
   useEffect(() => {
     setSearchCache({});
-    setIsUsingCache(false);
     console.log('Cache cleared on page load');
   }, []);
 
@@ -103,11 +101,8 @@ const CandidateSearchPage = () => {
     if (searchCache[cacheKey]) {
       console.log('Using cached results for:', cacheKey);
       setCandidates(searchCache[cacheKey]);
-      setIsUsingCache(true);
       return;
     }
-    
-    setIsUsingCache(false);
 
     const fetchCandidates = async () => {
       setIsLoading(true);
@@ -294,7 +289,6 @@ const CandidateSearchPage = () => {
           hasActiveFilters={hasActiveFilters}
           groupingStrategy={groupingStrategy}
           groupedCandidates={groupedCandidates}
-          isUsingCache={isUsingCache}
         />
 
         {/* Loading State */}

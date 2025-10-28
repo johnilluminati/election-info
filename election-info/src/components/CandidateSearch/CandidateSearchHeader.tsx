@@ -3,15 +3,13 @@ interface CandidateSearchHeaderProps {
   hasActiveFilters: boolean;
   groupingStrategy: string;
   groupedCandidates: Array<{ group: string; candidates: unknown[]; subGroups?: Array<unknown> }>;
-  isUsingCache: boolean;
 }
 
 const CandidateSearchHeader = ({
   candidateCount,
   hasActiveFilters,
   groupingStrategy,
-  groupedCandidates,
-  isUsingCache
+  groupedCandidates
 }: CandidateSearchHeaderProps) => {
   const getGroupingLabel = () => {
     if (groupingStrategy === 'by_state') return 'State';
@@ -25,7 +23,7 @@ const CandidateSearchHeader = ({
   };
 
   return (
-    <div className="flex justify-between items-center mb-6">
+    <div className="mb-6">
       <div>
         <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">
           {hasActiveFilters 
@@ -39,18 +37,6 @@ const CandidateSearchHeader = ({
           </p>
         )}
       </div>
-      {hasActiveFilters && candidateCount > 0 && (
-        <div className="text-right">
-          <span className="text-sm text-gray-500 dark:text-gray-400">
-            Showing {candidateCount} candidates
-          </span>
-          {isUsingCache && (
-            <div className="text-xs text-blue-600 dark:text-blue-400 mt-1">
-              📋 Cached results
-            </div>
-          )}
-        </div>
-      )}
     </div>
   );
 };
