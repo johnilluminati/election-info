@@ -75,18 +75,7 @@ const CandidateSearchPage = () => {
   // Clear cache when page loads to ensure fresh results
   useEffect(() => {
     setSearchCache({});
-    console.log('Cache cleared on page load');
   }, []);
-
-  // Monitor candidates state changes
-  useEffect(() => {
-    console.log('Candidates state changed:', {
-      candidatesLength: candidates.length,
-      candidatesType: typeof candidates,
-      isArray: Array.isArray(candidates),
-      firstCandidate: candidates[0]
-    });
-  }, [candidates]);
 
   // Fetch candidates only when filters change and we don't have cached results
   useEffect(() => {
@@ -99,7 +88,6 @@ const CandidateSearchPage = () => {
     // Check if we have cached results
     const cacheKey = getCacheKey();
     if (searchCache[cacheKey]) {
-      console.log('Using cached results for:', cacheKey);
       setCandidates(searchCache[cacheKey]);
       return;
     }
@@ -121,72 +109,44 @@ const CandidateSearchPage = () => {
         // Make API call to fetch candidates
         const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
         const fullUrl = `${API_BASE_URL}/api/candidates?${params.toString()}`;
-        console.log('Fetching from URL:', fullUrl);
-        console.log('Active filters:', filters);
         const response = await fetch(fullUrl);
-        
-        // Log response details for debugging
-        console.log('Response status:', response.status);
-        console.log('Response headers:', response.headers);
         
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
         
-        // Get response text first to debug JSON parsing
         const responseText = await response.text();
-        console.log('Response text:', responseText);
         
         let data;
         try {
           data = JSON.parse(responseText);
         } catch (parseError) {
-          console.error('JSON parse error:', parseError);
-          console.error('Response text that failed to parse:', responseText);
           const errorMessage = parseError instanceof Error ? parseError.message : 'Unknown parsing error';
           throw new Error(`Invalid JSON response: ${errorMessage}`);
         }
         
-        console.log('Parsed data:', data);
-        console.log('Raw data.data:', data.data);
-        console.log('Data structure check:', {
-          hasData: !!data.data,
-          dataType: typeof data.data,
-          isArray: Array.isArray(data.data),
-          dataLength: data.data?.length,
-          dataKeys: data.data ? Object.keys(data.data[0] || {}) : 'no data'
-        });
-        
-        // Check for both response formats and log each step
+        // Check for both response formats
         let candidatesData;
         if (data.data) {
-          console.log('data.data exists, length:', data.data.length);
           candidatesData = data.data;
         } else if (data.candidates) {
-          console.log('data.candidates exists, length:', data.candidates.length);
           candidatesData = data.candidates;
         } else {
-          console.log('Neither data.data nor data.candidates exists');
-          console.log('Available keys in data:', Object.keys(data));
           candidatesData = [];
         }
         
         if (candidatesData.length > 0) {
-          console.log('First candidate:', candidatesData[0]);
-          console.log('Setting candidates to:', candidatesData);
           setCandidates(candidatesData);
           
           // Cache the results
           addToCache(cacheKey, candidatesData);
         } else {
-          console.log('No candidates found, setting empty array');
           setCandidates([]);
           
           // Cache empty results too
           addToCache(cacheKey, []);
         }
       } catch (err) {
-        console.error('Fetch error:', err);
         setError(err instanceof Error ? err.message : 'An error occurred');
         setCandidates([]);
       } finally {
@@ -221,8 +181,7 @@ const CandidateSearchPage = () => {
       // const response = await fetch(`${API_BASE_URL}/api/candidates/${candidate.candidate?.id}`);
       // ... detailed data fetching logic
       
-    } catch (error) {
-      console.error('Error in handleViewDetails:', error);
+    } catch {
       setSelectedCandidate(candidate);
     } finally {
       setIsModalLoading(false);
