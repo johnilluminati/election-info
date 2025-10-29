@@ -124,16 +124,17 @@ async function getElectionCandidates(req, res, next) {
         where,
         include: {
           candidate: {
-            select: {
-              id: true,
-              first_name: true,
-              last_name: true,
-              nickname: true,
-              picture_link: true,
-              created_on: true,
-              created_by: true,
-              updated_on: true,
-              updated_by: true
+            include: {
+              candidate_views: {
+                include: {
+                  view_category: true
+                }
+              },
+              candidate_histories: {
+                orderBy: {
+                  created_on: 'desc'
+                }
+              }
             }
           },
           party: true,
@@ -142,6 +143,16 @@ async function getElectionCandidates(req, res, next) {
               election_cycle: true,
               election_type: true,
               geographies: true
+            }
+          },
+          key_issues: {
+            orderBy: {
+              order_of_important: 'asc'
+            }
+          },
+          donations: {
+            orderBy: {
+              donation_amount: 'desc'
             }
           }
         },
