@@ -1,3 +1,5 @@
+import { useState, useMemo } from "react";
+import { FaSearch, FaSortAmountDown } from "react-icons/fa";
 import type { ElectionCandidateDonation } from "../../types/api";
 
 interface DonorInfo {
@@ -191,22 +193,233 @@ const CandidateDonationsTab = ({
   candidateKeyIssues = [], 
   candidateViews = [] 
 }: CandidateDonationsTabProps) => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedDonorType, setSelectedDonorType] = useState<string>("all");
+  const [selectedIndustry, setSelectedIndustry] = useState<string>("all");
+  const [sortBy, setSortBy] = useState<"amount" | "date" | "donor">("amount");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+
+  // Process all donations to get donor info
+  const donationsWithInfo = useMemo(() => {
+    if (!donations || donations.length === 0) return [];
+    
+    return donations.map(donation => ({
+      donation,
+      donorInfo: getDonorInfo(donation, donations, candidateKeyIssues, candidateViews)
+    }));
+  }, [donations, candidateKeyIssues, candidateViews]);
+
+  // Calculate summary statistics
+  const summaryStats = useMemo(() => {
+    if (!donations || donations.length === 0) {
+      return {
+        totalDonations: 0,
+        totalAmount: 0,
+        averageAmount: 0,
+        uniqueDonors: 0,
+        byType: {} as Record<string, number>,
+        byIndustry: {} as Record<string, number>,
+        byAlignment: {} as Record<string, number>
+      };
+    }
+
+    const totalAmount = donations.reduce((sum, d) => sum + parseFloat(d.donation_amount), 0);
+    const uniqueDonors = new Set(donations.map(d => d.donor_name)).size;
+    
+    const byType: Record<string, number> = {};
+    const byIndustry: Record<string, number> = {};
+    const byAlignment: Record<string, number> = {};
+
+    donationsWithInfo.forEach(({ donorInfo }) => {
+      // Count by type
+      byType[donorInfo.type] = (byType[donorInfo.type] || 0) + 1;
+      
+      // Count by industry
+      if (donorInfo.industry) {
+        byIndustry[donorInfo.industry] = (byIndustry[donorInfo.industry] || 0) + 1;
+      }
+      
+      // Count by alignment
+      if (donorInfo.context) {
+        byAlignment[donorInfo.context.alignment] = (byAlignment[donorInfo.context.alignment] || 0) + 1;
+      }
+    });
+
+    return {
+      totalDonations: donations.length,
+      totalAmount,
+      averageAmount: totalAmount / donations.length,
+      uniqueDonors,
+      byType,
+      byIndustry,
+      byAlignment
+    };
+  }, [donations, donationsWithInfo]);
+
+  // Filter and sort donations
+  const filteredAndSortedDonations = useMemo(() => {
+    if (!donations || donations.length === 0) return [];
+
+    const filtered = donationsWithInfo.filter(({ donation, donorInfo }) => {
+      // Search filter
+      if (searchQuery && !donation.donor_name.toLowerCase().includes(searchQuery.toLowerCase())) {
+        return false;
+      }
+
+      // Donor type filter
+      if (selectedDonorType !== "all" && donorInfo.type !== selectedDonorType) {
+        return false;
+      }
+
+      // Industry filter
+      if (selectedIndustry !== "all" && donorInfo.industry !== selectedIndustry) {
+        return false;
+      }
+
+      return true;
+    });
+
+    // Sort donations
+    const sorted = [...filtered].sort((a, b) => {
+      let comparison = 0;
+      
+      switch (sortBy) {
+        case "amount":
+          comparison = parseFloat(a.donation.donation_amount) - parseFloat(b.donation.donation_amount);
+          break;
+        case "date":
+          comparison = new Date(a.donation.created_on).getTime() - new Date(b.donation.created_on).getTime();
+          break;
+        case "donor":
+          comparison = a.donation.donor_name.localeCompare(b.donation.donor_name);
+          break;
+      }
+
+      return sortOrder === "asc" ? comparison : -comparison;
+    });
+
+    return sorted;
+  }, [donations, donationsWithInfo, searchQuery, selectedDonorType, selectedIndustry, sortBy, sortOrder]);
+
+  // Get unique values for filters
+  const uniqueIndustries = useMemo(() => {
+    const industries = new Set<string>();
+    donationsWithInfo.forEach(({ donorInfo }) => {
+      if (donorInfo.industry) {
+        industries.add(donorInfo.industry);
+      }
+    });
+    return Array.from(industries).sort();
+  }, [donationsWithInfo]);
+
+  const donorTypes: DonorInfo['type'][] = ['Individual', 'Corporation', 'PAC', 'Union', 'Nonprofit', 'Other'];
+
   return (
-    <div className="flex flex-col p-4 space-y-4">
+    <div className="flex flex-col p-4 space-y-6">
       {donations && donations.length > 0 ? (
         <>
-          <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-            Total Donations: {donations.length} record{donations.length !== 1 ? 's' : ''}
+          {/* Summary Statistics */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+            <div>
+              <div className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">Total Donations</div>
+              <div className="text-2xl font-bold text-gray-900 dark:text-white">{summaryStats.totalDonations}</div>
+            </div>
+            <div>
+              <div className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">Total Amount</div>
+              <div className="text-2xl font-bold text-green-600 dark:text-green-400">
+                ${summaryStats.totalAmount.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+              </div>
+            </div>
+            <div>
+              <div className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">Average</div>
+              <div className="text-2xl font-bold text-gray-900 dark:text-white">
+                ${summaryStats.averageAmount.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+              </div>
+            </div>
+            <div>
+              <div className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">Unique Donors</div>
+              <div className="text-2xl font-bold text-gray-900 dark:text-white">{summaryStats.uniqueDonors}</div>
+            </div>
           </div>
-          {donations.map((donation) => {
-            const donorInfo = getDonorInfo(
-              donation, 
-              donations,
-              candidateKeyIssues,
-              candidateViews
-            );
-            return (
-              <div key={donation.id} className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-white dark:bg-gray-800 shadow-sm hover:shadow-md transition-shadow">
+
+          {/* Filters and Search */}
+          <div className="space-y-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+            {/* Search */}
+            <div className="relative">
+              <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search by donor name..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
+            {/* Filter Row */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Donor Type Filter */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Donor Type
+                </label>
+                <select
+                  value={selectedDonorType}
+                  onChange={(e) => setSelectedDonorType(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="all">All Types</option>
+                  {donorTypes.map(type => (
+                    <option key={type} value={type}>{type}</option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Industry Filter */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Industry
+                </label>
+                <select
+                  value={selectedIndustry}
+                  onChange={(e) => setSelectedIndustry(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="all">All Industries</option>
+                  {uniqueIndustries.map(industry => (
+                    <option key={industry} value={industry}>{industry}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            {/* Sort Controls */}
+            <div className="flex items-center gap-4">
+              <FaSortAmountDown className="text-gray-400" />
+              <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Sort by:</label>
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as "amount" | "date" | "donor")}
+                className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="amount">Amount</option>
+                <option value="date">Date</option>
+                <option value="donor">Donor Name</option>
+              </select>
+              <button
+                onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
+                className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                {sortOrder === "asc" ? "↑ Ascending" : "↓ Descending"}
+              </button>
+            </div>
+          </div>
+
+          {/* Donations List */}
+          {filteredAndSortedDonations.length > 0 ? (
+            <div className="space-y-4">
+              {filteredAndSortedDonations.map(({ donation, donorInfo }) => (
+                <div key={donation.id} className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-white dark:bg-gray-800 shadow-sm hover:shadow-md transition-shadow">
                 {/* Header with donor name and amount */}
                 <div className="flex justify-between items-start mb-3 pb-3 border-b border-gray-200 dark:border-gray-700">
                   <div className="flex-1">
@@ -317,9 +530,26 @@ const CandidateDonationsTab = ({
                     </div>
                   </div>
                 )}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+              <div className="text-gray-500 dark:text-gray-400 text-lg mb-2">
+                No donations match your filters
               </div>
-            );
-          })}
+              <button
+                onClick={() => {
+                  setSearchQuery("");
+                  setSelectedDonorType("all");
+                  setSelectedIndustry("all");
+                }}
+                className="text-blue-600 dark:text-blue-400 hover:underline"
+              >
+                Clear all filters
+              </button>
+            </div>
+          )}
         </>
       ) : (
         <div className="text-gray-500 dark:text-gray-400 italic text-center py-8">
