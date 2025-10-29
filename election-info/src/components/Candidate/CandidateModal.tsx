@@ -2,6 +2,10 @@ import { useEffect } from 'react';
 import { FaTimes, FaExternalLinkAlt } from 'react-icons/fa';
 import type { ElectionCandidate } from '../../types/api';
 import CandidateInfoTabs from './CandidateInfoTabs';
+import CandidateKeyIssuesTab from './CandidateKeyIssuesTab';
+import CandidateViewsTab from './CandidateViewsTab';
+import CandidateHistoryTab from './CandidateHistoryTab';
+import CandidateDonationsTab from './CandidateDonationsTab';
 
 interface CandidateModalProps {
   candidate: ElectionCandidate | null;
@@ -31,93 +35,39 @@ const CandidateModal = ({ candidate, isOpen, onClose, isLoading = false }: Candi
     };
   }, [isOpen, onClose]);
 
+  // Extract candidate positions for context analysis
+  const candidateKeyIssues = candidate?.key_issues?.map(issue => 
+    `${issue.issue_text} ${issue.view_text || ''}`
+  ) || [];
+  
+  const candidateViews = candidate?.candidate?.candidate_views?.map(view => view.view_text) || [];
+
   // Create tab data for the modal
   const tabData = candidate ? [
     {
       title: "Key Issues",
       link: "/key_issues",
-      component: (
-        <div className="flex flex-col p-2">
-          {candidate.key_issues && candidate.key_issues.length > 0 ? (
-            candidate.key_issues.map((issue) => (
-              <div key={issue.id} className="border p-2 mb-2">
-                <div className="font-semibold text-sm text-gray-600 mb-1">
-                  Issue #{issue.order_of_important}
-                </div>
-                <div className="text-base">{issue.issue_text}</div>
-                {issue.view_text && (
-                  <div className="text-sm text-gray-600 mt-1 italic">
-                    {issue.view_text}
-                  </div>
-                )}
-              </div>
-            ))
-          ) : (
-            <div className="text-gray-500 italic">No key issues available for this election</div>
-          )}
-        </div>
-      )
+      component: <CandidateKeyIssuesTab keyIssues={candidate.key_issues} />
     },
     {
       title: "Views",
       link: "/views",
-      component: (
-        <div className="flex flex-col p-2">
-          {candidate.candidate?.candidate_views && candidate.candidate.candidate_views.length > 0 ? (
-            candidate.candidate.candidate_views.map((view) => (
-              <div key={view.id} className="border p-2 mb-2">
-                <div className="font-semibold text-sm text-gray-600 mb-1">
-                  {view.view_category?.title || 'General View'}
-                </div>
-                <div className="text-base">{view.view_text}</div>
-              </div>
-            ))
-          ) : (
-            <div className="text-gray-500 italic">No candidate views available</div>
-          )}
-        </div>
-      )
+      component: <CandidateViewsTab views={candidate.candidate?.candidate_views} />
     },
     {
       title: "History",
       link: "/history",
-      component: (
-        <div className="flex flex-col p-2">
-          {candidate.candidate?.candidate_histories && candidate.candidate.candidate_histories.length > 0 ? (
-            candidate.candidate.candidate_histories.map((history) => (
-              <div key={history.id} className="border p-2 mb-2">
-                <div className="text-base">{history.history_text}</div>
-              </div>
-            ))
-          ) : (
-            <div className="text-gray-500 italic">No candidate history available</div>
-          )}
-        </div>
-      )
+      component: <CandidateHistoryTab histories={candidate.candidate?.candidate_histories} />
     },
     {
       title: "Donations",
       link: "/donations",
       component: (
-        <div className="flex flex-col p-2">
-          {candidate.donations && candidate.donations.length > 0 ? (
-            candidate.donations.map((donation) => (
-              <div key={donation.id} className="border p-2 mb-2">
-                <div className="flex justify-between items-center">
-                  <div className="font-semibold">{donation.donor_name}</div>
-                  <div className="text-green-600 font-mono">
-                    ${parseFloat(donation.donation_amount).toLocaleString()}
-                  </div>
-                </div>
-                <div className="text-xs text-gray-500 mt-1">
-                  {new Date(donation.created_on).toLocaleDateString()}
-                </div>
-              </div>
-            ))
-          ) : (
-            <div className="text-gray-500 italic">No donation records available for this election</div>
-          )}
-        </div>
+        <CandidateDonationsTab 
+          donations={candidate.donations}
+          candidateKeyIssues={candidateKeyIssues}
+          candidateViews={candidateViews}
+        />
       )
     }
   ] : [];
