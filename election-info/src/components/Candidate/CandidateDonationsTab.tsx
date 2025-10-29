@@ -315,7 +315,7 @@ const CandidateDonationsTab = ({
   const donorTypes: DonorInfo['type'][] = ['Individual', 'Corporation', 'PAC', 'Union', 'Nonprofit', 'Other'];
 
   return (
-    <div className="flex flex-col p-4 space-y-6">
+    <div className="flex flex-col p-2 space-y-6">
       {donations && donations.length > 0 ? (
         <>
           {/* Summary Statistics */}

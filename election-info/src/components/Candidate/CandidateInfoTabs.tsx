@@ -32,7 +32,7 @@ const CandidateInfoTabs = ({ tabs }: { tabs: TabData[] }) => {
           )
         })}
       </div>
-      <div>
+      <div className="px-2">
         {activeTab.component}
       </div>
     </>
