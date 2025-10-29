@@ -157,6 +157,10 @@ async function main() {
   
   // Clear all data in reverse dependency order
   await prisma.electionCandidateDonation.deleteMany();
+  await prisma.conflictOfInterest.deleteMany();
+  await prisma.candidateLegislation.deleteMany();
+  await prisma.candidateVote.deleteMany();
+  await prisma.donor.deleteMany();
   await prisma.candidateKeyIssue.deleteMany();
   await prisma.electionCandidate.deleteMany();
   await prisma.electionGeography.deleteMany();
@@ -543,9 +547,20 @@ async function main() {
 
   let totalKeyIssues = 0;
   for (const candidate of allElectionCandidates) {
-    const issueCount = Math.floor(Math.random() * 3) + 1; // 1-3 issues per candidate
+    const issueCount = Math.floor(Math.random() * 4) + 4; // 4-7 issues per candidate
+    // Ensure we don't duplicate issues for the same candidate
+    const usedIssues = new Set();
     for (let i = 0; i < issueCount; i++) {
-      const randomIssue = keyIssueTemplates[Math.floor(Math.random() * keyIssueTemplates.length)];
+      let randomIssue;
+      let attempts = 0;
+      // Try to find an unused issue, but allow duplicates if we've used all issues
+      do {
+        randomIssue = keyIssueTemplates[Math.floor(Math.random() * keyIssueTemplates.length)];
+        attempts++;
+      } while (usedIssues.size < keyIssueTemplates.length && usedIssues.has(randomIssue) && attempts < 10);
+      
+      usedIssues.add(randomIssue);
+      
       await prisma.candidateKeyIssue.create({
         data: {
           election_candidate_id: candidate.id,
@@ -668,9 +683,216 @@ async function main() {
   }
   console.log(`✅ Created ${totalDonations} campaign donations for all candidates`);
 
+  // 5. Create Donor records for all unique donor names
+  console.log('Creating donor records...');
+  const uniqueDonorNames = [...new Set(donorNames)];
+  const donorTypes = ['INDIVIDUAL', 'CORPORATION', 'PAC', 'UNION', 'NONPROFIT', 'OTHER'];
+  const industries = [
+    'Technology', 'Healthcare', 'Finance', 'Energy', 'Education', 'Real Estate',
+    'Manufacturing', 'Retail', 'Agriculture', 'Defense', 'Transportation', 'Telecommunications'
+  ];
+  const cities = [
+    'New York, NY', 'Los Angeles, CA', 'Chicago, IL', 'Houston, TX', 'Phoenix, AZ',
+    'Philadelphia, PA', 'San Antonio, TX', 'San Diego, CA', 'Dallas, TX', 'San Jose, CA',
+    'Austin, TX', 'Jacksonville, FL', 'Fort Worth, TX', 'Columbus, OH', 'Charlotte, NC'
+  ];
+  
+  const organizationNames = {
+    'CORPORATION': ['Acme Corporation', 'Global Tech Solutions', 'United Industries', 'Pacific Enterprises'],
+    'PAC': ['Progress PAC', 'Forward Action Committee', 'Citizens United PAC', 'American Values PAC'],
+    'UNION': ['United Workers Union', 'National Labor Federation', 'Service Employees Union'],
+    'NONPROFIT': ['Community Foundation', 'Public Interest Group', 'Civic Action Network']
+  };
+
+  let totalDonors = 0;
+  for (const donorName of uniqueDonorNames) {
+    const nameHash = donorName.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    const donorType = donorTypes[nameHash % donorTypes.length];
+    const industry = donorType !== 'INDIVIDUAL' ? industries[nameHash % industries.length] : null;
+    const location = cities[nameHash % cities.length];
+    const organizationName = organizationNames[donorType] 
+      ? organizationNames[donorType][nameHash % organizationNames[donorType].length]
+      : null;
+
+    await prisma.donor.create({
+      data: {
+        name: donorName,
+        donor_type: donorType,
+        organization_name: organizationName,
+        location: location,
+        industry: industry,
+        created_on: new Date(),
+        created_by: 'seed',
+        updated_on: new Date()
+      }
+    });
+    totalDonors++;
+  }
+  console.log(`✅ Created ${totalDonors} donor records`);
+
+  // 6. Create votes and legislation for candidate views
+  console.log('Creating votes and legislation for candidate views...');
+  const allViews = await prisma.candidateView.findMany();
+  const bills = [
+    "H.R. 1234 - Healthcare Reform Act",
+    "S. 567 - Climate Action Bill",
+    "H.R. 890 - Education Funding Package",
+    "S. 234 - Infrastructure Investment Act",
+    "H.R. 456 - Tax Reform Legislation",
+    "S. 789 - Public Safety Act",
+    "H.R. 321 - Economic Recovery Bill",
+    "S. 654 - Environmental Protection Act"
+  ];
+
+  const voteTypes = ['FOR', 'AGAINST', 'PRESENT'];
+  const legislationStatuses = ['INTRODUCED', 'PASSED', 'PENDING'];
+  const conflictTypes = ['FINANCIAL', 'PERSONAL', 'PROFESSIONAL'];
+  const severities = ['LOW', 'MEDIUM', 'HIGH'];
+
+  const voteImpacts = [
+    "This vote contributed to the bill's passage, affecting millions of constituents.",
+    "This vote helped block the legislation from moving forward.",
+    "The bill passed despite this vote, with implications for state funding.",
+    "This vote aligned with party leadership and had regional consequences.",
+    "The legislation failed by a narrow margin, with this vote being decisive."
+  ];
+
+  const voteReasons = [
+    "Supported this bill because it addresses critical infrastructure needs in our communities.",
+    "Opposed this legislation due to concerns about its fiscal impact and potential overreach.",
+    "Voted against because the bill lacked sufficient safeguards for taxpayer protections.",
+    "Supported this measure as it aligns with my commitment to environmental stewardship.",
+    "Opposed due to insufficient provisions for small business protections.",
+    "Voted in favor to ensure equitable access to healthcare services.",
+    "Supported because the bill strengthens our education system without raising taxes."
+  ];
+
+  const legislationImpacts = [
+    "If passed, this legislation would provide funding for infrastructure projects across the state.",
+    "This bill addresses regulatory concerns and could affect thousands of businesses.",
+    "Legislation aims to expand access to key services for underserved communities.",
+    "If enacted, this would be the first comprehensive reform in this area in over a decade.",
+    "This bill would establish new standards affecting public safety and welfare."
+  ];
+
+  const legislationReasons = [
+    "Introduced this bill to address the growing concerns raised by constituents.",
+    "This legislation reflects my commitment to ensuring fair and equitable policies.",
+    "Sponsored this bill after extensive consultation with stakeholders and experts.",
+    "This measure addresses a critical gap in our current regulatory framework.",
+    "Introduced to provide much-needed support to working families in our district."
+  ];
+
+  const conflictDescriptions = [
+    "Candidate has received significant campaign donations from industry groups related to this legislation.",
+    "Financial ties to companies that would benefit from this policy through stock holdings or board positions.",
+    "Personal connections to stakeholders in industries affected by this vote.",
+    "Previous employment or consulting relationships with organizations that have a vested interest in this legislation.",
+    "Family members have financial interests in companies affected by this policy.",
+    "Received donations from PACs and lobbying groups representing interests aligned with this vote."
+  ];
+
+  const conflictImpacts = [
+    "This financial relationship may raise questions about the objectivity of this vote.",
+    "Could create the appearance of favoring donor interests over public interest.",
+    "May influence how constituents view the candidate's independence on this issue.",
+    "Raises transparency concerns regarding the relationship between donations and policy positions."
+  ];
+
+  const conflictResponses = [
+    "Has stated that campaign contributions do not influence policy decisions and maintains strict ethical standards.",
+    "No public response has been provided regarding this potential conflict.",
+    "Candidate maintains full compliance with all disclosure requirements and ethics regulations.",
+    "Has recused from relevant votes when this conflict was identified."
+  ];
+
+  let totalVotes = 0;
+  let totalLegislation = 0;
+  let totalConflicts = 0;
+
+  for (const view of allViews) {
+    const seed = (view.view_text || "").length + (view.id.toString().length || 0);
+    
+    // About 50% of views get votes
+    if (seed % 2 === 0) {
+      const vote = await prisma.candidateVote.create({
+        data: {
+          candidate_view_id: view.id,
+          bill_title: bills[seed % bills.length],
+          vote_type: voteTypes[seed % voteTypes.length],
+          vote_date: new Date(2023 + (seed % 2), (seed % 12), (seed % 28) + 1),
+          description: "Voted on this legislation related to the candidate's stated position.",
+          impact: voteImpacts[seed % voteImpacts.length],
+          stated_reason: voteReasons[seed % voteReasons.length],
+          created_on: new Date(),
+          created_by: 'seed',
+          updated_on: new Date()
+        }
+      });
+      totalVotes++;
+
+      // About 30% of votes have conflicts
+      if (seed % 10 < 3) {
+        await prisma.conflictOfInterest.create({
+          data: {
+            conflict_type: conflictTypes[seed % conflictTypes.length],
+            description: conflictDescriptions[seed % conflictDescriptions.length],
+            severity: severities[seed % severities.length],
+            impact: conflictImpacts[seed % conflictImpacts.length],
+            response: conflictResponses[seed % conflictResponses.length],
+            candidate_vote_id: vote.id,
+            created_on: new Date(),
+            created_by: 'seed',
+            updated_on: new Date()
+          }
+        });
+        totalConflicts++;
+      }
+    }
+
+    // About 33% of views get legislation
+    if (seed % 3 === 1) {
+      const legislation = await prisma.candidateLegislation.create({
+        data: {
+          candidate_view_id: view.id,
+          title: bills[(seed * 2) % bills.length],
+          status: legislationStatuses[seed % legislationStatuses.length],
+          date: new Date(2023 + (seed % 2), (seed % 12), (seed % 28) + 1),
+          description: "Sponsored or co-sponsored legislation aligned with this position.",
+          impact: legislationImpacts[seed % legislationImpacts.length],
+          stated_reason: legislationReasons[seed % legislationReasons.length],
+          created_on: new Date(),
+          created_by: 'seed',
+          updated_on: new Date()
+        }
+      });
+      totalLegislation++;
+
+      // About 30% of legislation has conflicts
+      if ((seed * 2) % 10 < 3) {
+        await prisma.conflictOfInterest.create({
+          data: {
+            conflict_type: conflictTypes[(seed * 3) % conflictTypes.length],
+            description: conflictDescriptions[(seed * 2) % conflictDescriptions.length],
+            severity: severities[(seed * 2) % severities.length],
+            impact: conflictImpacts[(seed * 2) % conflictImpacts.length],
+            response: conflictResponses[(seed * 2) % conflictResponses.length],
+            candidate_legislation_id: legislation.id,
+            created_on: new Date(),
+            created_by: 'seed',
+            updated_on: new Date()
+          }
+        });
+        totalConflicts++;
+      }
+    }
+  }
+
+  console.log(`✅ Created ${totalVotes} votes, ${totalLegislation} legislation, and ${totalConflicts} conflicts`);
+
   console.log('🎉 Database seeding completed successfully!');
   console.log(`📊 Summary: ${states.length} states, ${totalDistricts} districts, ${candidateCount} candidates, ${parties.length} parties, ${totalElections} elections, ${totalElectionCandidates} election candidates`);
-  console.log(`📊 Comprehensive Data: ${totalKeyIssues} key issues, ${totalViews} views, ${totalHistories} histories, ${totalDonations} donations`);
+  console.log(`📊 Comprehensive Data: ${totalKeyIssues} key issues, ${totalViews} views, ${totalHistories} histories, ${totalDonations} donations, ${totalDonors} donors, ${totalVotes} votes, ${totalLegislation} legislation, ${totalConflicts} conflicts`);
   console.log('🗓️  All elections are scheduled for November 3, 2026 ONLY');
   console.log('🐕 Candidate profile pictures are random dog images from dog.ceo API');
   console.log('🌍 Comprehensive coverage: Presidential, Congressional (all districts), Senate (all states), Gubernatorial (all states)');

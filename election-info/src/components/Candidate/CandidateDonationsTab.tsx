@@ -1,5 +1,7 @@
 import { useState, useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { FaSearch, FaSortAmountDown } from "react-icons/fa";
+import { api } from "../../lib/api";
 import type { ElectionCandidateDonation } from "../../types/api";
 
 interface DonorInfo {
@@ -103,89 +105,28 @@ const analyzeDonationContext = (
   };
 };
 
-// Helper function to generate consistent dummy donor data based on donor name
-const getDonorInfo = (
-  donation: ElectionCandidateDonation, 
-  allDonations: ElectionCandidateDonation[],
-  candidateKeyIssues: string[] = [],
-  candidateViews: string[] = []
-): DonorInfo => {
-  // Create a hash from the donor name for consistent dummy data
-  const nameHash = donation.donor_name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-  
-  const donorTypes: DonorInfo['type'][] = ['Individual', 'Corporation', 'PAC', 'Union', 'Nonprofit', 'Other'];
-  const donorType = donorTypes[nameHash % donorTypes.length];
-  
-  const industries = [
-    'Technology', 'Healthcare', 'Finance', 'Energy', 'Education', 'Real Estate',
-    'Manufacturing', 'Retail', 'Agriculture', 'Defense', 'Transportation', 'Telecommunications'
-  ];
-  const industry = industries[nameHash % industries.length];
-  
-  const cities = [
-    'New York, NY', 'Los Angeles, CA', 'Chicago, IL', 'Houston, TX', 'Phoenix, AZ',
-    'Philadelphia, PA', 'San Antonio, TX', 'San Diego, CA', 'Dallas, TX', 'San Jose, CA',
-    'Austin, TX', 'Jacksonville, FL', 'Fort Worth, TX', 'Columbus, OH', 'Charlotte, NC'
-  ];
-  const location = cities[nameHash % cities.length];
-  
-  const organizations = {
-    Individual: undefined,
-    Corporation: [
-      'Acme Corporation', 'Global Tech Solutions', 'United Industries', 'Pacific Enterprises',
-      'National Manufacturing Co.', 'Premier Services Group', 'Metro Business Holdings'
-    ],
-    PAC: [
-      'Progress PAC', 'Forward Action Committee', 'Citizens United PAC', 'American Values PAC',
-      'Future Leaders PAC', 'Community Voice PAC', 'National Interest PAC'
-    ],
-    Union: [
-      'United Workers Union', 'National Labor Federation', 'Service Employees Union',
-      'Transport Workers Union', 'Healthcare Professionals Union'
-    ],
-    Nonprofit: [
-      'Community Foundation', 'Public Interest Group', 'Civic Action Network',
-      'Policy Institute', 'Advocacy Alliance'
-    ],
-    Other: undefined
+// Helper to convert DonorType from API to DonorInfo type
+const formatDonorType = (donorType: string): DonorInfo['type'] => {
+  const mapping: Record<string, DonorInfo['type']> = {
+    'INDIVIDUAL': 'Individual',
+    'CORPORATION': 'Corporation',
+    'PAC': 'PAC',
+    'UNION': 'Union',
+    'NONPROFIT': 'Nonprofit',
+    'OTHER': 'Other'
   };
-  
-  const organization = donorType !== 'Individual' && donorType !== 'Other'
-    ? organizations[donorType]?.[(nameHash * 7) % (organizations[donorType]?.length || 1)]
-    : undefined;
-  
-  // Calculate totals
-  const totalToCandidate = allDonations
-    .filter(d => d.donor_name === donation.donor_name)
-    .reduce((sum, d) => sum + parseFloat(d.donation_amount), 0);
-  
-  const totalThisCycle = totalToCandidate * (1.2 + (nameHash % 10) / 20); // Vary between 1.2x and 1.7x
-  
-  const notes = donorType === 'Corporation' 
-    ? 'Corporate Political Action Committee'
-    : donorType === 'PAC'
-    ? 'Registered Political Action Committee'
-    : donorType === 'Union'
-    ? 'Labor Union Political Fund'
-    : donorType === 'Nonprofit'
-    ? '501(c)(4) Social Welfare Organization'
-    : undefined;
-  
-  // Analyze donation context based on candidate positions
-  const context = donorType !== 'Individual' && industry
-    ? analyzeDonationContext(industry, candidateKeyIssues, candidateViews)
-    : undefined;
-  
-  return {
-    type: donorType,
-    organization,
-    location,
-    industry: donorType !== 'Individual' ? industry : undefined,
-    totalToCandidate,
-    totalThisCycle,
-    notes,
-    context
+  return mapping[donorType] || 'Other';
+};
+
+// Helper to generate notes based on donor type
+const getDonorNotes = (donorType: string): string | undefined => {
+  const mapping: Record<string, string> = {
+    'CORPORATION': 'Corporate Political Action Committee',
+    'PAC': 'Registered Political Action Committee',
+    'UNION': 'Labor Union Political Fund',
+    'NONPROFIT': '501(c)(4) Social Welfare Organization'
   };
+  return mapping[donorType];
 };
 
 const CandidateDonationsTab = ({ 
@@ -199,15 +140,55 @@ const CandidateDonationsTab = ({
   const [sortBy, setSortBy] = useState<"amount" | "date" | "donor">("amount");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
 
-  // Process all donations to get donor info
+  // Get unique donor names
+  const uniqueDonorNames = useMemo(() => {
+    if (!donations || donations.length === 0) return [];
+    return [...new Set(donations.map(d => d.donor_name))];
+  }, [donations]);
+
+  // Fetch donor information in batch
+  const { data: donorsData } = useQuery({
+    queryKey: ['donors-batch', uniqueDonorNames.sort().join(',')],
+    queryFn: () => api.getDonorsBatch(uniqueDonorNames),
+    enabled: uniqueDonorNames.length > 0,
+  });
+
+  // Process all donations to get donor info from API
   const donationsWithInfo = useMemo(() => {
     if (!donations || donations.length === 0) return [];
     
-    return donations.map(donation => ({
-      donation,
-      donorInfo: getDonorInfo(donation, donations, candidateKeyIssues, candidateViews)
-    }));
-  }, [donations, candidateKeyIssues, candidateViews]);
+    return donations.map(donation => {
+      const donor = donorsData?.[donation.donor_name];
+      
+      // Calculate totals
+      const totalToCandidate = donations
+        .filter(d => d.donor_name === donation.donor_name)
+        .reduce((sum, d) => sum + parseFloat(d.donation_amount), 0);
+      
+      // Estimate total this cycle (roughly 1.2x-1.7x, using donation name as seed)
+      const nameHash = donation.donor_name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+      const totalThisCycle = totalToCandidate * (1.2 + (nameHash % 10) / 20);
+      
+      // Build DonorInfo from API data
+      const donorInfo: DonorInfo = {
+        type: donor ? formatDonorType(donor.donor_type) : 'Other',
+        organization: donor?.organization_name,
+        location: donor?.location || 'Unknown',
+        industry: donor?.industry,
+        totalToCandidate,
+        totalThisCycle,
+        notes: donor ? getDonorNotes(donor.donor_type) : undefined,
+        context: donor?.industry 
+          ? analyzeDonationContext(donor.industry, candidateKeyIssues, candidateViews)
+          : undefined
+      };
+      
+      return {
+        donation,
+        donorInfo
+      };
+    });
+  }, [donations, donorsData, candidateKeyIssues, candidateViews]);
 
   // Calculate summary statistics
   const summaryStats = useMemo(() => {

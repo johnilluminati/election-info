@@ -189,6 +189,8 @@ model CandidateView {
   updated_by    String?
   candidate     Candidate             @relation(fields: [candidate_id], references: [id])
   view_category CandidateViewCategory @relation(fields: [view_type_id], references: [id])
+  votes         CandidateVote[]
+  legislation   CandidateLegislation[]
 }
 
 model CandidateViewCategory {
@@ -218,6 +220,29 @@ model ElectionCandidateDonation {
   updated_on            DateTime
   updated_by            String?
   election_candidate    ElectionCandidate @relation(fields: [election_candidate_id], references: [id])
+  
+  @@index([donor_name])
+}
+
+model Donor {
+  name                  String                        @id
+  donor_type            DonorType
+  organization_name     String?
+  location              String?
+  industry              String?
+  created_on            DateTime
+  created_by            String
+  updated_on            DateTime
+  updated_by            String?
+}
+
+enum DonorType {
+  INDIVIDUAL
+  CORPORATION
+  PAC
+  UNION
+  NONPROFIT
+  OTHER
 }
 
 model ElectionGeography {
@@ -234,4 +259,84 @@ enum GeographyType {
   COUNTY
   CITY
   DISTRICT
+}
+
+model CandidateVote {
+  id             BigInt                @id @default(autoincrement())
+  candidate_view_id BigInt
+  bill_title     String
+  vote_type      VoteType
+  vote_date      DateTime
+  description    String?
+  impact         String?
+  stated_reason  String?
+  created_on     DateTime
+  created_by     String
+  updated_on     DateTime
+  updated_by     String?
+  candidate_view CandidateView          @relation(fields: [candidate_view_id], references: [id])
+  conflicts      ConflictOfInterest[]
+}
+
+enum VoteType {
+  FOR
+  AGAINST
+  PRESENT
+  NOT_VOTING
+}
+
+model CandidateLegislation {
+  id             BigInt                @id @default(autoincrement())
+  candidate_view_id BigInt
+  title          String
+  status         LegislationStatus
+  date           DateTime
+  description    String?
+  impact         String?
+  stated_reason  String?
+  created_on     DateTime
+  created_by     String
+  updated_on     DateTime
+  updated_by     String?
+  candidate_view CandidateView          @relation(fields: [candidate_view_id], references: [id])
+  conflicts      ConflictOfInterest[]
+}
+
+enum LegislationStatus {
+  INTRODUCED
+  PASSED
+  PENDING
+  VETOED
+}
+
+model ConflictOfInterest {
+  id                   BigInt                @id @default(autoincrement())
+  conflict_type        ConflictType
+  description          String
+  severity             ConflictSeverity
+  impact               String?
+  response             String?
+  candidate_vote_id    BigInt?
+  candidate_legislation_id BigInt?
+  created_on           DateTime
+  created_by           String
+  updated_on           DateTime
+  updated_by           String?
+  candidate_vote       CandidateVote?        @relation(fields: [candidate_vote_id], references: [id])
+  candidate_legislation CandidateLegislation? @relation(fields: [candidate_legislation_id], references: [id])
+
+  @@index([candidate_vote_id])
+  @@index([candidate_legislation_id])
+}
+
+enum ConflictType {
+  FINANCIAL
+  PERSONAL
+  PROFESSIONAL
+}
+
+enum ConflictSeverity {
+  LOW
+  MEDIUM
+  HIGH
 }

@@ -13,6 +13,10 @@ import type {
   ElectionCandidate,
   CandidateKeyIssue,
   ElectionCandidateDonation,
+  CandidateVote,
+  CandidateLegislation,
+  ConflictOfInterest,
+  Donor,
   HealthCheck
 } from '../types/api'
 
@@ -172,6 +176,21 @@ export const api = {
     const params = election_id ? `?election_id=${election_id}` : ''
     return apiRequest<ElectionCandidateDonation[]>(`/api/candidates/${id}/donations${params}`)
   },
+  
+  // View related content
+  getViewVotes: (viewId: string) => apiRequest<CandidateVote[]>(`/api/candidates/views/${viewId}/votes`),
+  getViewLegislation: (viewId: string) => apiRequest<CandidateLegislation[]>(`/api/candidates/views/${viewId}/legislation`),
+  getViewRelatedContent: (viewId: string) => apiRequest<{ votes: CandidateVote[], legislation: CandidateLegislation[] }>(`/api/candidates/views/${viewId}/related-content`),
+  
+  // Donors
+  getDonor: (donorName: string) => apiRequest<Donor>(`/api/candidates/donors/${encodeURIComponent(donorName)}`),
+  getDonorsBatch: (donorNames: string[]) => apiRequest<Record<string, Donor>>('/api/candidates/donors/batch', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ donorNames })
+  }),
 
   // Parties
   getParties: () => apiRequest<PoliticalParty[]>('/api/parties'),

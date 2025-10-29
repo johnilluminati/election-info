@@ -255,6 +255,65 @@ export interface CandidateView {
   view_category?: CandidateViewCategory
 }
 
+export interface CandidateVote {
+  id: string
+  candidate_view_id: string
+  bill_title: string
+  vote_type: 'FOR' | 'AGAINST' | 'PRESENT' | 'NOT_VOTING'
+  vote_date: string
+  description?: string
+  impact?: string
+  stated_reason?: string
+  created_on: string
+  created_by: string
+  updated_on: string
+  updated_by?: string
+  conflicts?: ConflictOfInterest[]
+}
+
+export interface CandidateLegislation {
+  id: string
+  candidate_view_id: string
+  title: string
+  status: 'INTRODUCED' | 'PASSED' | 'PENDING' | 'VETOED'
+  date: string
+  description?: string
+  impact?: string
+  stated_reason?: string
+  created_on: string
+  created_by: string
+  updated_on: string
+  updated_by?: string
+  conflicts?: ConflictOfInterest[]
+}
+
+export interface ConflictOfInterest {
+  id: string
+  conflict_type: 'FINANCIAL' | 'PERSONAL' | 'PROFESSIONAL'
+  description: string
+  severity: 'LOW' | 'MEDIUM' | 'HIGH'
+  impact?: string
+  response?: string
+  candidate_vote_id?: string
+  candidate_legislation_id?: string
+  created_on: string
+  created_by: string
+  updated_on: string
+  updated_by?: string
+}
+
+export interface Donor {
+  name: string
+  donor_type: 'INDIVIDUAL' | 'CORPORATION' | 'PAC' | 'UNION' | 'NONPROFIT' | 'OTHER'
+  organization_name?: string
+  location?: string
+  industry?: string
+  created_on: string
+  created_by: string
+  updated_on: string
+  updated_by?: string
+}
+
 export interface CandidateViewCategory {
   id: string
   title: string

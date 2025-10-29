@@ -316,6 +316,128 @@ router.get('/:id/donations', async (req, res, next) => {
   }
 });
 
+// GET /api/candidates/views/:viewId/votes - Get votes related to a candidate view
+router.get('/views/:viewId/votes', async (req, res, next) => {
+  try {
+    const { viewId } = req.params;
+    const votes = await prisma.candidateVote.findMany({
+      where: {
+        candidate_view_id: BigInt(viewId)
+      },
+      include: {
+        conflicts: true
+      },
+      orderBy: {
+        vote_date: 'desc'
+      }
+    });
+    res.json(votes);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// GET /api/candidates/views/:viewId/legislation - Get legislation related to a candidate view
+router.get('/views/:viewId/legislation', async (req, res, next) => {
+  try {
+    const { viewId } = req.params;
+    const legislation = await prisma.candidateLegislation.findMany({
+      where: {
+        candidate_view_id: BigInt(viewId)
+      },
+      include: {
+        conflicts: true
+      },
+      orderBy: {
+        date: 'desc'
+      }
+    });
+    res.json(legislation);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// GET /api/candidates/views/:viewId/related-content - Get all related content (votes + legislation) for a view
+router.get('/views/:viewId/related-content', async (req, res, next) => {
+  try {
+    const { viewId } = req.params;
+    const [votes, legislation] = await Promise.all([
+      prisma.candidateVote.findMany({
+        where: {
+          candidate_view_id: BigInt(viewId)
+        },
+        include: {
+          conflicts: true
+        },
+        orderBy: {
+          vote_date: 'desc'
+        }
+      }),
+      prisma.candidateLegislation.findMany({
+        where: {
+          candidate_view_id: BigInt(viewId)
+        },
+        include: {
+          conflicts: true
+        },
+        orderBy: {
+          date: 'desc'
+        }
+      })
+    ]);
+    res.json({ votes, legislation });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// GET /api/candidates/donors/:donorName - Get donor information by name
+router.get('/donors/:donorName', async (req, res, next) => {
+  try {
+    const { donorName } = req.params;
+    const donor = await prisma.donor.findUnique({
+      where: {
+        name: decodeURIComponent(donorName)
+      }
+    });
+    if (!donor) {
+      return res.status(404).json({ error: 'Donor not found' });
+    }
+    res.json(donor);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// POST /api/candidates/donors/batch - Get donor information for multiple donor names
+router.post('/donors/batch', async (req, res, next) => {
+  try {
+    const { donorNames } = req.body;
+    if (!Array.isArray(donorNames)) {
+      return res.status(400).json({ error: 'donorNames must be an array' });
+    }
+    
+    const donors = await prisma.donor.findMany({
+      where: {
+        name: {
+          in: donorNames
+        }
+      }
+    });
+    
+    // Create a map for quick lookup
+    const donorMap = {};
+    donors.forEach(donor => {
+      donorMap[donor.name] = donor;
+    });
+    
+    res.json(donorMap);
+  } catch (error) {
+    next(error);
+  }
+});
+
 // GET /api/candidates/:id - Get candidate by ID (MUST come after specific routes)
 router.get('/:id', async (req, res, next) => {
   try {
