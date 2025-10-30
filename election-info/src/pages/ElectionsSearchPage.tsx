@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import CandidateComparison from "../components/CandidateComparison";
 import CongressionalMap from "../components/CongressionalMap";
 import { useElections } from "../hooks";
@@ -11,6 +11,9 @@ const ElectionsSearchPage = () => {
   const [selectedState, setSelectedState] = useState<string | null>(null);
   const [selectedElection, setSelectedElection] = useState<Election | null>(null);
   const [zoomToHome, setZoomToHome] = useState<boolean>(false);
+  const listContainerRef = useRef<HTMLDivElement | null>(null);
+  const listItemRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const detailsRef = useRef<HTMLDivElement | null>(null);
   const [zoomToState, setZoomToState] = useState<string | null>(null);
   const [zoomToDistrict, setZoomToDistrict] = useState<string | null>(null);
 
@@ -35,6 +38,19 @@ const ElectionsSearchPage = () => {
   const handleElectionClick = (election: Election) => {
     setSelectedElection(election);
   };
+
+  // Auto-scroll selected election into view and, on small screens, scroll details into view
+  useEffect(() => {
+    if (selectedElection) {
+      const el = listItemRefs.current[selectedElection.id || ''];
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+      }
+      if (typeof window !== 'undefined' && window.innerWidth < 1024 && detailsRef.current) {
+        detailsRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+  }, [selectedElection]);
 
   const handleZoomToHome = () => {
     setZoomToHome(true);
@@ -117,10 +133,10 @@ const ElectionsSearchPage = () => {
 
   return (
     <>
-      <section className="h-96 lg:h-[620px] overflow-hidden">
+      <section className="h-auto lg:h-[620px] overflow-hidden">
         <div className="h-full">
-          <div className="flex flex-row justify-center items-center w-full h-[calc(100%-2rem)]">
-            <div className="flex flex-col basis-3/4 h-full">
+          <div className="flex flex-col lg:flex-row justify-center items-stretch w-full h-full">
+            <div className="flex flex-col w-full lg:basis-3/4 lg:h-full">
               <CongressionalMapNav 
                 onMapSelection={handleSelection} 
                 selectedState={selectedState}
@@ -136,13 +152,13 @@ const ElectionsSearchPage = () => {
                 zoomToDistrict={zoomToDistrict}
               />
             </div>
-            <div className="flex basis-1/4 h-full flex-col pl-4">
+            <div className="flex w-full lg:basis-1/4 lg:h-full flex-col lg:pl-4 mt-4 lg:mt-0">
               <span className="text-2xl font-bold text-center w-full pb-4 border-b">
                 <u>Upcoming Elections
                   {selectedDistrict ? ` - ${selectedDistrict}` : selectedState ? ` - ${selectedState}` : ''}
                 </u>
               </span>
-              <div className="overflow-y-auto p-4">
+              <div className="overflow-y-auto p-4" ref={listContainerRef}>
                 {!selectedDistrict && !selectedState ? (
                   <div className="text-center text-gray-500 mt-8">
                     Select a state or district on the map to view elections
@@ -168,18 +184,30 @@ const ElectionsSearchPage = () => {
                       return (
                         <div key={typeName} className="border-b pb-2">
                           <h3 className="font-semibold text-lg">{typeName}</h3>
-                          {elections?.map((election) => (
-                            <div key={election.id} className="mt-2">
-                              <div className="text-sm text-gray-600 mb-1">
-                                {election.election_cycle?.election_day ? 
-                                  new Date(election.election_cycle.election_day).toLocaleDateString('en-US', {
-                                    year: 'numeric',
-                                    month: 'long',
-                                    day: 'numeric'
-                                  }) : 
-                                  `${election.election_cycle?.election_year || 'Unknown'}`
-                                }
-                              </div>
+                          {elections?.map((election) => {
+                            const isCongressional = typeName === 'Congressional';
+                            const districtFromElection = election.geographies?.find(g => g.scope_type === 'DISTRICT')?.scope_id;
+                            const shouldShowDistrict = isCongressional && !selectedDistrict;
+                            const districtToShow = shouldShowDistrict ? districtFromElection : undefined;
+                            const dateText = election.election_cycle?.election_day 
+                              ? new Date(election.election_cycle.election_day).toLocaleDateString('en-US', {
+                                  year: 'numeric',
+                                  month: 'long',
+                                  day: 'numeric'
+                                })
+                              : `${election.election_cycle?.election_year || 'Unknown'}`;
+                            return (
+                              <div
+                                key={election.id}
+                                className="mt-2"
+                                ref={(el) => { listItemRefs.current[election.id] = el; }}
+                              >
+                                <div className="text-sm text-gray-600 mb-1">
+                                  {dateText}
+                                  {districtToShow && (
+                                    <span className="ml-2 text-gray-500">· District {districtToShow}</span>
+                                  )}
+                                </div>
                               <button
                                 onClick={() => handleElectionClick(election)}
                                 className={`w-full text-left p-2 rounded transition-colors ${
@@ -202,7 +230,8 @@ const ElectionsSearchPage = () => {
                                 )}
                               </button>
                             </div>
-                          ))}
+                            );
+                          })}
                         </div>
                       );
                     })}
@@ -213,11 +242,13 @@ const ElectionsSearchPage = () => {
           </div>
         </div>
       </section>
-      <CandidateComparison 
-        selectedElection={selectedElection}
-        selectedState={selectedState}
-        selectedDistrict={selectedDistrict}
-      />
+      <div ref={detailsRef}>
+        <CandidateComparison 
+          selectedElection={selectedElection}
+          selectedState={selectedState}
+          selectedDistrict={selectedDistrict}
+        />
+      </div>
     </>
   );
 };
