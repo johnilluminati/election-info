@@ -747,7 +747,6 @@ async function main() {
   const voteTypes = ['FOR', 'AGAINST', 'PRESENT'];
   const legislationStatuses = ['INTRODUCED', 'PASSED', 'PENDING'];
   const conflictTypes = ['FINANCIAL', 'PERSONAL', 'PROFESSIONAL'];
-  const severities = ['LOW', 'MEDIUM', 'HIGH'];
 
   const voteImpacts = [
     "This vote contributed to the bill's passage, affecting millions of constituents.",
@@ -837,7 +836,6 @@ async function main() {
           data: {
             conflict_type: conflictTypes[seed % conflictTypes.length],
             description: conflictDescriptions[seed % conflictDescriptions.length],
-            severity: severities[seed % severities.length],
             impact: conflictImpacts[seed % conflictImpacts.length],
             response: conflictResponses[seed % conflictResponses.length],
             candidate_vote_id: vote.id,
@@ -874,7 +872,6 @@ async function main() {
           data: {
             conflict_type: conflictTypes[(seed * 3) % conflictTypes.length],
             description: conflictDescriptions[(seed * 2) % conflictDescriptions.length],
-            severity: severities[(seed * 2) % severities.length],
             impact: conflictImpacts[(seed * 2) % conflictImpacts.length],
             response: conflictResponses[(seed * 2) % conflictResponses.length],
             candidate_legislation_id: legislation.id,

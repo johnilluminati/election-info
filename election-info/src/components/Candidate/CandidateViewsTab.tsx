@@ -36,9 +36,6 @@ const ViewRelatedContent = ({ viewId }: { viewId: string }) => {
     return status.charAt(0) + status.slice(1).toLowerCase();
   };
 
-  const formatSeverity = (severity: string): string => {
-    return severity.charAt(0) + severity.slice(1).toLowerCase();
-  };
 
   return (
     <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700 space-y-4">
@@ -88,15 +85,8 @@ const ViewRelatedContent = ({ viewId }: { viewId: string }) => {
                     </div>
                     {vote.conflicts.map((conflict) => (
                       <div key={conflict.id} className="bg-orange-50 dark:bg-orange-900/20 rounded p-2 mb-2 last:mb-0 space-y-2">
-                        <div className="flex items-start justify-between gap-2">
+                        <div className="flex items-start gap-2">
                           <span className="text-xs font-medium text-orange-900 dark:text-orange-200">{formatConflictType(conflict.conflict_type)} Conflict</span>
-                          <span className={`text-xs font-semibold px-2 py-0.5 rounded ${
-                            conflict.severity === "HIGH" ? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400" :
-                            conflict.severity === "MEDIUM" ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400" :
-                            "bg-gray-100 text-gray-800 dark:bg-gray-600 dark:text-gray-300"
-                          }`}>
-                            {formatSeverity(conflict.severity)}
-                          </span>
                         </div>
                         <div className="text-xs text-orange-800 dark:text-orange-300 leading-relaxed">{conflict.description}</div>
                         {conflict.impact && (
@@ -171,15 +161,8 @@ const ViewRelatedContent = ({ viewId }: { viewId: string }) => {
                     </div>
                     {leg.conflicts.map((conflict) => (
                       <div key={conflict.id} className="bg-orange-50 dark:bg-orange-900/20 rounded p-2 mb-2 last:mb-0 space-y-2">
-                        <div className="flex items-start justify-between gap-2">
+                        <div className="flex items-start gap-2">
                           <span className="text-xs font-medium text-orange-900 dark:text-orange-200">{formatConflictType(conflict.conflict_type)} Conflict</span>
-                          <span className={`text-xs font-semibold px-2 py-0.5 rounded ${
-                            conflict.severity === "HIGH" ? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400" :
-                            conflict.severity === "MEDIUM" ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400" :
-                            "bg-gray-100 text-gray-800 dark:bg-gray-600 dark:text-gray-300"
-                          }`}>
-                            {formatSeverity(conflict.severity)}
-                          </span>
                         </div>
                         <div className="text-xs text-orange-800 dark:text-orange-300 leading-relaxed">{conflict.description}</div>
                         {conflict.impact && (

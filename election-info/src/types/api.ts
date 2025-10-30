@@ -291,7 +291,6 @@ export interface ConflictOfInterest {
   id: string
   conflict_type: 'FINANCIAL' | 'PERSONAL' | 'PROFESSIONAL'
   description: string
-  severity: 'LOW' | 'MEDIUM' | 'HIGH'
   impact?: string
   response?: string
   candidate_vote_id?: string
