@@ -220,6 +220,7 @@ model ElectionCandidateDonation {
   updated_on            DateTime
   updated_by            String?
   election_candidate    ElectionCandidate @relation(fields: [election_candidate_id], references: [id])
+  donor                 Donor              @relation(fields: [donor_name], references: [name])
   
   @@index([donor_name])
 }
@@ -234,6 +235,7 @@ model Donor {
   created_by            String
   updated_on            DateTime
   updated_by            String?
+  donations             ElectionCandidateDonation[]
 }
 
 enum DonorType {
@@ -313,7 +315,6 @@ model ConflictOfInterest {
   id                   BigInt                @id @default(autoincrement())
   conflict_type        ConflictType
   description          String
-  severity             ConflictSeverity
   impact               String?
   response             String?
   candidate_vote_id    BigInt?
@@ -333,10 +334,4 @@ enum ConflictType {
   FINANCIAL
   PERSONAL
   PROFESSIONAL
-}
-
-enum ConflictSeverity {
-  LOW
-  MEDIUM
-  HIGH
 }

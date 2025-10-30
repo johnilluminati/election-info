@@ -134,7 +134,16 @@ router.get('/:id', async (req, res, next) => {
               select: {
                 id: true,
                 donor_name: true,
-                donation_amount: true
+                donation_amount: true,
+                donor: {
+                  select: {
+                    name: true,
+                    donor_type: true,
+                    organization_name: true,
+                    location: true,
+                    industry: true
+                  }
+                }
               },
               orderBy: {
                 donation_amount: 'desc'

@@ -151,6 +151,9 @@ async function getElectionCandidates(req, res, next) {
             }
           },
           donations: {
+            include: {
+              donor: true
+            },
             orderBy: {
               donation_amount: 'desc'
             }
@@ -285,6 +288,7 @@ router.get('/:id/donations', async (req, res, next) => {
     const donations = await prisma.electionCandidateDonation.findMany({
       where,
       include: {
+        donor: true,
         election_candidate: {
           include: {
             election: {

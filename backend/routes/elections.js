@@ -199,6 +199,9 @@ router.get('/:id', async (req, res, next) => {
               }
             },
             donations: {
+              include: {
+                donor: true
+              },
               orderBy: {
                 donation_amount: 'desc'
               }

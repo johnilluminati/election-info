@@ -648,8 +648,8 @@ async function main() {
   }
   console.log(`✅ Created ${totalHistories} candidate histories for all candidates`);
 
-  // 4. Donations for ALL candidates
-  console.log('Creating campaign donations for all candidates...');
+  // 4. Create Donor records for all unique donor names (must be created before donations due to foreign key)
+  console.log('Creating donor records...');
   const donorNames = [
     'Progressive PAC', 'Conservative Coalition', 'Liberty Fund', 'Labor Union Local 123', 'Business Roundtable',
     'Environmental Action Fund', 'Veterans for America', 'Small Business Alliance', 'Healthcare Reform PAC',
@@ -660,31 +660,6 @@ async function main() {
     'Criminal Justice Reform PAC', 'Workforce Development Fund', 'Small Business PAC', 'Manufacturing PAC',
     'Retail PAC', 'Healthcare PAC', 'Education PAC', 'Defense PAC', 'Homeland Security PAC'
   ];
-
-  let totalDonations = 0;
-  for (const candidate of allElectionCandidates) {
-    const donationCount = Math.floor(Math.random() * 5) + 2; // 2-6 donations per candidate
-    for (let i = 0; i < donationCount; i++) {
-      const randomDonor = donorNames[Math.floor(Math.random() * donorNames.length)];
-      const amount = (Math.random() * 10000 + 1000).toFixed(2);
-      
-      await prisma.electionCandidateDonation.create({
-        data: {
-          election_candidate_id: candidate.id,
-          donor_name: randomDonor,
-          donation_amount: amount,
-          created_on: new Date(),
-          created_by: 'seed',
-          updated_on: new Date()
-        }
-      });
-      totalDonations++;
-    }
-  }
-  console.log(`✅ Created ${totalDonations} campaign donations for all candidates`);
-
-  // 5. Create Donor records for all unique donor names
-  console.log('Creating donor records...');
   const uniqueDonorNames = [...new Set(donorNames)];
   const donorTypes = ['INDIVIDUAL', 'CORPORATION', 'PAC', 'UNION', 'NONPROFIT', 'OTHER'];
   const industries = [
@@ -729,6 +704,30 @@ async function main() {
     totalDonors++;
   }
   console.log(`✅ Created ${totalDonors} donor records`);
+
+  // 5. Donations for ALL candidates (created after donors due to foreign key)
+  console.log('Creating campaign donations for all candidates...');
+  let totalDonations = 0;
+  for (const candidate of allElectionCandidates) {
+    const donationCount = Math.floor(Math.random() * 5) + 2; // 2-6 donations per candidate
+    for (let i = 0; i < donationCount; i++) {
+      const randomDonor = donorNames[Math.floor(Math.random() * donorNames.length)];
+      const amount = (Math.random() * 10000 + 1000).toFixed(2);
+      
+      await prisma.electionCandidateDonation.create({
+        data: {
+          election_candidate_id: candidate.id,
+          donor_name: randomDonor,
+          donation_amount: amount,
+          created_on: new Date(),
+          created_by: 'seed',
+          updated_on: new Date()
+        }
+      });
+      totalDonations++;
+    }
+  }
+  console.log(`✅ Created ${totalDonations} campaign donations for all candidates`);
 
   // 6. Create votes and legislation for candidate views
   console.log('Creating votes and legislation for candidate views...');
