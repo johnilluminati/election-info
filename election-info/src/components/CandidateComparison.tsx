@@ -202,8 +202,7 @@ const CandidateComparison = ({ selectedElection, selectedState, selectedDistrict
                     </p>
                   </div>
 
-                  {/* Candidate Display Area - Now supports multiple candidates */}
-                  <div className="flex flex-col lg:flex-row justify-center gap-4">
+                  <div className="flex flex-row justify-center gap-4">
                     {selectedCandidates.map((electionCandidate, index) => (
                       <div key={electionCandidate.id} className="flex items-start">
                         <div className="max-w-5xl w-full">
