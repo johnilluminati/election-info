@@ -18,15 +18,6 @@ const CandidateKeyIssuesTab = ({ keyIssues }: CandidateKeyIssuesTabProps) => {
 
   return (
     <div className="flex flex-col gap-4 p-2">
-      <div className="mb-2">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
-          Campaign Priorities
-        </h3>
-        <p className="text-sm text-gray-600 dark:text-gray-400">
-          Key issues and positions for this election cycle
-        </p>
-      </div>
-
       <div className="space-y-4">
         {sortedIssues.map((issue) => (
           <div
