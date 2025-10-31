@@ -50,20 +50,17 @@ The goal is to cut through the noise and make it simple to find accurate, transp
 ## Tech Stack
 
 ### Frontend
-- **React 19** - Modern UI library for building interactive user interfaces
-- **TypeScript** - Type-safe development for improved code quality
-- **TailwindCSS 4** - Utility-first CSS framework for rapid styling
-- **React Router** - Declarative routing for single-page applications
-- **TanStack Query (React Query)** - Powerful data synchronization and caching
+- **React 19**
+- **TypeScript**
+- **TailwindCSS 4**
+- **React Router**
+- **TanStack Query (React Query)** - Data synchronization and caching
 - **MapLibre GL** - Interactive, vector-based maps for geographic visualization
-- **Vite** - Fast build tool and development server
 
 ### Backend
-- **Node.js with Express** - Lightweight, flexible REST API server
-- **Prisma** - Next-generation ORM with type safety and excellent developer experience
-- **PostgreSQL** - Robust relational database for complex data relationships
-- **Security Middleware** - Helmet for security headers, CORS for cross-origin handling
-- **Request Logging** - Morgan for HTTP request logging
+- **Node.js with Express**
+- **Prisma ORM**
+- **PostgreSQL**
 
 ## Project Structure
 
