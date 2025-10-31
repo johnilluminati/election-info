@@ -2,6 +2,8 @@
 
 A comprehensive web platform designed to make information about upcoming US elections and candidates easily accessible, helping voters distinguish accurate information from misinformation.
 
+**Please note that all of the election and candidate data is just dummy data that I'm creating, for the purpose of having data to work with for the frontend.**
+
 ## Mission
 
 Finding reliable information about elections and candidates shouldn't have to be difficult. This platform aims to provide a centralized, easy-to-navigate resource where voters can:
@@ -21,6 +23,7 @@ The goal is to cut through the noise and make it simple to find accurate, transp
 - Filter elections by type (Presidential, Congressional, Senate, Gubernatorial, State Legislature, Local)
 - View upcoming elections with candidate information
 - Detailed election cycle information
+<img width="1580" height="1170" alt="Image" src="https://github.com/user-attachments/assets/c488caa8-f846-48fd-87e1-8b6b6ca86f61" />
 
 ### Candidate Search & Comparison
 - Search candidates by name, state, party, or election type
@@ -31,16 +34,13 @@ The goal is to cut through the noise and make it simple to find accurate, transp
   - Professional and personal background
   - Potential conflicts of interest
 - **Side-by-side candidate comparison** for easy evaluation
-
-### Interactive Congressional Map
-- Visual map interface for selecting states and districts
-- Breadcrumb navigation for easy location selection
-- District-specific election information
+<img width="1575" height="1266" alt="Image" src="https://github.com/user-attachments/assets/d6a0c6c7-dc4f-4942-aba7-aceddd2ed54d" />
 
 ### Political Party Information
 - View party stances and positions
-- See candidates by party
 - Party leadership information
+- See candidates by party and see how they align with their party
+<img width="1551" height="1275" alt="Image" src="https://github.com/user-attachments/assets/d09ebde2-4693-466c-be75-5b8adc7ac152" />
 
 ### User Experience
 - Much emphasis placed on ease of navigation and presenting information in as unbiased a way as possible
