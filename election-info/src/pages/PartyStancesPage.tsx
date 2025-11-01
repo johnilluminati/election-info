@@ -73,16 +73,16 @@ const PartyStancesPage = () => {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Hero Section */}
-      <div className="bg-gray-800 dark:bg-gray-900 text-white">
+      <div className="dark:bg-gray-900">
         <div className="container mx-auto px-4 py-16">
           <div className="text-center max-w-4xl mx-auto">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-white">
               Political Party Stances
             </h1>
-            <p className="text-xl md:text-2xl text-gray-300 mb-6">
+            <p className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 mb-6">
               Learn about the positions, values, and candidates of political parties.
             </p>
-            <p className="text-lg text-gray-400 max-w-2xl mx-auto">
+            <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
               Explore party platforms, key issues, and leadership to make informed decisions about your vote.
             </p>
           </div>
