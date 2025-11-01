@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo, useEffect, useRef } from 'react'
 import type { CandidateParty, ElectionCandidate, USState } from '../../types/api'
 import { FaUser, FaChevronRight, FaSearch, FaMapMarkerAlt, FaVoteYea, FaChevronDown, FaInfoCircle, FaExternalLinkAlt } from 'react-icons/fa'
 
@@ -24,6 +24,7 @@ const PartyCandidatesSection = ({
     state: '',
     electionType: ''
   })
+  const candidateRefs = useRef<Map<string, HTMLDivElement>>(new Map())
   
   const CANDIDATES_PER_PAGE = 5
 
@@ -230,6 +231,28 @@ const PartyCandidatesSection = ({
     setPagination({})
   }, [filters.name, filters.state, filters.electionType])
 
+  // Scroll to candidate when expanded
+  useEffect(() => {
+    if (expandedCandidates.size > 0) {
+      // Get the first (and only) expanded candidate ID
+      const expandedId = Array.from(expandedCandidates)[0]
+      const candidateElement = candidateRefs.current.get(expandedId)
+      
+      if (candidateElement) {
+        // Use requestAnimationFrame to wait for DOM updates
+        requestAnimationFrame(() => {
+          const elementPosition = candidateElement.getBoundingClientRect().top + window.pageYOffset
+          const offsetPosition = elementPosition - 100 // Account for sticky header
+          
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+          })
+        })
+      }
+    }
+  }, [expandedCandidates])
+
   const hasActiveFilters = Object.values(filters).some(value => value !== '')
 
   if (activeCandidates.length === 0) {
@@ -375,7 +398,16 @@ const PartyCandidatesSection = ({
                     <>
                       <div className="grid gap-3">
                         {paginatedCandidates.map((candidate, index) => (
-                      <div key={`candidate-${candidate.id}-${index}`}>
+                      <div 
+                        key={`candidate-${candidate.id}-${index}`}
+                        ref={(el) => {
+                          if (el) {
+                            candidateRefs.current.set(candidate.id, el)
+                          } else {
+                            candidateRefs.current.delete(candidate.id)
+                          }
+                        }}
+                      >
                         <div
                           className={`bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-sm transition-shadow ${expandedCandidates.has(candidate.id) ? 'rounded-b-none' : ''
                             }`}
