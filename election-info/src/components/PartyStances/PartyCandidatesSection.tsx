@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react'
 import type { CandidateParty, ElectionCandidate, USState } from '../../types/api'
-import { FaUser, FaChevronRight, FaSearch, FaMapMarkerAlt, FaVoteYea, FaChevronDown, FaInfoCircle } from 'react-icons/fa'
+import { FaUser, FaChevronRight, FaSearch, FaMapMarkerAlt, FaVoteYea, FaChevronDown, FaInfoCircle, FaExternalLinkAlt } from 'react-icons/fa'
 
 interface PartyCandidatesSectionProps {
   candidates: CandidateParty[]
@@ -593,18 +593,16 @@ const PartyCandidatesSection = ({
                                             </div>
                                           )}
                                           
-                                          <div className="space-y-1">
-                                            <div className="text-xs">
-                                              <span className="text-gray-500 dark:text-gray-500">Reference: </span>
-                                              <span className="text-gray-700 dark:text-gray-300">{selectedExample.reference}</span>
-                                            </div>
+                                          <div className="text-xs">
+                                            <span className="text-gray-500 dark:text-gray-500">Reference: </span>
                                             <a 
                                               href={selectedExample.link}
                                               target="_blank"
                                               rel="noopener noreferrer"
-                                              className="text-xs text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-200 underline"
+                                              className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 inline-flex items-center gap-1"
                                             >
-                                              View Source →
+                                              {selectedExample.reference}
+                                              <FaExternalLinkAlt className="w-3 h-3" />
                                             </a>
                                           </div>
                                         </div>
@@ -737,16 +735,16 @@ const PartyCandidatesSection = ({
                                 
                                 <div className="text-xs">
                                   <span className="text-gray-500 dark:text-gray-500">Reference: </span>
-                                  <span className="text-gray-700 dark:text-gray-300">{divergence.reference}</span>
+                                  <a 
+                                    href={divergence.link}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 inline-flex items-center gap-1"
+                                  >
+                                    {divergence.reference}
+                                    <FaExternalLinkAlt className="w-3 h-3" />
+                                  </a>
                                 </div>
-                                <a 
-                                  href={divergence.link}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="text-xs text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-200 underline block mt-1"
-                                >
-                                  View Source →
-                                </a>
                               </div>
                             );
                           });
