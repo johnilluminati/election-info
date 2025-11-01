@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import type { CandidateParty, ElectionCandidate, USState } from '../../types/api'
 import { FaUser, FaChevronRight, FaSearch, FaMapMarkerAlt, FaVoteYea, FaChevronDown, FaInfoCircle, FaExternalLinkAlt } from 'react-icons/fa'
 
@@ -18,11 +18,14 @@ const PartyCandidatesSection = ({
 }: PartyCandidatesSectionProps) => {
   const [expandedCandidates, setExpandedCandidates] = useState<Set<string>>(new Set())
   const [collapsedElectionTypes, setCollapsedElectionTypes] = useState<Set<string>>(new Set())
+  const [pagination, setPagination] = useState<Record<string, number>>({}) // electionType -> page number
   const [filters, setFilters] = useState({
     name: '',
     state: '',
     electionType: ''
   })
+  
+  const CANDIDATES_PER_PAGE = 5
 
   // Combine both types of candidates and remove duplicates
   const allCandidates = [
@@ -137,6 +140,8 @@ const PartyCandidatesSection = ({
       state: '',
       electionType: ''
     })
+    // Reset pagination when filters are cleared
+    setPagination({})
   }
 
   const toggleCandidateExpansion = (candidateId: string) => {
@@ -162,6 +167,68 @@ const PartyCandidatesSection = ({
       return newSet
     })
   }
+
+  const setPage = (electionType: string, page: number) => {
+    setPagination(prev => ({
+      ...prev,
+      [electionType]: page
+    }))
+  }
+
+  const getPaginatedCandidates = (candidates: typeof filteredCandidates, electionType: string) => {
+    const currentPage = pagination[electionType] || 1
+    const startIndex = (currentPage - 1) * CANDIDATES_PER_PAGE
+    const endIndex = startIndex + CANDIDATES_PER_PAGE
+    return candidates.slice(startIndex, endIndex)
+  }
+
+  const getTotalPages = (candidates: typeof filteredCandidates) => {
+    return Math.ceil(candidates.length / CANDIDATES_PER_PAGE)
+  }
+
+  const getPageNumbers = (currentPage: number, totalPages: number): (number | string)[] => {
+    const pages: (number | string)[] = []
+    
+    if (totalPages <= 5) {
+      // Show all pages if 5 or fewer
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i)
+      }
+    } else {
+      // Always show first page
+      pages.push(1)
+      
+      if (currentPage <= 2) {
+        // Near the beginning
+        for (let i = 2; i <= 3; i++) {
+          pages.push(i)
+        }
+        pages.push('ellipsis')
+        pages.push(totalPages)
+      } else if (currentPage >= totalPages - 1) {
+        // Near the end
+        pages.push('ellipsis')
+        for (let i = totalPages - 2; i <= totalPages; i++) {
+          pages.push(i)
+        }
+      } else {
+        // In the middle
+        pages.push('ellipsis')
+        for (let i = currentPage - 1; i <= currentPage + 1; i++) {
+          pages.push(i)
+        }
+        pages.push('ellipsis')
+        pages.push(totalPages)
+      }
+    }
+    
+    return pages
+  }
+
+  // Reset pagination when filters change
+  useEffect(() => {
+    setPagination({})
+  }, [filters.name, filters.state, filters.electionType])
 
   const hasActiveFilters = Object.values(filters).some(value => value !== '')
 
@@ -299,9 +366,15 @@ const PartyCandidatesSection = ({
                 </div>
 
                 {/* Candidates Grid */}
-                {!isCollapsed && (
-                  <div className="grid gap-3">
-                    {candidatesInType.map((candidate, index) => (
+                {!isCollapsed && (() => {
+                  const currentPage = pagination[electionType] || 1
+                  const totalPages = getTotalPages(candidatesInType)
+                  const paginatedCandidates = getPaginatedCandidates(candidatesInType, electionType)
+                  
+                  return (
+                    <>
+                      <div className="grid gap-3">
+                        {paginatedCandidates.map((candidate, index) => (
                       <div key={`candidate-${candidate.id}-${index}`}>
                         <div
                           className={`bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-sm transition-shadow ${expandedCandidates.has(candidate.id) ? 'rounded-b-none' : ''
@@ -772,9 +845,50 @@ const PartyCandidatesSection = ({
                           )}
                         </div>
                       </div>
-                    ))}
-                  </div>
-                )}
+                      ))}
+                      </div>
+                      
+                      {/* Pagination Controls */}
+                      {totalPages > 1 && (
+                        <div className="mt-4 flex items-center justify-between">
+                          <div className="text-sm text-gray-600 dark:text-gray-400">
+                            Showing {((currentPage - 1) * CANDIDATES_PER_PAGE) + 1} to {Math.min(currentPage * CANDIDATES_PER_PAGE, candidatesInType.length)} of {candidatesInType.length} candidates
+                          </div>
+                          <div className="flex items-center space-x-1">
+                            {getPageNumbers(currentPage, totalPages).map((page, index) => {
+                              if (page === 'ellipsis') {
+                                return (
+                                  <span key={`ellipsis-${index}`} className="px-2 text-gray-400 dark:text-gray-500">
+                                    ...
+                                  </span>
+                                )
+                              }
+                              
+                              const pageNum = page as number
+                              const isCurrentPage = pageNum === currentPage
+                              
+                              return (
+                                <button
+                                  key={pageNum}
+                                  onClick={() => setPage(electionType, pageNum)}
+                                  className={`px-3 py-1 text-sm rounded-md transition-colors ${
+                                    isCurrentPage
+                                      ? 'bg-blue-600 text-white dark:bg-blue-500'
+                                      : 'border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+                                  }`}
+                                  aria-label={`Go to page ${pageNum}`}
+                                  aria-current={isCurrentPage ? 'page' : undefined}
+                                >
+                                  {pageNum}
+                                </button>
+                              )
+                            })}
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  )
+                })()}
               </div>
             )
           })}
