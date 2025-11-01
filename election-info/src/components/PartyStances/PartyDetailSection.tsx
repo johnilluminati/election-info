@@ -24,9 +24,8 @@ const PartyDetailSection = ({ selectedParty, onClose }: PartyDetailSectionProps)
 
   // Get party stance information
   const getPartyStances = (partyCode: string) => {
-    const stances: Record<string, { description: string; keyIssues: string[]; color: string }> = {
+    const stances: Record<string, { keyIssues: string[]; color: string }> = {
       'DEM': {
-        description: 'The Democratic Party generally supports social equality, environmental protection, and government intervention in the economy.',
         keyIssues: [
           'Healthcare access and affordability',
           'Climate change and environmental protection',
@@ -37,7 +36,6 @@ const PartyDetailSection = ({ selectedParty, onClose }: PartyDetailSectionProps)
         color: 'blue'
       },
       'REP': {
-        description: 'The Republican Party generally supports free markets, limited government, traditional values, and strong national defense.',
         keyIssues: [
           'Free market economics',
           'Limited government intervention',
@@ -48,7 +46,6 @@ const PartyDetailSection = ({ selectedParty, onClose }: PartyDetailSectionProps)
         color: 'red'
       },
       'LIB': {
-        description: 'The Libertarian Party advocates for maximum individual liberty and minimal government intervention in both personal and economic matters.',
         keyIssues: [
           'Individual liberty and personal freedom',
           'Free market capitalism',
@@ -59,7 +56,6 @@ const PartyDetailSection = ({ selectedParty, onClose }: PartyDetailSectionProps)
         color: 'yellow'
       },
       'GRN': {
-        description: 'The Green Party focuses on environmental protection, social justice, grassroots democracy, and nonviolence.',
         keyIssues: [
           'Environmental protection and sustainability',
           'Social justice and equality',
@@ -70,7 +66,6 @@ const PartyDetailSection = ({ selectedParty, onClose }: PartyDetailSectionProps)
         color: 'green'
       },
       'IND': {
-        description: 'Independent candidates and voters who do not align with any specific political party, often focusing on pragmatic solutions.',
         keyIssues: [
           'Pragmatic policy solutions',
           'Reducing partisan division',
@@ -81,7 +76,6 @@ const PartyDetailSection = ({ selectedParty, onClose }: PartyDetailSectionProps)
         color: 'gray'
       },
       'REF': {
-        description: 'The Reform Party advocates for political reform, fiscal responsibility, and reducing the influence of special interests.',
         keyIssues: [
           'Campaign finance reform',
           'Term limits for elected officials',
@@ -92,7 +86,6 @@ const PartyDetailSection = ({ selectedParty, onClose }: PartyDetailSectionProps)
         color: 'purple'
       },
       'CON': {
-        description: 'The Constitution Party emphasizes strict adherence to the U.S. Constitution and traditional American values.',
         keyIssues: [
           'Constitutional government',
           'Traditional family values',
@@ -103,7 +96,6 @@ const PartyDetailSection = ({ selectedParty, onClose }: PartyDetailSectionProps)
         color: 'indigo'
       },
       'WFP': {
-        description: 'The Working Families Party focuses on economic justice, workers\' rights, and progressive social policies.',
         keyIssues: [
           'Workers\' rights and unions',
           'Economic justice and equality',
@@ -116,7 +108,6 @@ const PartyDetailSection = ({ selectedParty, onClose }: PartyDetailSectionProps)
     }
     
     return stances[partyCode] || {
-      description: 'This party represents a unique political perspective in American politics.',
       keyIssues: ['Policy positions vary by candidate'],
       color: 'gray'
     }
@@ -222,14 +213,6 @@ const PartyDetailSection = ({ selectedParty, onClose }: PartyDetailSectionProps)
           <span>Right</span>
           <span>Far Right</span>
         </div>
-      </div>
-
-      {/* Description */}
-      <div className="mb-6">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">About</h3>
-        <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-          {stances.description}
-        </p>
       </div>
 
       {/* Key Issues */}
