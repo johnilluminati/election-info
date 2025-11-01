@@ -203,19 +203,35 @@ const CandidateComparison = ({ selectedElection, selectedState, selectedDistrict
                   </div>
 
                   <div className="flex flex-row justify-center gap-4">
-                    {selectedCandidates.map((electionCandidate, index) => (
-                      <div key={electionCandidate.id} className="flex items-start">
-                        <div className="max-w-5xl w-full">
-                          <Candidate
-                            electionCandidate={electionCandidate}
-                          />
+                    {selectedCandidates.length === 2 ? (
+                      <>
+                        <div key={selectedCandidates[0].id} className="flex flex-col flex-1 min-w-0">
+                          <div className="w-full">
+                            <Candidate
+                              electionCandidate={selectedCandidates[0]}
+                            />
+                          </div>
                         </div>
-                        {/* Add vertical divider between candidates on larger screens */}
-                        {index === 0 && selectedCandidates.length === 2 && (
-                          <div className="hidden lg:block w-px bg-gray-300 dark:bg-gray-600 mx-6 self-stretch" />
-                        )}
-                      </div>
-                    ))}
+                        <div className="hidden lg:block w-px bg-gray-300 dark:bg-gray-600 flex-shrink-0 self-stretch" />
+                        <div key={selectedCandidates[1].id} className="flex flex-col flex-1 min-w-0">
+                          <div className="w-full">
+                            <Candidate
+                              electionCandidate={selectedCandidates[1]}
+                            />
+                          </div>
+                        </div>
+                      </>
+                    ) : (
+                      selectedCandidates.map((electionCandidate) => (
+                        <div key={electionCandidate.id} className="flex flex-col flex-1 min-w-0">
+                          <div className="w-full">
+                            <Candidate
+                              electionCandidate={electionCandidate}
+                            />
+                          </div>
+                        </div>
+                      ))
+                    )}
                   </div>
                 </div>
               )}
