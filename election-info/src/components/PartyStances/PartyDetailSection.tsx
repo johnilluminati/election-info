@@ -26,7 +26,7 @@ const PartyDetailSection = ({ selectedParty, onClose }: PartyDetailSectionProps)
   const getPartyStances = (partyCode: string) => {
     const stances: Record<string, { description: string; keyIssues: string[]; color: string }> = {
       'DEM': {
-        description: 'The Democratic Party is one of the two major political parties in the United States. Founded in 1828, it generally supports social equality, environmental protection, and government intervention in the economy.',
+        description: 'The Democratic Party generally supports social equality, environmental protection, and government intervention in the economy.',
         keyIssues: [
           'Healthcare access and affordability',
           'Climate change and environmental protection',
@@ -37,7 +37,7 @@ const PartyDetailSection = ({ selectedParty, onClose }: PartyDetailSectionProps)
         color: 'blue'
       },
       'REP': {
-        description: 'The Republican Party is one of the two major political parties in the United States. Founded in 1854, it generally supports free markets, limited government, traditional values, and strong national defense.',
+        description: 'The Republican Party generally supports free markets, limited government, traditional values, and strong national defense.',
         keyIssues: [
           'Free market economics',
           'Limited government intervention',
