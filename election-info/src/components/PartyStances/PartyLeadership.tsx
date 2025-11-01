@@ -1,4 +1,4 @@
-import { FaUser, FaCrown, FaChevronDown, FaChevronUp } from 'react-icons/fa'
+import { FaUser, FaChevronDown, FaChevronUp } from 'react-icons/fa'
 
 interface PartyLeader {
   id: string
@@ -187,7 +187,6 @@ const PartyLeadership = ({ partyCode, isExpanded = false, onToggle }: PartyLeade
         className="w-full flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
       >
         <div className="flex items-center space-x-2">
-          <FaCrown className="text-yellow-600 dark:text-yellow-400 text-sm" />
           <span className="text-sm font-medium text-gray-900 dark:text-white">
             Party Leadership ({leaders.length})
           </span>
@@ -226,9 +225,6 @@ const PartyLeadership = ({ partyCode, isExpanded = false, onToggle }: PartyLeade
                   <h5 className="text-sm font-semibold text-gray-900 dark:text-white truncate">
                     {leader.name}
                   </h5>
-                  {leader.position === 1 && (
-                    <FaCrown className="w-3 h-3 text-yellow-500 flex-shrink-0" />
-                  )}
                 </div>
                 
                 <p className="text-xs font-medium text-blue-600 dark:text-blue-400 mb-1">
