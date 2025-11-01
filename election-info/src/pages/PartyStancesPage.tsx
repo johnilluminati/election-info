@@ -152,15 +152,31 @@ const PartyStancesPage = () => {
               Political Parties
             </h2>
             <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto text-sm">
-              Click on any party below to learn more about their positions, leadership, and candidates. 
-              Parties are ordered by the number of active candidates running for office.
+              Click on any party below to learn more about their positions, leadership, and candidates.
             </p>
           </div>
           
           {parties && parties.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
               {parties
-                .sort((a, b) => (b._count?.election_candidates || 0) - (a._count?.election_candidates || 0))
+                .sort((a, b) => {
+                  // Prioritize Democratic and Republican parties
+                  const aIsMajor = a.party_code === 'DEM' || a.party_code === 'REP'
+                  const bIsMajor = b.party_code === 'DEM' || b.party_code === 'REP'
+                  
+                  // If one is major and the other isn't, major comes first
+                  if (aIsMajor && !bIsMajor) return -1
+                  if (!aIsMajor && bIsMajor) return 1
+                  
+                  // If both are major, prioritize DEM then REP
+                  if (aIsMajor && bIsMajor) {
+                    if (a.party_code === 'DEM' && b.party_code === 'REP') return -1
+                    if (a.party_code === 'REP' && b.party_code === 'DEM') return 1
+                  }
+                  
+                  // For non-major parties, sort by candidate count
+                  return (b._count?.election_candidates || 0) - (a._count?.election_candidates || 0)
+                })
                 .map((party) => (
                   <PartyCard 
                     key={party.id} 
