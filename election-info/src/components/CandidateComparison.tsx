@@ -22,6 +22,8 @@ const CandidateComparison = ({ selectedElection, selectedState, selectedDistrict
 
   // Ref for the candidate section to scroll to
   const candidateSectionRef = useRef<HTMLDivElement>(null);
+  // Ref for the election title and candidate selection section
+  const electionSectionRef = useRef<HTMLDivElement>(null);
 
   // Use detailed candidates if available, otherwise fall back to basic data
   const candidates = useMemo(() => 
@@ -48,16 +50,13 @@ const CandidateComparison = ({ selectedElection, selectedState, selectedDistrict
 
   // Auto-scroll when candidates are selected
   useEffect(() => {
-    if (selectedCandidates.length > 0 && candidateSectionRef.current) {
-      // Use setTimeout to ensure the DOM has updated with the candidate content
-      setTimeout(() => {
-        candidateSectionRef.current?.scrollIntoView({ 
-          behavior: 'smooth', 
-          block: 'start' 
-        });
-      }, 100);
+    if (selectedCandidateIndexes.length > 0 && electionSectionRef.current) {
+      electionSectionRef.current.scrollIntoView({ 
+        behavior: 'smooth', 
+        block: 'start' 
+      });
     }
-  }, [selectedCandidates.length]);
+  }, [selectedCandidateIndexes.length]);
 
 
   // Don't render anything if no election is selected
@@ -112,7 +111,7 @@ const CandidateComparison = ({ selectedElection, selectedState, selectedDistrict
   return (
     <>
       <section>
-        <div className="px-4 py-4">
+        <div ref={electionSectionRef} className="px-4 py-4 scroll-mt-24">
           <div className="text-center mb-4">
             <h2 className="text-2xl font-bold">{getElectionTitle()}</h2>
             <p className="text-gray-600">
