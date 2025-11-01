@@ -475,13 +475,13 @@ const PartyCandidatesSection = ({
                                           type: 'Vote',
                                           description: 'Voted against party line on late-term abortion restrictions bill',
                                           reference: 'H.R. 1234 - Late-Term Abortion Restrictions Act (2023)',
-                                          link: 'https://congress.gov/bill/118th-congress/house-bill/1234'
+                                          //link: 'https://congress.gov/bill/118th-congress/house-bill/1234'
                                         },
                                         {
                                           type: 'Statement',
                                           description: 'Publicly stated support for parental notification requirements',
                                           reference: 'Interview with State Journal, March 15, 2023',
-                                          link: 'https://statejournal.com/interviews/candidate-parental-notification'
+                                          link: 'https://example.com'
                                         }
                                       ],
                                       'Healthcare': [
@@ -489,13 +489,13 @@ const PartyCandidatesSection = ({
                                           type: 'Legislation',
                                           description: 'Co-sponsored alternative healthcare reform bill',
                                           reference: 'S. 5678 - Healthcare Choice Act (2023)',
-                                          link: 'https://congress.gov/bill/118th-congress/senate-bill/5678'
+                                          link: 'https://example.com'
                                         },
                                         {
                                           type: 'Statement',
                                           description: 'Expressed concerns about single-payer implementation timeline',
                                           reference: 'Town Hall Meeting, Springfield, IL - April 2023',
-                                          link: 'https://youtube.com/watch?v=example-townhall'
+                                          link: 'https://example.com'
                                         }
                                       ],
                                       'Climate Change': [
@@ -503,13 +503,13 @@ const PartyCandidatesSection = ({
                                           type: 'Vote',
                                           description: 'Voted against carbon tax increase in state legislature',
                                           reference: 'State Bill 456 - Carbon Tax Increase (2022)',
-                                          link: 'https://statelegislature.gov/bills/2022/sb456'
+                                          link: 'https://example.com'
                                         },
                                         {
                                           type: 'Statement',
                                           description: 'Called for more nuclear energy investment over renewables',
                                           reference: 'Energy Policy Speech, June 10, 2023',
-                                          link: 'https://candidate-news.com/energy-policy-speech'
+                                          link: 'https://example.com'
                                         }
                                       ],
                                       'Gun Control': [
@@ -517,13 +517,13 @@ const PartyCandidatesSection = ({
                                           type: 'Vote',
                                           description: 'Opposed assault weapons ban in committee vote',
                                           reference: 'Committee Vote - H.R. 9012 Assault Weapons Ban (2023)',
-                                          link: 'https://congress.gov/committee/hearing/118th/hr3000'
+                                          link: 'https://example.com'
                                         },
                                         {
                                           type: 'Statement',
                                           description: 'Supported mental health funding over gun restrictions',
                                           reference: 'Press Release, February 14, 2023',
-                                          link: 'https://candidate-website.com/press-releases/mental-health-funding'
+                                          link: 'https://example.com'
                                         }
                                       ],
                                       'Taxes': [
@@ -531,13 +531,13 @@ const PartyCandidatesSection = ({
                                           type: 'Vote',
                                           description: 'Voted against wealth tax proposal in state senate',
                                           reference: 'State Bill 789 - Wealth Tax Act (2023)',
-                                          link: 'https://statelegislature.gov/bills/2023/sb789'
+                                          link: 'https://example.com'
                                         },
                                         {
                                           type: 'Statement',
                                           description: 'Advocated for corporate tax cuts in economic forum',
                                           reference: 'Economic Growth Forum, Chicago, IL - May 2023',
-                                          link: 'https://economicforum.org/speakers/candidate-tax-policy'
+                                          link: 'https://example.com'
                                         }
                                       ]
                                     };
@@ -671,21 +671,21 @@ const PartyCandidatesSection = ({
                               issue: 'Infrastructure Bill',
                               action: 'Voted against party on funding allocation',
                               reference: 'H.R. 3684 - Infrastructure Investment Act',
-                              link: 'https://congress.gov/bill/117th-congress/house-bill/3684'
+                              link: 'https://example.com'
                             },
                             {
                               date: '2023-09-22',
                               issue: 'Education Reform',
                               action: 'Abstained from vote on school choice provisions',
                               reference: 'S. 2786 - Education Freedom Act',
-                              link: 'https://congress.gov/bill/118th-congress/senate-bill/2786'
+                              link: 'https://example.com'
                             },
                             {
                               date: '2023-07-08',
                               issue: 'Immigration Policy',
                               action: 'Publicly criticized party position on border security',
                               reference: 'Interview with National Review, July 8, 2023',
-                              link: 'https://nationalreview.com/interviews/candidate-immigration-views'
+                              link: 'https://example.com'
                             }
                           ];
                           
