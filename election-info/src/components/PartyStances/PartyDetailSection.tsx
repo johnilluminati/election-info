@@ -181,16 +181,24 @@ const PartyDetailSection = ({ selectedParty, onClose }: PartyDetailSectionProps)
             {partyLoading ? (
               <span className="text-gray-400">...</span>
             ) : (() => {
-              // TEMPORARY: Generate random number less than candidates running
+              // TEMPORARY: Calculate office holders based on party type
               // TODO: Replace with actual calculation based on election results data
               // The seed file doesn't currently generate historical election data for previous terms
               // Once we have proper election result data, calculate current office holders based on:
               // - Elections from previous cycles where candidate won
               // - Current office status tracked in the database
               const candidatesRunning = fullPartyData?.election_candidates?.length || 0
-              if (candidatesRunning === 0) return 0
-              // Generate a random number between 0 and candidatesRunning (exclusive)
-              return Math.floor(Math.random() * candidatesRunning)
+              const partyCode = selectedParty.party_code
+              
+              if (partyCode === 'DEM') {
+                return Math.floor(candidatesRunning / 2)
+              } else if (partyCode === 'REP') {
+                return Math.ceil(candidatesRunning / 2)
+              } else if (partyCode === 'IND') {
+                return 8
+              } else {
+                return 0
+              }
             })()}
           </div>
           <div className="text-sm text-gray-600 dark:text-gray-400">Current Office Holders</div>
