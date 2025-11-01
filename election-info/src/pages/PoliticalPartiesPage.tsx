@@ -5,7 +5,7 @@ import PartyDetailSection from '../components/PoliticalParties/PartyDetailSectio
 import type { PoliticalParty } from '../types/api'
 import { FaInfoCircle } from 'react-icons/fa'
 
-const PartyStancesPage = () => {
+const PoliticalPartiesPage = () => {
   const { data: parties, isLoading, error } = useParties()
   const [selectedParty, setSelectedParty] = useState<PoliticalParty | null>(null)
   const detailSectionRef = useRef<HTMLDivElement>(null)
@@ -206,4 +206,4 @@ const PartyStancesPage = () => {
   )
 }
 
-export default PartyStancesPage
+export default PoliticalPartiesPage

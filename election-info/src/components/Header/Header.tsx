@@ -4,7 +4,7 @@ import Navbar from "./Navbar"
 const headerLinks: HeaderLink[] = [
   { text: 'Search Candidates', routerLink: '/candidates', alignment: 'left' },
   { text: 'Search Elections', routerLink: '/elections', alignment: 'left' },
-  { text: `Parties' Stances`, routerLink: '/party-stances', alignment: 'left' },
+  { text: 'Political Parties', routerLink: '/political-parties', alignment: 'left' },
   { text: 'Not Registered to Vote?', routerLink: '/register-to-vote', alignment: 'right' },
   { text: 'Donate', routerLink: '/donate', alignment: 'right' }
 ]
