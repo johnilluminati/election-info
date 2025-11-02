@@ -261,7 +261,7 @@ export const useCandidateGrouping = ({
             })
             .forEach(([district, candidates]) => {
               result.push({
-                group: `${formatStateDisplayName(state)} - District ${district}`,
+                group: `District ${district}`,
                 candidates
               });
             });
@@ -467,7 +467,7 @@ export const useCandidateGrouping = ({
             .map(([key, candidates]) => {
               const [state, district] = key.split('|');
               return {
-                group: `${formatStateDisplayName(state)} - District ${district}`,
+                group: `District ${district}`,
                 candidates
               };
             });

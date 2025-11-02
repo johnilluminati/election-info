@@ -1,5 +1,6 @@
 import { FaCalendarAlt, FaMapMarkerAlt } from 'react-icons/fa';
 import type { ElectionCandidate } from '../../types/api';
+import { STATE_ABBREVIATION } from '../../lib/constants';
 
 interface CandidateCardProps {
   candidate: ElectionCandidate;
@@ -7,6 +8,70 @@ interface CandidateCardProps {
 }
 
 const CandidateCard = ({ candidate, onViewDetails }: CandidateCardProps) => {
+  // Helper functions to extract state and district from geographies
+  const getStateFromCandidate = (): string => {
+    const geographies = candidate.election?.geographies || [];
+    const stateGeo = geographies.find(g => g.scope_type === 'STATE');
+    if (!stateGeo?.scope_id) return '';
+    
+    // Convert state abbreviation to full name if needed
+    const stateName = stateGeo.scope_id;
+    if (STATE_ABBREVIATION[stateName]) {
+      return stateName; // Already full name
+    }
+    
+    // Try to find full name from abbreviation
+    const fullName = Object.keys(STATE_ABBREVIATION).find(
+      name => STATE_ABBREVIATION[name] === stateName
+    );
+    return fullName || stateName;
+  };
+
+  const getDistrictFromCandidate = (): string | null => {
+    const geographies = candidate.election?.geographies || [];
+    const districtGeo = geographies.find(g => g.scope_type === 'DISTRICT');
+    return districtGeo?.scope_id || null;
+  };
+
+  const formatElectionDate = (): string => {
+    const electionDay = candidate.election?.election_cycle?.election_day;
+    if (!electionDay) {
+      const year = candidate.election?.election_cycle?.election_year;
+      return year ? year.toString() : 'Date TBD';
+    }
+    
+    try {
+      const date = new Date(electionDay);
+      return date.toLocaleDateString('en-US', { 
+        month: 'short', 
+        day: 'numeric', 
+        year: 'numeric' 
+      });
+    } catch {
+      return electionDay;
+    }
+  };
+
+  const state = getStateFromCandidate();
+  const district = getDistrictFromCandidate();
+  const electionDate = formatElectionDate();
+
+  // Map election types to position titles (same as CandidateModal)
+  const getPositionTitle = (): string => {
+    const electionType = candidate.election?.election_type?.name;
+    const positionMap: Record<string, string> = {
+      'Presidential': 'President of the United States',
+      'Senate': 'U.S. Senator',
+      'Gubernatorial': 'Governor',
+      'Congressional': 'U.S. Representative',
+      'State Legislature': 'State Legislator',
+      'Local': 'Local Office'
+    };
+    return positionMap[electionType || ''] || electionType || 'Public Office';
+  };
+
+  const positionTitle = getPositionTitle();
+
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow border border-gray-200 dark:border-gray-700 overflow-hidden">
       {/* Candidate Header */}
@@ -40,23 +105,22 @@ const CandidateCard = ({ candidate, onViewDetails }: CandidateCardProps) => {
       <div className="p-6">
         <div className="space-y-3">
           <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
-            <FaCalendarAlt className="mr-2" />
-            {candidate.election?.election_type?.name} Election
+            <FaCalendarAlt className="mr-2 flex-shrink-0" />
+            <span>Running for {positionTitle}</span>
           </div>
-          <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
-            <FaMapMarkerAlt className="mr-2" />
-            {candidate.election?.election_cycle?.election_year || 'Unknown Year'}
-          </div>
-          {candidate.website && (
-            <div className="pt-2">
-              <a
-                href={candidate.website}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 text-sm font-medium"
-              >
-                Visit Website →
-              </a>
+          {state && (
+            <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
+              <FaMapMarkerAlt className="mr-2 flex-shrink-0" />
+              <span>
+                {state}
+                {district && ` - District ${district}`}
+              </span>
+            </div>
+          )}
+          {electionDate && (
+            <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
+              <FaCalendarAlt className="mr-2 flex-shrink-0" />
+              <span>Election: {electionDate}</span>
             </div>
           )}
         </div>
