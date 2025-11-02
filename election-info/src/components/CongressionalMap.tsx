@@ -99,6 +99,7 @@ const CongressionalMap: React.FC<CongressionalMapProps> = ({
   const [tooltip, setTooltip] = useState<TooltipState>({ show: false, text: '', x: 0, y: 0 });
   const selectedDistrictIdRef = useRef<number | null>(null);
   const selectedStateIdRef = useRef<number | null>(null);
+  const onMapSelectionRef = useRef(onMapSelection);
 
   useEffect(() => {
     // Fetch the GeoJSON data
@@ -133,6 +134,10 @@ const CongressionalMap: React.FC<CongressionalMapProps> = ({
       })
       .catch(error => console.error('Error loading district data:', error));
   }, []);
+
+  useEffect(() => {
+    onMapSelectionRef.current = onMapSelection;
+  }, [onMapSelection]);
 
   useEffect(() => {
     if (!mapContainer.current || !districtData || !stateData) return;
@@ -347,7 +352,7 @@ const CongressionalMap: React.FC<CongressionalMapProps> = ({
         const feature = e.features[0];
         const districtId = feature.properties.district;
         const stateName = feature.properties.state;
-        onMapSelection?.(districtId, stateName);
+        onMapSelectionRef.current?.(districtId, stateName);
         
         // Store current selection IDs before clearing
         const currentSelectedDistrictId = selectedDistrictIdRef.current;
@@ -475,7 +480,7 @@ const CongressionalMap: React.FC<CongressionalMapProps> = ({
       if (e.features && e.features.length > 0) {
         const feature = e.features[0];
         const stateName = feature.properties.state;
-        onMapSelection?.(undefined, stateName);
+        onMapSelectionRef.current?.(undefined, stateName);
         // Only handle state selection when zoomed out (district lines not visible)
         const currentZoom = map.current?.getZoom() || 0;
         if (currentZoom >= 4) {
