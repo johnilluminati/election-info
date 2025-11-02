@@ -20,7 +20,6 @@ interface CandidateGridProps {
 
 const CandidateGrid = ({
   groups,
-  groupingStrategy,
   collapsedSections,
   onToggleSection,
   onViewDetails
