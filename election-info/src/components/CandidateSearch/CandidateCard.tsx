@@ -1,4 +1,4 @@
-import { FaCalendarAlt, FaMapMarkerAlt } from 'react-icons/fa';
+import { FaCalendarAlt, FaMapMarkerAlt, FaUserTie } from 'react-icons/fa';
 import type { ElectionCandidate } from '../../types/api';
 import { STATE_ABBREVIATION } from '../../lib/constants';
 
@@ -105,7 +105,7 @@ const CandidateCard = ({ candidate, onViewDetails }: CandidateCardProps) => {
       <div className="p-6">
         <div className="space-y-3">
           <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
-            <FaCalendarAlt className="mr-2 flex-shrink-0" />
+            <FaUserTie className="mr-2 flex-shrink-0" />
             <span>Running for {positionTitle}</span>
           </div>
           {state && (
