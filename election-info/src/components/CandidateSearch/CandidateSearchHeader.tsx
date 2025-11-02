@@ -26,10 +26,7 @@ const CandidateSearchHeader = ({
     <div className="mb-6">
       <div>
         <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">
-          {hasActiveFilters 
-            ? `${candidateCount} Candidate${candidateCount !== 1 ? 's' : ''} Found` 
-            : 'Select Filters to Find Candidates'
-          }
+          {hasActiveFilters &&`${candidateCount} Candidate${candidateCount !== 1 ? 's' : ''} Found`}
         </h2>
         {hasActiveFilters && candidateCount > 0 && (
           <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">

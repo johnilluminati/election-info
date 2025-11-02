@@ -207,7 +207,7 @@ const CandidateSearchPage = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="bg-gray-50 dark:bg-gray-900">
       {/* Header Section */}
       <div className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
         <div className="container mx-auto px-4 py-8">
@@ -243,12 +243,12 @@ const CandidateSearchPage = () => {
       {/* Results Section */}
       <div className="container mx-auto px-4 py-8">
         {/* Results Header */}
-        <CandidateSearchHeader
+        {hasActiveFilters && candidates.length > 0 && <CandidateSearchHeader
           candidateCount={candidates.length}
           hasActiveFilters={hasActiveFilters}
           groupingStrategy={groupingStrategy}
           groupedCandidates={groupedCandidates}
-        />
+        />}
 
         {/* Loading State */}
         {isLoading && (
