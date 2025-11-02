@@ -128,9 +128,9 @@ export const useCandidateGrouping = ({
       }
       if (selectedState && selectedParty) return 'by_election_type';
       if (searchQuery && selectedElectionType) {
-        // Special handling for Congressional elections with search
+        // Special handling for Congressional elections with search - use hierarchical state/district grouping
         if (selectedElectionType === 'Congressional') {
-          return 'by_state_and_district';
+          return 'by_state_with_districts';
         }
         // Presidential elections are national, don't group by state
         if (selectedElectionType === 'Presidential') {
