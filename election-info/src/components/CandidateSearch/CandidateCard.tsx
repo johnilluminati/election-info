@@ -1,6 +1,7 @@
 import { FaCalendarAlt, FaMapMarkerAlt, FaUserTie } from 'react-icons/fa';
 import type { ElectionCandidate } from '../../types/api';
 import { STATE_ABBREVIATION } from '../../lib/constants';
+import { getPositionTitle } from '../../lib/candidateUtils';
 
 interface CandidateCardProps {
   candidate: ElectionCandidate;
@@ -55,22 +56,7 @@ const CandidateCard = ({ candidate, onViewDetails }: CandidateCardProps) => {
   const state = getStateFromCandidate();
   const district = getDistrictFromCandidate();
   const electionDate = formatElectionDate();
-
-  // Map election types to position titles (same as CandidateModal)
-  const getPositionTitle = (): string => {
-    const electionType = candidate.election?.election_type?.name;
-    const positionMap: Record<string, string> = {
-      'Presidential': 'President of the United States',
-      'Senate': 'U.S. Senator',
-      'Gubernatorial': 'Governor',
-      'Congressional': 'U.S. Representative',
-      'State Legislature': 'State Legislator',
-      'Local': 'Local Office'
-    };
-    return positionMap[electionType || ''] || electionType || 'Public Office';
-  };
-
-  const positionTitle = getPositionTitle();
+  const positionTitle = getPositionTitle(candidate.election?.election_type?.name);
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow border border-gray-200 dark:border-gray-700 overflow-hidden">

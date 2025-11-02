@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 import { FaTimes, FaExternalLinkAlt } from 'react-icons/fa';
 import type { ElectionCandidate } from '../../types/api';
+import { getPositionTitle } from '../../lib/candidateUtils';
+import { STATE_ABBREVIATION } from '../../lib/constants';
 import CandidateInfoTabs from './CandidateInfoTabs';
 import CandidateKeyIssuesTab from './CandidateKeyIssuesTab';
 import CandidateViewsTab from './CandidateViewsTab';
@@ -124,33 +126,49 @@ const CandidateModal = ({ candidate, isOpen, onClose, isLoading = false }: Candi
                   )}
                 </h2>
                 <div className="space-y-1">
+                  <p className="text-lg text-gray-700 dark:text-gray-300 font-semibold">
+                    {candidate.party?.name || 'Independent'}
+                  </p>
                   <p className="text-lg text-gray-700 dark:text-gray-300">
-                    <span className="font-semibold">{candidate.party?.name || 'Independent'}</span>
-                    <span className="mx-2">•</span>
-                    <span>
-                      {(() => {
-                        const electionType = candidate.election?.election_type?.name;
-                        const geographies = candidate.election?.geographies || [];
-                        
-                        // Find state geography if available
-                        const stateGeo = geographies.find(g => g.scope_type === 'STATE');
-                        const stateName = stateGeo?.scope_id || 'Unknown State';
-                        
-                        // Map election types to position titles
-                        const positionMap: Record<string, string> = {
-                          'Presidential': 'President of the United States',
-                          'Senate': 'U.S. Senator',
-                          'Gubernatorial': 'Governor',
-                          'Congressional': 'U.S. Representative',
-                          'State Legislature': 'State Legislator',
-                          'Local': 'Local Office'
-                        };
-                        
-                        const position = positionMap[electionType || ''] || electionType || 'Public Office';
-                        
-                        return `Running for ${position}${stateGeo ? ` in ${stateName}` : ''}`;
-                      })()}
-                    </span>
+                    {(() => {
+                      const geographies = candidate.election?.geographies || [];
+                      const electionType = candidate.election?.election_type?.name;
+                      
+                      // Find state geography if available
+                      const stateGeo = geographies.find(g => g.scope_type === 'STATE');
+                      const districtGeo = geographies.find(g => g.scope_type === 'DISTRICT');
+                      
+                      // Convert state abbreviation to full name
+                      let stateName = '';
+                      if (stateGeo?.scope_id) {
+                        const stateId = stateGeo.scope_id;
+                        // Check if it's already a full name
+                        if (STATE_ABBREVIATION[stateId]) {
+                          stateName = stateId; // Already full name
+                        } else {
+                          // Convert abbreviation to full name
+                          const fullName = Object.keys(STATE_ABBREVIATION).find(
+                            name => STATE_ABBREVIATION[name] === stateId
+                          );
+                          stateName = fullName || stateId;
+                        }
+                      }
+                      
+                      const position = getPositionTitle(electionType);
+                      let locationText = '';
+                      
+                      if (stateName) {
+                        if (electionType === 'Congressional' && districtGeo?.scope_id) {
+                          // For Congressional, include district: "Alabama - AL01"
+                          locationText = ` in ${stateName} - ${districtGeo.scope_id}`;
+                        } else {
+                          // For other election types, just state
+                          locationText = ` in ${stateName}`;
+                        }
+                      }
+                      
+                      return `Running for ${position}${locationText}`;
+                    })()}
                   </p>
                   {candidate.website && (
                     <a
