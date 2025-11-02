@@ -88,6 +88,10 @@ export const useCandidateGrouping = ({
         if (selectedElectionType === 'Congressional') {
           return 'by_state_with_districts';
         }
+        // Presidential elections are national, don't group by state
+        if (selectedElectionType === 'Presidential') {
+          return 'flat_list';
+        }
         return 'by_state';
       }
       if (selectedState) return 'by_election_type';
@@ -100,12 +104,20 @@ export const useCandidateGrouping = ({
         if (selectedElectionType === 'Congressional') {
           return 'by_district';
         }
+        // Presidential elections are national, state filter doesn't make sense, use flat list
+        if (selectedElectionType === 'Presidential') {
+          return 'flat_list';
+        }
         return 'by_district';
       }
       if (selectedElectionType && selectedParty) {
         // Special handling for Congressional elections with party filter
         if (selectedElectionType === 'Congressional') {
           return 'by_state_with_districts';
+        }
+        // Presidential elections are national, don't group by state
+        if (selectedElectionType === 'Presidential') {
+          return 'flat_list';
         }
         return 'by_state';
       }
@@ -114,6 +126,10 @@ export const useCandidateGrouping = ({
         // Special handling for Congressional elections with search
         if (selectedElectionType === 'Congressional') {
           return 'by_state_and_district';
+        }
+        // Presidential elections are national, don't group by state
+        if (selectedElectionType === 'Presidential') {
+          return 'flat_list';
         }
         return 'by_state';
       }
