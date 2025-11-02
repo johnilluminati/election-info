@@ -18,7 +18,6 @@ const CandidateSearchPage = () => {
     setSelectedState,
     setSelectedElectionType,
     setSelectedParty,
-    setSortBy,
     clearFilters,
     hasActiveFilters
   } = useCandidateFilters();
@@ -229,12 +228,10 @@ const CandidateSearchPage = () => {
         selectedState={filters.selectedState}
         selectedElectionType={filters.selectedElectionType}
         selectedParty={filters.selectedParty}
-        sortBy={filters.sortBy}
         onSearchChange={setSearchQuery}
         onStateChange={setSelectedState}
         onElectionTypeChange={setSelectedElectionType}
         onPartyChange={setSelectedParty}
-        onSortChange={setSortBy}
         onClearFilters={clearFilters}
         states={states}
         hasActiveFilters={hasActiveFilters}

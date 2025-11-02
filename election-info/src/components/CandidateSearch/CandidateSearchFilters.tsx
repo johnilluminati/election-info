@@ -7,14 +7,12 @@ interface CandidateSearchFiltersProps {
   selectedState: string;
   selectedElectionType: string;
   selectedParty: string;
-  sortBy: 'name' | 'state' | 'election_type';
   
   // Filter handlers
   onSearchChange: (value: string) => void;
   onStateChange: (value: string) => void;
   onElectionTypeChange: (value: string) => void;
   onPartyChange: (value: string) => void;
-  onSortChange: (value: 'name' | 'state' | 'election_type') => void;
   onClearFilters: () => void;
   
   // Data
@@ -29,12 +27,10 @@ const CandidateSearchFilters = ({
   selectedState,
   selectedElectionType,
   selectedParty,
-  sortBy,
   onSearchChange,
   onStateChange,
   onElectionTypeChange,
   onPartyChange,
-  onSortChange,
   onClearFilters,
   states,
   hasActiveFilters
@@ -61,7 +57,7 @@ const CandidateSearchFilters = ({
         </div>
 
         {/* Filters */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl mx-auto">
           {/* State Filter */}
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -113,22 +109,6 @@ const CandidateSearchFilters = ({
               {parties.map(party => (
                 <option key={party} value={party}>{party}</option>
               ))}
-            </select>
-          </div>
-
-          {/* Sort By */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Sort By
-            </label>
-            <select
-              value={sortBy}
-              onChange={(e) => onSortChange(e.target.value as 'name' | 'state' | 'election_type')}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-            >
-              <option value="name">Name</option>
-              <option value="state">State</option>
-              <option value="election_type">Election Type</option>
             </select>
           </div>
         </div>
