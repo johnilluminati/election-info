@@ -100,36 +100,36 @@ const CandidateModal = ({ candidate, isOpen, onClose, isLoading = false }: Candi
         onClick={handleModalContentClick}
       >
         {/* Modal Header */}
-        <div className="p-6 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700">
-          <div className="flex items-start justify-between">
-            <div className="flex items-start space-x-6">
-              <div className="w-20 h-20 rounded-full bg-gray-200 dark:bg-gray-600 flex items-center justify-center flex-shrink-0">
-                {candidate.candidate?.picture_link ? (
-                  <img
-                    src={candidate.candidate.picture_link}
-                    alt={`${candidate.candidate.first_name} ${candidate.candidate.last_name}`}
-                    className="w-full h-full rounded-full object-cover"
-                  />
-                ) : (
-                  <span className="text-2xl text-gray-500 dark:text-gray-400">
-                    {candidate.candidate?.first_name?.[0]}{candidate.candidate?.last_name?.[0]}
-                  </span>
-                )}
-              </div>
-              <div className="flex-1">
-                <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-                  {candidate.candidate?.first_name} {candidate.candidate?.last_name}
-                  {candidate.candidate?.nickname && (
-                    <span className="text-xl font-normal text-gray-600 dark:text-gray-400 ml-3">
-                      "{candidate.candidate.nickname}"
+        <div className="border-b border-gray-200 dark:border-gray-700">
+          <div className="p-6">
+            <div className="flex items-start justify-between">
+              <div className="flex items-center space-x-4 flex-1">
+                <div className="w-30 h-30 rounded-full bg-gray-200 dark:bg-gray-600 flex items-center justify-center flex-shrink-0">
+                  {candidate.candidate?.picture_link ? (
+                    <img
+                      src={candidate.candidate.picture_link}
+                      alt={`${candidate.candidate.first_name} ${candidate.candidate.last_name}`}
+                      className="w-full h-full rounded-full object-cover"
+                    />
+                  ) : (
+                    <span className="text-2xl text-gray-500 dark:text-gray-400">
+                      {candidate.candidate?.first_name?.[0]}{candidate.candidate?.last_name?.[0]}
                     </span>
                   )}
-                </h2>
-                <div className="space-y-1">
-                  <p className="text-lg text-gray-700 dark:text-gray-300 font-semibold">
+                </div>
+                <div className="flex-1">
+                  <h2 className="text-3xl font-semibold text-gray-900 dark:text-white">
+                    {candidate.candidate?.first_name} {candidate.candidate?.last_name}
+                    {candidate.candidate?.nickname && (
+                      <span className="text-lg font-normal text-gray-600 dark:text-gray-400 ml-2">
+                        "{candidate.candidate.nickname}"
+                      </span>
+                    )}
+                  </h2>
+                  <p className="text-lg text-gray-600 dark:text-gray-400">
                     {candidate.party?.name || 'Independent'}
                   </p>
-                  <p className="text-lg text-gray-700 dark:text-gray-300">
+                  <p className="text-lg text-gray-600 dark:text-gray-400">
                     {(() => {
                       const geographies = candidate.election?.geographies || [];
                       const electionType = candidate.election?.election_type?.name;
@@ -175,23 +175,23 @@ const CandidateModal = ({ candidate, isOpen, onClose, isLoading = false }: Candi
                       href={candidate.website}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center space-x-2 text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 text-sm font-medium transition-colors"
+                      className="inline-flex items-center space-x-2 text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium transition-colors"
                     >
-                      <FaExternalLinkAlt className="text-xs" />
-                      <span>{candidate.website}</span>
+                      <FaExternalLinkAlt className="text-md" />
+                      <span className="text-lg">{candidate.website}</span>
                     </a>
                   )}
                 </div>
               </div>
+              
+              <button
+                onClick={onClose}
+                className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors flex-shrink-0 ml-4"
+                aria-label="Close modal"
+              >
+                <FaTimes className="w-6 h-6" />
+              </button>
             </div>
-            
-            <button
-              onClick={onClose}
-              className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors flex-shrink-0"
-              aria-label="Close modal"
-            >
-              <FaTimes className="w-6 h-6" />
-            </button>
           </div>
         </div>
 
