@@ -5,3 +5,7 @@ node_modules
 /generated/prisma
 
 /scripts
+
+# Deployment documentation (keeping locally for now)
+DOCKER_DEPLOYMENT.md
+QUICK_START.md
