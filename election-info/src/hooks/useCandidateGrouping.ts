@@ -96,11 +96,14 @@ export const useCandidateGrouping = ({
       }
       if (selectedState) return 'by_election_type';
       if (selectedParty) return 'by_election_type';
-      if (searchQuery) return 'by_election_type';
+      if (searchQuery) {
+        // When searching by name only, group by state for better organization
+        return 'by_state_within_election_type';
+      }
     } else if (activeFilterCount === 2) {
       // Two filters active
       if (selectedElectionType && selectedState) {
-        // For Congressional with a state, still group by district
+        // For Congressional with a state, group by district
         if (selectedElectionType === 'Congressional') {
           return 'by_district';
         }
@@ -108,7 +111,9 @@ export const useCandidateGrouping = ({
         if (selectedElectionType === 'Presidential') {
           return 'flat_list';
         }
-        return 'by_district';
+        // Senate and Gubernatorial elections with a state selected are state-wide (not district-based)
+        // Other election types may also not be district-based
+        return 'flat_list';
       }
       if (selectedElectionType && selectedParty) {
         // Special handling for Congressional elections with party filter
@@ -136,7 +141,12 @@ export const useCandidateGrouping = ({
       if (searchQuery && selectedState) return 'by_election_type';
       if (searchQuery && selectedParty) return 'by_election_type';
     } else if (activeFilterCount >= 3) {
-      // Three or more filters active - show in a flat list
+      // Three or more filters active
+      // Special case: Congressional + State + Party should still group by district
+      if (selectedElectionType === 'Congressional' && selectedState && selectedParty) {
+        return 'by_district';
+      }
+      // Other combinations - show in a flat list
       return 'flat_list';
     }
     
@@ -304,6 +314,101 @@ export const useCandidateGrouping = ({
           return a.localeCompare(b);
         })
         .map(([district, candidates]) => ({ group: `District ${district}`, candidates }));
+      
+      return result;
+    }
+    
+    if (groupingStrategy === 'by_state_within_election_type') {
+      // First group by election type, then by state within each type (except Presidential)
+      const electionTypeOrder = ['Presidential', 'Senate', 'Gubernatorial', 'Congressional', 'State Legislature', 'Local'];
+      const grouped = candidates.reduce((acc: Record<string, typeof candidates>, candidate) => {
+        const electionType = candidate.election?.election_type?.name || 'Other';
+        if (!acc[electionType]) {
+          acc[electionType] = [];
+        }
+        acc[electionType].push(candidate);
+        return acc;
+      }, {} as Record<string, typeof candidates>);
+      
+      const result: CandidateGroup[] = [];
+      
+      // Process election types in order
+      electionTypeOrder
+        .filter(type => grouped[type])
+        .forEach(type => {
+          if (type === 'Presidential') {
+            // Presidential stays as a flat group (national election)
+            result.push({
+              group: type,
+              candidates: grouped[type]
+            });
+          } else {
+            // For other election types, group by state within the type
+            const stateGroups: Record<string, typeof candidates> = {};
+            grouped[type].forEach(candidate => {
+              const state = getStateFromCandidate(candidate);
+              if (!stateGroups[state]) stateGroups[state] = [];
+              stateGroups[state].push(candidate);
+            });
+            
+            // Create state subGroups for this election type
+            const subGroups = Object.entries(stateGroups)
+              .sort(([a], [b]) => {
+                const stateA = stateAbbreviationToName[a] || a;
+                const stateB = stateAbbreviationToName[b] || b;
+                return stateA.localeCompare(stateB);
+              })
+              .map(([state, candidates]) => ({
+                group: formatStateDisplayName(state),
+                candidates
+              }));
+            
+            result.push({
+              group: type,
+              candidates: [], // Empty since candidates are in subGroups
+              subGroups
+            });
+          }
+        });
+      
+      // Add any other election types not in the predefined order
+      Object.entries(grouped)
+        .filter(([type]) => !electionTypeOrder.includes(type))
+        .forEach(([type, candidates]) => {
+          // Try to group by state for unknown types too
+          const stateGroups: Record<string, typeof candidates> = {};
+          candidates.forEach(candidate => {
+            const state = getStateFromCandidate(candidate);
+            if (!stateGroups[state]) stateGroups[state] = [];
+            stateGroups[state].push(candidate);
+          });
+          
+          if (Object.keys(stateGroups).length > 1) {
+            // Multiple states, create subGroups
+            const subGroups = Object.entries(stateGroups)
+              .sort(([a], [b]) => {
+                const stateA = stateAbbreviationToName[a] || a;
+                const stateB = stateAbbreviationToName[b] || b;
+                return stateA.localeCompare(stateB);
+              })
+              .map(([state, candidates]) => ({
+                group: formatStateDisplayName(state),
+                candidates
+              }));
+            
+            result.push({
+              group: type,
+              candidates: [],
+              subGroups
+            });
+          } else {
+            // Single state or no state info, show as single group
+            result.push({
+              group: type,
+              candidates
+            });
+          }
+        });
       
       return result;
     }
