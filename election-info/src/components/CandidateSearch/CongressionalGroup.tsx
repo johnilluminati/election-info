@@ -29,9 +29,12 @@ const CongressionalGroup = ({
     return null;
   }
 
+  // Calculate total candidates from subGroups (in case main group candidates array is empty)
+  const totalCandidates = group.subGroups!.reduce((sum, sub) => sum + sub.candidates.length, 0);
+
   return (
     <div className="space-y-4">
-      {/* Main Group Header (Congressional) */}
+      {/* Main Group Header (State) */}
       <div className="border-b-2 border-gray-300 dark:border-gray-600 pb-2">
         <div className="flex items-center justify-between">
           <div className="flex-1">
@@ -39,7 +42,7 @@ const CongressionalGroup = ({
               {group.group}
             </h3>
             <p className="text-sm text-gray-600 dark:text-gray-400">
-              {group.candidates.length} candidate{group.candidates.length !== 1 ? 's' : ''} across {group.subGroups!.length} district{group.subGroups!.length !== 1 ? 's' : ''}
+              {totalCandidates} candidate{totalCandidates !== 1 ? 's' : ''} across {group.subGroups!.length} district{group.subGroups!.length !== 1 ? 's' : ''}
             </p>
           </div>
           <button

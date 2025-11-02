@@ -84,9 +84,9 @@ export const useCandidateGrouping = ({
     if (activeFilterCount === 1) {
       // Single filter active
       if (selectedElectionType) {
-        // Special handling for Congressional elections - group by state and district
+        // Special handling for Congressional elections - group by state with districts as subGroups
         if (selectedElectionType === 'Congressional') {
-          return 'by_state_and_district';
+          return 'by_state_with_districts';
         }
         return 'by_state';
       }
@@ -105,7 +105,7 @@ export const useCandidateGrouping = ({
       if (selectedElectionType && selectedParty) {
         // Special handling for Congressional elections with party filter
         if (selectedElectionType === 'Congressional') {
-          return 'by_state_and_district';
+          return 'by_state_with_districts';
         }
         return 'by_state';
       }
@@ -138,9 +138,66 @@ export const useCandidateGrouping = ({
       return [{ group: 'All Candidates', candidates }];
     }
     
+    if (groupingStrategy === 'by_state_with_districts') {
+      // Group by state first, then by district within each state
+      // This creates a hierarchical structure with states as main groups and districts as subGroups
+      const stateGroups: Record<string, Record<string, typeof candidates>> = {};
+      
+      candidates.forEach(candidate => {
+        const state = getStateFromCandidate(candidate);
+        const district = getDistrictFromCandidate(candidate);
+        
+        if (!stateGroups[state]) {
+          stateGroups[state] = {};
+        }
+        if (!stateGroups[state][district]) {
+          stateGroups[state][district] = [];
+        }
+        stateGroups[state][district].push(candidate);
+      });
+      
+      // Create state groups with district subGroups
+      const result: CandidateGroup[] = [];
+      
+      Object.entries(stateGroups)
+        .sort(([a], [b]) => {
+          const stateA = stateAbbreviationToName[a] || a;
+          const stateB = stateAbbreviationToName[b] || b;
+          return stateA.localeCompare(stateB);
+        })
+        .forEach(([state, districts]) => {
+          // Calculate total candidates for this state
+          const totalCandidates = Object.values(districts).flat().length;
+          
+          // Create district subGroups
+          const subGroups = Object.entries(districts)
+            .sort(([a], [b]) => {
+              // Sort districts numerically if possible
+              const numA = parseInt(a);
+              const numB = parseInt(b);
+              if (!isNaN(numA) && !isNaN(numB)) {
+                return numA - numB;
+              }
+              return a.localeCompare(b);
+            })
+            .map(([district, candidates]) => ({
+              group: `District ${district}`,
+              candidates
+            }));
+          
+          result.push({
+            group: formatStateDisplayName(state),
+            candidates: [], // Empty since candidates are in subGroups
+            subGroups
+          });
+        });
+      
+      return result;
+    }
+
     if (groupingStrategy === 'by_state_and_district') {
       // Group by state first, then by district within each state
-      // This creates a hierarchical structure
+      // This creates a flattened list for other scenarios (e.g., with party filter)
       const stateGroups: Record<string, Record<string, typeof candidates>> = {};
       
       candidates.forEach(candidate => {
@@ -316,11 +373,10 @@ export const useCandidateGrouping = ({
     return result;
   }, [candidates, groupingStrategy, formatStateDisplayName, stateAbbreviationToName, getDistrictFromCandidate, getStateFromCandidate]);
 
-  // Filter and sort candidates within groups
+  // Filter and sort candidates within groups and subGroups
   const processedCandidates = useMemo(() => {
-    const result = groupedCandidates.map(group => ({
-      ...group,
-      candidates: group.candidates.sort((a, b) => {
+    const sortCandidates = (candidates: typeof groupedCandidates[0]['candidates']) => {
+      return [...candidates].sort((a, b) => {
         switch (sortBy) {
           case 'name':
             return `${a.candidate?.first_name} ${a.candidate?.last_name}`
@@ -332,7 +388,16 @@ export const useCandidateGrouping = ({
           default:
             return 0;
         }
-      })
+      });
+    };
+
+    const result = groupedCandidates.map(group => ({
+      ...group,
+      candidates: sortCandidates(group.candidates),
+      subGroups: group.subGroups?.map(subGroup => ({
+        ...subGroup,
+        candidates: sortCandidates(subGroup.candidates)
+      }))
     }));
     
     return result;
