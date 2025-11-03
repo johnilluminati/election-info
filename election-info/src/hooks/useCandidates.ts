@@ -3,7 +3,7 @@ import { api } from '../lib/api'
 import type { Candidate, ElectionCandidate, CandidateKeyIssue, ElectionCandidateDonation, PaginatedResponse } from '../types/api'
 
 export const useCandidates = (params?: { page?: number; limit?: number; search?: string }) => {
-  return useQuery<PaginatedResponse<Candidate>>({
+  return useQuery<ElectionCandidate[] | PaginatedResponse<Candidate>>({
     queryKey: ['candidates', params],
     queryFn: () => api.getCandidates(params),
   })

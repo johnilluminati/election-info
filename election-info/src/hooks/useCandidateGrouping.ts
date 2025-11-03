@@ -192,9 +192,6 @@ export const useCandidateGrouping = ({
           return stateA.localeCompare(stateB);
         })
         .forEach(([state, districts]) => {
-          // Calculate total candidates for this state
-          const totalCandidates = Object.values(districts).flat().length;
-          
           // Create district subGroups
           const subGroups = Object.entries(districts)
             .sort(([a], [b]) => {
@@ -216,55 +213,6 @@ export const useCandidateGrouping = ({
             candidates: [], // Empty since candidates are in subGroups
             subGroups
           });
-        });
-      
-      return result;
-    }
-
-    if (groupingStrategy === 'by_state_and_district') {
-      // Group by state first, then by district within each state
-      // This creates a flattened list for other scenarios (e.g., with party filter)
-      const stateGroups: Record<string, Record<string, typeof candidates>> = {};
-      
-      candidates.forEach(candidate => {
-        const state = getStateFromCandidate(candidate);
-        const district = getDistrictFromCandidate(candidate);
-        
-        if (!stateGroups[state]) {
-          stateGroups[state] = {};
-        }
-        if (!stateGroups[state][district]) {
-          stateGroups[state][district] = [];
-        }
-        stateGroups[state][district].push(candidate);
-      });
-      
-      // Flatten into a single array with state/district combinations as group names
-      const result: CandidateGroup[] = [];
-      
-      Object.entries(stateGroups)
-        .sort(([a], [b]) => {
-          const stateA = stateAbbreviationToName[a] || a;
-          const stateB = stateAbbreviationToName[b] || b;
-          return stateA.localeCompare(stateB);
-        })
-        .forEach(([state, districts]) => {
-          Object.entries(districts)
-            .sort(([a], [b]) => {
-              // Sort districts numerically if possible
-              const numA = parseInt(a);
-              const numB = parseInt(b);
-              if (!isNaN(numA) && !isNaN(numB)) {
-                return numA - numB;
-              }
-              return a.localeCompare(b);
-            })
-            .forEach(([district, candidates]) => {
-              result.push({
-                group: `District ${district}`,
-                candidates
-              });
-            });
         });
       
       return result;
@@ -465,7 +413,7 @@ export const useCandidateGrouping = ({
               return districtA.localeCompare(districtB);
             })
             .map(([key, candidates]) => {
-              const [state, district] = key.split('|');
+              const district = key.split('|')[1];
               return {
                 group: `District ${district}`,
                 candidates
