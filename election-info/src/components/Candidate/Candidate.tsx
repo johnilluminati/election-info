@@ -1,4 +1,5 @@
 import type { ElectionCandidate } from "../../types/api";
+import { FaExternalLinkAlt } from "react-icons/fa";
 import CandidateInfoTabs from "./CandidateInfoTabs";
 import CandidateKeyIssuesTab from "./CandidateKeyIssuesTab";
 import CandidateViewsTab from "./CandidateViewsTab";
@@ -55,31 +56,45 @@ const Candidate = ({ electionCandidate }: CandidateProps) => {
 
   return (
     <>
-      <div className="flex flex-row gap-4 mb-4 p-2">
-        <div className="basis-1/6 flex items-center">
-          <img 
-            className="rounded-full aspect-square object-cover" 
-            src={candidate.picture_link || "/src/assets/candidate1.png"} 
-            alt={`${candidate.first_name} ${candidate.last_name}`}
-          />
-        </div>
-        <div className="basis-5/6 flex flex-col justify-center dark:text-slate-200">
-          <div>
-            <span className="text-[2rem] pr-2">{`${candidate.first_name} ${candidate.last_name}`}</span>
-            {candidate.nickname && (
-              <span className="text-[1rem] text-gray-600">"{candidate.nickname}"</span>
+      <div className="p-6">
+        <div className="flex items-center space-x-4">
+          <div className="w-24 h-24 rounded-full bg-gray-200 dark:bg-gray-600 flex items-center justify-center flex-shrink-0 max-w-[120px]">
+            {candidate.picture_link ? (
+              <img 
+                src={candidate.picture_link}
+                alt={`${candidate.first_name} ${candidate.last_name}`}
+                className="w-full h-full rounded-full object-cover"
+              />
+            ) : (
+              <span className="text-2xl text-gray-500 dark:text-gray-400">
+                {candidate.first_name?.[0]}{candidate.last_name?.[0]}
+              </span>
             )}
           </div>
-          <span className="text-[1.25rem]">
-            {electionCandidate.election?.election_type?.name || 'Candidate'} - {party?.name || 'Independent'}
-          </span>
-          {electionCandidate.website && (
-            <span className="text-[1.25rem] block">
-              Website: <a href={electionCandidate.website} className="text-blue-500 dark:text-dark-mode-blue underline" target="_blank" rel="noopener noreferrer">
-                {electionCandidate.website}
+          <div className="flex-1">
+            <h2 className="text-3xl font-semibold text-gray-900 dark:text-white">
+              {candidate.first_name} {candidate.last_name}
+              {candidate.nickname && (
+                <span className="text-lg font-normal text-gray-600 dark:text-gray-400 ml-2">
+                  "{candidate.nickname}"
+                </span>
+              )}
+            </h2>
+            <p className="text-lg text-gray-600 dark:text-gray-400">
+              {party?.name || 'Independent'}
+            </p>
+            {electionCandidate.website && (
+              <a
+                href={electionCandidate.website}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center space-x-2 text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium transition-colors"
+              >
+                <FaExternalLinkAlt className="text-md" />
+                <span className="text-lg">{electionCandidate.website}</span>
               </a>
-            </span>
-          )}
+            )}
+          </div>
         </div>
       </div>
       <CandidateInfoTabs tabs={tabData} />
