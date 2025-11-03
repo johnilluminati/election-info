@@ -5,7 +5,7 @@ const headerLinks: HeaderLink[] = [
   { text: 'Search Elections', routerLink: '/elections', alignment: 'left' },
   { text: 'Search Candidates', routerLink: '/candidates', alignment: 'left' },
   { text: 'Political Parties', routerLink: '/political-parties', alignment: 'left' },
-  { text: 'Not Registered to Vote?', routerLink: '/register-to-vote', alignment: 'right' },
+  { text: 'Not Registered to Vote?', routerLink: '/voter-registration', alignment: 'right' },
   { text: 'Donate', routerLink: '/donate', alignment: 'right' }
 ]
 

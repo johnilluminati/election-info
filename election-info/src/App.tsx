@@ -6,6 +6,8 @@ import NotFoundPage from "./pages/NotFoundPage"
 import CandidateSearchPage from "./pages/CandidateSearchPage"
 import ElectionsSearchPage from "./pages/ElectionsSearchPage"
 import PoliticalPartiesPage from "./pages/PoliticalPartiesPage"
+import VoterRegistrationPage from "./pages/VoterRegistrationPage"
+import DonatePage from "./pages/DonatePage"
 
 function App() {
   const router = createBrowserRouter(
@@ -16,6 +18,8 @@ function App() {
         <Route path="/candidates" element={<CandidateSearchPage />} />
         <Route path="/elections" element={<ElectionsSearchPage />} />
         <Route path="/political-parties" element={<PoliticalPartiesPage />} />
+        <Route path="/voter-registration" element={<VoterRegistrationPage />} />
+        <Route path="/donate" element={<DonatePage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     )
