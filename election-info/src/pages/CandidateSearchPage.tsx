@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import type { ElectionCandidate } from '../types/api';
+import { api } from '../lib/api';
 import { useStates } from '../hooks';
 import { useCandidateFilters } from '../hooks/useCandidateFilters';
 import { useCandidateGrouping } from '../hooks/useCandidateGrouping';
@@ -96,42 +97,26 @@ const CandidateSearchPage = () => {
       setError(null);
       
       try {
-        // Build query parameters
-        const params = new URLSearchParams();
-        if (filters.searchQuery) params.append('search', filters.searchQuery);
-        if (filters.selectedState) params.append('state', filters.selectedState);
-        if (filters.selectedElectionType) params.append('election_type', filters.selectedElectionType);
-        if (filters.selectedParty) params.append('party', filters.selectedParty);
-        // Add a reasonable limit to prevent too many results
-        params.append('limit', '100');
+        // Use centralized API client
+        const data = await api.getCandidates({
+          search: filters.searchQuery || undefined,
+          state: filters.selectedState || undefined,
+          election_type: filters.selectedElectionType || undefined,
+          party: filters.selectedParty || undefined,
+          limit: 100
+        });
         
-        // Make API call to fetch candidates
-        const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
-        const fullUrl = `${API_BASE_URL}/api/candidates?${params.toString()}`;
-        const response = await fetch(fullUrl);
-        
-        if (!response.ok) {
-          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-        }
-        
-        const responseText = await response.text();
-        
-        let data;
-        try {
-          data = JSON.parse(responseText);
-        } catch (parseError) {
-          const errorMessage = parseError instanceof Error ? parseError.message : 'Unknown parsing error';
-          throw new Error(`Invalid JSON response: ${errorMessage}`);
-        }
-        
-        // Check for both response formats
-        let candidatesData;
-        if (data.data) {
-          candidatesData = data.data;
-        } else if (data.candidates) {
-          candidatesData = data.candidates;
-        } else {
-          candidatesData = [];
+        // Handle both array and paginated response formats
+        let candidatesData: ElectionCandidate[] = [];
+        if (Array.isArray(data)) {
+          // Direct array response (ElectionCandidate[])
+          candidatesData = data;
+        } else if ('data' in data && Array.isArray(data.data)) {
+          // Paginated response with data array
+          candidatesData = data.data as unknown as ElectionCandidate[];
+        } else if ('candidates' in data && Array.isArray(data.candidates)) {
+          // Paginated response with candidates array
+          candidatesData = data.candidates as unknown as ElectionCandidate[];
         }
         
         if (candidatesData.length > 0) {

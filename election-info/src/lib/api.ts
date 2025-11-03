@@ -15,12 +15,14 @@ import type {
   ElectionCandidateDonation,
   CandidateVote,
   CandidateLegislation,
-  ConflictOfInterest,
   Donor,
   HealthCheck
 } from '../types/api'
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001'
+// Vite replaces environment variables at build time
+// For production on Render, set VITE_API_URL in the environment variables
+// If not set, falls back to localhost for development
+export const API_BASE_URL = import.meta.env.VITE_API_URL?.trim() || 'http://localhost:3001'
 
 class ApiError extends Error {
   constructor(
@@ -157,14 +159,24 @@ export const api = {
   getElectionCandidates: (id: string) => apiRequest<ElectionCandidate[]>(`/api/elections/${id}/candidates`),
 
   // Candidates
-  getCandidates: (params?: { page?: number; limit?: number; search?: string }) => {
+  getCandidates: (params?: { 
+    page?: number; 
+    limit?: number; 
+    search?: string;
+    state?: string;
+    election_type?: string;
+    party?: string;
+  }) => {
     const searchParams = new URLSearchParams()
     if (params?.page) searchParams.append('page', params.page.toString())
     if (params?.limit) searchParams.append('limit', params.limit.toString())
     if (params?.search) searchParams.append('search', params.search)
+    if (params?.state) searchParams.append('state', params.state)
+    if (params?.election_type) searchParams.append('election_type', params.election_type)
+    if (params?.party) searchParams.append('party', params.party)
     
     const query = searchParams.toString()
-    return apiRequest<PaginatedResponse<Candidate>>(`/api/candidates${query ? `?${query}` : ''}`)
+    return apiRequest<ElectionCandidate[] | PaginatedResponse<Candidate>>(`/api/candidates${query ? `?${query}` : ''}`)
   },
   getCandidate: (id: string) => apiRequest<Candidate>(`/api/candidates/${id}`),
   getCandidateElections: (id: string) => apiRequest<ElectionCandidate[]>(`/api/candidates/${id}/elections`),
