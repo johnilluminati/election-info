@@ -85,7 +85,7 @@ const CongressionalMapNav = ({
             e.stopPropagation();
             onDropdownToggle?.();
           }}
-          className="inline-flex items-center gap-1.5 rounded-lg px-2 py-2 text-md text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+          className="inline-flex items-center gap-1.5 rounded-lg px-1 py-1 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
           aria-expanded={isDropdownOpen}
           aria-haspopup="true"
         >
@@ -111,7 +111,8 @@ const CongressionalMapNav = ({
         {isClickable ? (
           <button 
             onClick={onClick}
-            className="block transition-colors hover:text-gray-900 dark:hover:text-white text-blue-600 dark:text-blue-400"
+            className="block transition-colors hover:text-gray-900 dark:hover:text-white text-blue-600 dark:text-blue-400 cursor-pointer"
+            title="Click to navigate back to this location"
           >
             {text}
           </button>
@@ -149,7 +150,7 @@ const CongressionalMapNav = ({
               <button
                 key={state.id}
                 onClick={() => onSelect(state)}
-                className="block w-full rounded-lg px-4 py-2 text-md text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-left"
+                className="block w-full rounded-lg px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-left"
               >
                 {state.name}
               </button>
@@ -195,9 +196,9 @@ const CongressionalMapNav = ({
   return (
     <>
       <nav ref={navRef} aria-label="Breadcrumb" className="relative mb-1">
-        <ol className="flex items-center gap-1 text-md text-gray-700 dark:text-gray-200">
+        <ol className="flex items-center gap-1 text-sm font-semibold text-gray-700 dark:text-gray-200">
           {/* United States breadcrumb - always visible */}
-          <li className="mr-2">
+          <li className="mr-1">
             {renderBreadcrumbItem(
               'United States', 
               true, 
