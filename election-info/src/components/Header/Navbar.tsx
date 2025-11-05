@@ -23,7 +23,11 @@ const Navbar = ({ links }: { links: HeaderLink[] }) => {
   return (
     <>
       <div className="container mx-auto px-4 flex h-16 items-center justify-between gap-4">
-        <Link to="/" className="flex items-center justify-center text-blue-500 dark:text-white flex-shrink-0">
+        <Link 
+          to="/" 
+          onClick={closeMobileMenu}
+          className="flex items-center justify-center text-blue-500 dark:text-white flex-shrink-0"
+        >
           <FaMagnifyingGlass className="text-2xl" />
           <span className="text-xl sm:text-2xl font-semibold ml-2">VoteWise</span>
         </Link>
