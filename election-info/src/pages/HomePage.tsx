@@ -1,5 +1,5 @@
-import HomeSiteOverview from "../components/HomeSiteOverview"
-import HomeBanner from "../components/HomeBanner"
+import HomeSiteOverview from "../components/Home/HomeSiteOverview"
+import HomeBanner from "../components/Home/HomeBanner"
 
 const HomePage = () => {
   return (
