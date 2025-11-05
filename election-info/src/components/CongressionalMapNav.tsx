@@ -77,31 +77,50 @@ const CongressionalMapNav = ({
     setShowDistrictDropdown(false);
   };
 
-  const renderBreadcrumbItem = (text: string, isClickable: boolean = true, onClick?: () => void, hasDropdown?: boolean, onDropdownToggle?: () => void, isDropdownOpen?: boolean) => {
+  const renderBreadcrumbItem = (text: string, isClickable: boolean = true, onClick?: () => void, hasDropdown?: boolean, onDropdownToggle?: () => void, isDropdownOpen?: boolean, isSelected?: boolean) => {
     if (hasDropdown !== undefined) {
       return (
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            onDropdownToggle?.();
-          }}
-          className="inline-flex items-center gap-1.5 rounded-lg px-1 py-1 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-          aria-expanded={isDropdownOpen}
-          aria-haspopup="true"
-        >
-          {text}
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className={`h-4 w-4 ${isDropdownOpen ? 'rotate-180' : ''}`}
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth="2"
-            aria-hidden="true"
+        <div className="inline-flex items-center gap-1.5 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors px-1 py-1">
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              if (isSelected) {
+                // If value is selected, clicking text navigates back
+                onClick?.();
+              } else {
+                // If no value selected, clicking text opens dropdown
+                onDropdownToggle?.();
+              }
+            }}
+            className={`cursor-pointer ${
+              isSelected ? 'text-blue-600 dark:text-blue-400' : 'text-gray-700 dark:text-gray-200'
+            }`}
           >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-          </svg>
-        </button>
+            {text}
+          </button>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onDropdownToggle?.();
+            }}
+            className="cursor-pointer"
+            aria-expanded={isDropdownOpen}
+            aria-haspopup="true"
+            aria-label="Toggle dropdown"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className={`h-4 w-4 text-gray-700 dark:text-gray-200 ${isDropdownOpen ? 'rotate-180' : ''}`}
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth="2"
+              aria-hidden="true"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+        </div>
       );
     }
 
@@ -218,7 +237,8 @@ const CongressionalMapNav = ({
                 setShowStateDropdown(!showStateDropdown);
                 setShowDistrictDropdown(false);
               },
-              showStateDropdown
+              showStateDropdown,
+              !!selectedState
             )}
             {showStateDropdown && states && renderStateDropdown(
               states,
@@ -242,7 +262,8 @@ const CongressionalMapNav = ({
                     setShowDistrictDropdown(!showDistrictDropdown);
                     setShowStateDropdown(false);
                   },
-                  showDistrictDropdown
+                  showDistrictDropdown,
+                  !!selectedDistrict
                 )}
                 {showDistrictDropdown && districts && renderDistrictDropdown(
                   districts,
