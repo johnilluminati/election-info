@@ -742,4 +742,5 @@ const CongressionalMap: React.FC<CongressionalMapProps> = ({
   );
 };
 
-export default CongressionalMap; 
+export default CongressionalMap;
+

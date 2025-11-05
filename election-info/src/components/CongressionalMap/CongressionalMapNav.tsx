@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
-import { useStates, useStateDistricts } from '../hooks';
-import type { USState, VotingDistrict } from '../types/api';
+import { useStates, useStateDistricts } from '../../hooks';
+import type { USState, VotingDistrict } from '../../types/api';
 
 const CongressionalMapNav = ({ 
   onMapSelection, 
@@ -280,4 +280,5 @@ const CongressionalMapNav = ({
   )
 }
 
-export default CongressionalMapNav
+export default CongressionalMapNav;
+
