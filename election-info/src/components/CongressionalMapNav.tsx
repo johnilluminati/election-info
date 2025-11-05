@@ -132,7 +132,7 @@ const CongressionalMapNav = ({
   const renderStateDropdown = (states: USState[], onSelect: (state: USState) => void, isLoading: boolean, placeholder: string) => {
     if (isLoading) {
       return (
-        <div className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-lg">
+        <div className="absolute left-0 z-10 mt-2 w-56 origin-top-left rounded-md border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-lg">
           <div className="p-2">
             <div className="block px-4 py-2 text-sm text-gray-500 dark:text-gray-400">Loading...</div>
           </div>
@@ -141,7 +141,7 @@ const CongressionalMapNav = ({
     }
 
     return (
-      <div className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-lg max-h-60 overflow-y-auto">
+      <div className="absolute left-0 z-10 mt-2 w-56 origin-top-left rounded-md border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-lg max-h-60 overflow-y-auto">
         <div className="p-2">
           {states.length === 0 ? (
             <div className="block px-4 py-2 text-sm text-gray-500 dark:text-gray-400">{placeholder}</div>
@@ -214,7 +214,10 @@ const CongressionalMapNav = ({
               !!selectedState, 
               selectedState ? () => handleBreadcrumbClick('state') : undefined,
               true,
-              () => setShowStateDropdown(!showStateDropdown),
+              () => {
+                setShowStateDropdown(!showStateDropdown);
+                setShowDistrictDropdown(false);
+              },
               showStateDropdown
             )}
             {showStateDropdown && states && renderStateDropdown(
@@ -235,7 +238,10 @@ const CongressionalMapNav = ({
                   !!selectedDistrict, 
                   selectedDistrict ? () => handleBreadcrumbClick('district') : undefined,
                   true,
-                  () => setShowDistrictDropdown(!showDistrictDropdown),
+                  () => {
+                    setShowDistrictDropdown(!showDistrictDropdown);
+                    setShowStateDropdown(false);
+                  },
                   showDistrictDropdown
                 )}
                 {showDistrictDropdown && districts && renderDistrictDropdown(
