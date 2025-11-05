@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { FaMapMarkedAlt, FaUsers, FaVoteYea } from 'react-icons/fa'
+import { FaMapMarkedAlt, FaUsers, FaVoteYea, FaArrowRight } from 'react-icons/fa'
 
 const HomeSiteOverview = () => {
   return (
@@ -18,7 +18,7 @@ const HomeSiteOverview = () => {
           {/* Search Elections */}
           <Link 
             to="/elections"
-            className="bg-gray-50 dark:bg-gray-800 rounded-lg p-8 border border-gray-200 dark:border-gray-700 hover:border-blue-400 dark:hover:border-blue-600 transition-colors"
+            className="bg-gray-50 dark:bg-gray-800 rounded-lg p-8 border border-gray-200 dark:border-gray-700 hover:border-blue-400 dark:hover:border-blue-600 transition-colors block"
           >
             <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mb-6">
               <FaMapMarkedAlt className="w-8 h-8 text-blue-600 dark:text-blue-400" />
@@ -26,15 +26,19 @@ const HomeSiteOverview = () => {
             <h3 className="text-2xl font-semibold text-gray-900 dark:text-white mb-3">
               Search Elections
             </h3>
-            <p className="text-gray-600 dark:text-gray-400">
+            <p className="text-gray-600 dark:text-gray-400 mb-4">
               Use our interactive map to find upcoming elections in your area. Explore by state, congressional district, or filter by election type to see what's on your ballot.
             </p>
+            <div className="flex items-center text-blue-600 dark:text-blue-400 font-medium">
+              Learn more
+              <FaArrowRight className="ml-2 w-4 h-4" />
+            </div>
           </Link>
 
           {/* Search Candidates */}
           <Link 
             to="/candidates"
-            className="bg-gray-50 dark:bg-gray-800 rounded-lg p-8 border border-gray-200 dark:border-gray-700 hover:border-blue-400 dark:hover:border-blue-600 transition-colors"
+            className="bg-gray-50 dark:bg-gray-800 rounded-lg p-8 border border-gray-200 dark:border-gray-700 hover:border-indigo-400 dark:hover:border-indigo-600 transition-colors block"
           >
             <div className="w-16 h-16 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center mb-6">
               <FaUsers className="w-8 h-8 text-indigo-600 dark:text-indigo-400" />
@@ -42,15 +46,19 @@ const HomeSiteOverview = () => {
             <h3 className="text-2xl font-semibold text-gray-900 dark:text-white mb-3">
               Search Candidates
             </h3>
-            <p className="text-gray-600 dark:text-gray-400">
+            <p className="text-gray-600 dark:text-gray-400 mb-4">
               Search for candidates by name, location, or party. View detailed profiles, compare candidates side-by-side, and explore voting records and campaign finance information.
             </p>
+            <div className="flex items-center text-indigo-600 dark:text-indigo-400 font-medium">
+              Learn more
+              <FaArrowRight className="ml-2 w-4 h-4" />
+            </div>
           </Link>
 
           {/* Political Parties */}
           <Link 
             to="/political-parties"
-            className="bg-gray-50 dark:bg-gray-800 rounded-lg p-8 border border-gray-200 dark:border-gray-700 hover:border-blue-400 dark:hover:border-blue-600 transition-colors"
+            className="bg-gray-50 dark:bg-gray-800 rounded-lg p-8 border border-gray-200 dark:border-gray-700 hover:border-purple-400 dark:hover:border-purple-600 transition-colors block"
           >
             <div className="w-16 h-16 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mb-6">
               <FaVoteYea className="w-8 h-8 text-purple-600 dark:text-purple-400" />
@@ -58,9 +66,13 @@ const HomeSiteOverview = () => {
             <h3 className="text-2xl font-semibold text-gray-900 dark:text-white mb-3">
               Political Parties
             </h3>
-            <p className="text-gray-600 dark:text-gray-400">
+            <p className="text-gray-600 dark:text-gray-400 mb-4">
               Explore where political parties stand on key issues, view party leadership, and see how candidates align with their party's positions and platform.
             </p>
+            <div className="flex items-center text-purple-600 dark:text-purple-400 font-medium">
+              Learn more
+              <FaArrowRight className="ml-2 w-4 h-4" />
+            </div>
           </Link>
         </div>
 
