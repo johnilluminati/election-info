@@ -29,7 +29,7 @@ const Navbar = ({ links }: { links: HeaderLink[] }) => {
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex flex-1 items-center justify-between ml-8">
+        <div className="hidden lg:flex flex-1 items-center justify-between ml-8">
           <nav aria-label="Global">
             <ul className="flex items-center gap-6 text-[1rem]">
               {leftLinks.map((item: HeaderLink, key: number) => {
@@ -65,10 +65,10 @@ const Navbar = ({ links }: { links: HeaderLink[] }) => {
         </div>
 
         {/* Mobile: Hamburger button */}
-        <div className="flex md:hidden items-center">
+        <div className="flex lg:hidden items-center">
           <button
             onClick={toggleMobileMenu}
-            className="p-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
+            className="p-2 text-gray-500 dark:text-white hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
             aria-label="Toggle menu"
             aria-expanded={isMobileMenuOpen}
           >
@@ -83,7 +83,7 @@ const Navbar = ({ links }: { links: HeaderLink[] }) => {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="md:hidden border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-nav-bg-color">
+        <div className="lg:hidden border-t border-gray-200 bg-white dark:bg-nav-bg-color">
           <div className="container mx-auto px-4 py-4">
             <nav aria-label="Mobile navigation">
               <ul className="space-y-4">
@@ -120,7 +120,7 @@ const Navbar = ({ links }: { links: HeaderLink[] }) => {
                   );
                 })}
                 {/* Dark mode toggle */}
-                <li className="pt-2 border-t border-gray-200 dark:border-gray-700">
+                <li className="pt-2 border-t border-gray-200">
                   <div className="flex items-center justify-between py-2">
                     <span className="text-gray-500 dark:text-white font-medium">Dark Mode</span>
                     <DarkModeToggle />
