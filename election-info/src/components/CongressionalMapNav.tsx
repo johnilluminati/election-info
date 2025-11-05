@@ -77,75 +77,85 @@ const CongressionalMapNav = ({
     setShowDistrictDropdown(false);
   };
 
-  const renderBreadcrumbItem = (text: string, isClickable: boolean = true, onClick?: () => void, showDropdown?: boolean, onDropdownToggle?: () => void) => (
-    <li className="relative flex items-center gap-1" style={{ position: 'relative' }}>
-      {isClickable ? (
-        <button 
-          onClick={onClick}
-          className="block transition-colors hover:text-gray-900 dark:hover:text-white text-blue-600 dark:text-blue-400"
+  const renderBreadcrumbItem = (text: string, isClickable: boolean = true, onClick?: () => void, hasDropdown?: boolean, onDropdownToggle?: () => void, isDropdownOpen?: boolean) => {
+    if (hasDropdown !== undefined) {
+      return (
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onDropdownToggle?.();
+          }}
+          className="inline-flex items-center gap-1.5 rounded-lg px-2 py-2 text-md text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+          aria-expanded={isDropdownOpen}
+          aria-haspopup="true"
         >
           {text}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className={`h-4 w-4 ${isDropdownOpen ? 'rotate-180' : ''}`}
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth="2"
+            aria-hidden="true"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+          </svg>
         </button>
-      ) : (
-        <span className="block text-gray-700 dark:text-gray-200">
-          {text}
-        </span>
-      )}
-             {showDropdown !== undefined && (
-         <button
-           onClick={(e) => {
-             e.stopPropagation();
-             onDropdownToggle?.();
-           }}
-           className="text-xs text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"
-         >
-           {showDropdown ? '▲' : '▼'}
-         </button>
-       )}
-    </li>
-  );
+      );
+    }
+
+    // Regular breadcrumb item without dropdown
+    return (
+      <>
+        {isClickable ? (
+          <button 
+            onClick={onClick}
+            className="block transition-colors hover:text-gray-900 dark:hover:text-white text-blue-600 dark:text-blue-400"
+          >
+            {text}
+          </button>
+        ) : (
+          <span className="block text-gray-700 dark:text-gray-200">
+            {text}
+          </span>
+        )}
+      </>
+    );
+  };
 
   const renderSeparator = () => (
-    <li className="rtl:rotate-180">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        className="size-4"
-        viewBox="0 0 20 20"
-        fill="currentColor"
-      >
-        <path
-          fillRule="evenodd"
-          d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-          clipRule="evenodd"
-        />
-      </svg>
-    </li>
+    <li className=" text-gray-400 dark:text-gray-500 rtl:-rotate-[40deg]">/</li>
   );
 
   const renderStateDropdown = (states: USState[], onSelect: (state: USState) => void, isLoading: boolean, placeholder: string) => {
     if (isLoading) {
       return (
-        <div className="absolute top-full left-0 mt-1 w-64 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-lg z-50 p-2">
-          <div className="text-center text-gray-500">Loading...</div>
+        <div className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-lg">
+          <div className="p-2">
+            <div className="block px-4 py-2 text-sm text-gray-500 dark:text-gray-400">Loading...</div>
+          </div>
         </div>
       );
     }
 
     return (
-      <div className="absolute top-full left-0 mt-1 w-64 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-lg z-50 max-h-60 overflow-y-auto">
-        {states.length === 0 ? (
-          <div className="p-2 text-center text-gray-500">{placeholder}</div>
-        ) : (
-          states.map((state) => (
-            <button
-              key={state.id}
-              onClick={() => onSelect(state)}
-              className="w-full text-left px-3 py-2 hover:bg-yellow-300 dark:hover:bg-yellow-700 transition-colors"
-            >
-              {state.name}
-            </button>
-          ))
-        )}
+      <div className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-lg max-h-60 overflow-y-auto">
+        <div className="p-2">
+          {states.length === 0 ? (
+            <div className="block px-4 py-2 text-sm text-gray-500 dark:text-gray-400">{placeholder}</div>
+          ) : (
+            states.map((state) => (
+              <button
+                key={state.id}
+                onClick={() => onSelect(state)}
+                className="block w-full rounded-lg px-4 py-2 text-md text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-left"
+              >
+                {state.name}
+              </button>
+            ))
+          )}
+        </div>
       </div>
     );
   };
@@ -153,75 +163,87 @@ const CongressionalMapNav = ({
   const renderDistrictDropdown = (districts: VotingDistrict[], onSelect: (district: VotingDistrict) => void, isLoading: boolean, placeholder: string) => {
     if (isLoading) {
       return (
-        <div className="absolute top-full left-0 mt-1 w-64 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-lg z-50 p-2">
-          <div className="text-center text-gray-500">Loading...</div>
+        <div className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-lg">
+          <div className="p-2">
+            <div className="block px-4 py-2 text-sm text-gray-500 dark:text-gray-400">Loading...</div>
+          </div>
         </div>
       );
     }
 
     return (
-      <div className="absolute top-full left-0 mt-1 w-64 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-lg z-50 max-h-60 overflow-y-auto">
-        {districts.length === 0 ? (
-          <div className="p-2 text-center text-gray-500">{placeholder}</div>
-        ) : (
-          districts.map((district) => (
-            <button
-              key={district.id}
-              onClick={() => onSelect(district)}
-              className="w-full text-left px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-            >
-              District {district.district_code}
-            </button>
-          ))
-        )}
+      <div className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-lg max-h-60 overflow-y-auto">
+        <div className="p-2">
+          {districts.length === 0 ? (
+            <div className="block px-4 py-2 text-sm text-gray-500 dark:text-gray-400">{placeholder}</div>
+          ) : (
+            districts.map((district) => (
+              <button
+                key={district.id}
+                onClick={() => onSelect(district)}
+                className="block w-full rounded-lg px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-left"
+              >
+                District {district.district_code}
+              </button>
+            ))
+          )}
+        </div>
       </div>
     );
   };
 
   return (
     <>
-      <nav ref={navRef} aria-label="Breadcrumb" className="relative">
-        <ol className="flex items-center gap-1 text-sm text-gray-700 dark:text-gray-200">
+      <nav ref={navRef} aria-label="Breadcrumb" className="relative mb-1">
+        <ol className="flex items-center gap-1 text-md text-gray-700 dark:text-gray-200">
           {/* United States breadcrumb - always visible */}
-          {renderBreadcrumbItem(
-            'United States', 
-            true, 
-            () => handleBreadcrumbClick('home')
-          )}
+          <li className="mr-2">
+            {renderBreadcrumbItem(
+              'United States', 
+              true, 
+              () => handleBreadcrumbClick('home')
+            )}
+          </li>
           
           {/* State breadcrumb - always visible with dropdown */}
           {renderSeparator()}
-          {renderBreadcrumbItem(
-            selectedState || 'Select State', 
-            !!selectedState, 
-            selectedState ? () => handleBreadcrumbClick('state') : undefined,
-            true,
-            () => setShowStateDropdown(!showStateDropdown)
-          )}
-          {showStateDropdown && states && renderStateDropdown(
-            states,
-            handleStateSelect,
-            statesLoading,
-            'No states available'
-          )}
+          <li className="relative">
+            {renderBreadcrumbItem(
+              selectedState || 'Select State', 
+              !!selectedState, 
+              selectedState ? () => handleBreadcrumbClick('state') : undefined,
+              true,
+              () => setShowStateDropdown(!showStateDropdown),
+              showStateDropdown
+            )}
+            {showStateDropdown && states && renderStateDropdown(
+              states,
+              handleStateSelect,
+              statesLoading,
+              'No states available'
+            )}
+          </li>
           
           {/* District breadcrumb - only visible when state is selected */}
           {selectedState && (
             <>
               {renderSeparator()}
-              {renderBreadcrumbItem(
-                selectedDistrict ? `District ${selectedDistrict}` : 'Select District', 
-                !!selectedDistrict, 
-                selectedDistrict ? () => handleBreadcrumbClick('district') : undefined,
-                true,
-                () => setShowDistrictDropdown(!showDistrictDropdown)
-              )}
-              {showDistrictDropdown && districts && renderDistrictDropdown(
-                districts,
-                handleDistrictSelect,
-                districtsLoading,
-                'No districts available'
-              )}
+              <li className="relative">
+                {renderBreadcrumbItem(
+                  selectedDistrict ? `District ${selectedDistrict}` : 'Select District', 
+                  !!selectedDistrict, 
+                  selectedDistrict ? () => handleBreadcrumbClick('district') : undefined,
+                  true,
+                  () => setShowDistrictDropdown(!showDistrictDropdown),
+                  showDistrictDropdown
+                )}
+                {showDistrictDropdown && districts && renderDistrictDropdown(
+                  districts,
+                  handleDistrictSelect,
+                  districtsLoading,
+                  'No districts available'
+                )}
+              </li>
             </>
           )}
         </ol>
