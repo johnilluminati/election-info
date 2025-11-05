@@ -201,9 +201,37 @@ const CandidateComparison = ({ selectedElection, selectedState, selectedDistrict
                     </p>
                   </div>
 
-                  <div className="flex flex-row justify-center gap-4">
-                    {selectedCandidates.length === 2 ? (
-                      <>
+                  {selectedCandidates.length === 2 ? (
+                    <>
+                      {/* Mobile: Horizontal scrollable container */}
+                      <div className="lg:hidden">
+                        <div className="flex flex-row gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-4 -mx-4 px-4">
+                          <div key={selectedCandidates[0].id} className="flex flex-col flex-[0_0_90%] sm:flex-[0_0_85%] min-w-0 snap-start">
+                            <div className="w-full">
+                              <Candidate
+                                electionCandidate={selectedCandidates[0]}
+                              />
+                            </div>
+                          </div>
+                          <div key={selectedCandidates[1].id} className="flex flex-col flex-[0_0_90%] sm:flex-[0_0_85%] min-w-0 snap-start">
+                            <div className="w-full">
+                              <Candidate
+                                electionCandidate={selectedCandidates[1]}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        {/* Scroll indicator */}
+                        <div className="flex justify-center items-center gap-2 mt-4">
+                          <div className="h-2 w-2 rounded-full bg-blue-500" aria-label="Candidate 1" />
+                          <div className="h-2 w-2 rounded-full bg-blue-500" aria-label="Candidate 2" />
+                        </div>
+                        <p className="text-xs text-center text-gray-500 dark:text-gray-400 mt-2">
+                          Swipe or scroll horizontally to view both candidates side-by-side
+                        </p>
+                      </div>
+                      {/* Desktop: Side-by-side layout */}
+                      <div className="hidden lg:flex flex-row justify-center gap-4">
                         <div key={selectedCandidates[0].id} className="flex flex-col flex-1 min-w-0">
                           <div className="w-full">
                             <Candidate
@@ -211,7 +239,7 @@ const CandidateComparison = ({ selectedElection, selectedState, selectedDistrict
                             />
                           </div>
                         </div>
-                        <div className="hidden lg:block w-px bg-gray-300 dark:bg-gray-600 flex-shrink-0 self-stretch" />
+                        <div className="w-px bg-gray-300 dark:bg-gray-600 flex-shrink-0 self-stretch" />
                         <div key={selectedCandidates[1].id} className="flex flex-col flex-1 min-w-0">
                           <div className="w-full">
                             <Candidate
@@ -219,9 +247,11 @@ const CandidateComparison = ({ selectedElection, selectedState, selectedDistrict
                             />
                           </div>
                         </div>
-                      </>
-                    ) : (
-                      selectedCandidates.map((electionCandidate) => (
+                      </div>
+                    </>
+                  ) : (
+                    <div className="flex flex-row justify-center gap-4">
+                      {selectedCandidates.map((electionCandidate) => (
                         <div key={electionCandidate.id} className="flex flex-col flex-1 min-w-0">
                           <div className="w-full">
                             <Candidate
@@ -229,9 +259,9 @@ const CandidateComparison = ({ selectedElection, selectedState, selectedDistrict
                             />
                           </div>
                         </div>
-                      ))
-                    )}
-                  </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               )}
 
