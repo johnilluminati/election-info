@@ -100,6 +100,8 @@ const CongressionalMap: React.FC<CongressionalMapProps> = ({
   const [isLoadingData, setIsLoadingData] = useState(true);
   const [isMapReady, setIsMapReady] = useState(false);
   const [mapError, setMapError] = useState<string | null>(null);
+  const mapTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const isMapReadyRef = useRef(false);
   const selectedDistrictIdRef = useRef<number | null>(null);
   const selectedStateIdRef = useRef<number | null>(null);
   const onMapSelectionRef = useRef(onMapSelection);
@@ -149,6 +151,10 @@ const CongressionalMap: React.FC<CongressionalMapProps> = ({
   useEffect(() => {
     onMapSelectionRef.current = onMapSelection;
   }, [onMapSelection]);
+
+  useEffect(() => {
+    isMapReadyRef.current = isMapReady;
+  }, [isMapReady]);
 
   useEffect(() => {
     if (!mapContainer.current || !districtData || !stateData) return;
@@ -266,6 +272,11 @@ const CongressionalMap: React.FC<CongressionalMapProps> = ({
     const handleMapLoad = () => {
       setIsMapReady(true);
       setMapError(null);
+      isMapReadyRef.current = true;
+      if (mapTimeoutRef.current) {
+        clearTimeout(mapTimeoutRef.current);
+        mapTimeoutRef.current = null;
+      }
     };
 
     const handleMapError = (event: { error?: Error }) => {
@@ -275,6 +286,12 @@ const CongressionalMap: React.FC<CongressionalMapProps> = ({
 
     map.current.once('load', handleMapLoad);
     map.current.on('error', handleMapError);
+
+    mapTimeoutRef.current = setTimeout(() => {
+      if (!isMapReadyRef.current) {
+        setMapError('Map is taking longer than expected to load.');
+      }
+    }, 30000);
 
     // Add navigation controls
     map.current.addControl(new maplibregl.NavigationControl());
@@ -617,6 +634,10 @@ const CongressionalMap: React.FC<CongressionalMapProps> = ({
 
     // Cleanup
     return () => {
+      if (mapTimeoutRef.current) {
+        clearTimeout(mapTimeoutRef.current);
+        mapTimeoutRef.current = null;
+      }
       if (map.current) {
         map.current.off('error', handleMapError);
         map.current.remove();
