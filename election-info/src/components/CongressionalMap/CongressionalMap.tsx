@@ -719,11 +719,11 @@ const CongressionalMap: React.FC<CongressionalMapProps> = ({
   }, [zoomToHome, zoomToState, zoomToDistrict, districtData, stateData]);
 
   return (
-    <div className="w-full h-full relative">
+    <div className="w-full h-full relative lg:flex-1 lg:min-h-0">
       <div 
         ref={mapContainer} 
         className="w-full h-full" 
-        style={{ minHeight: '600px' }} 
+        style={{ minHeight: '385px' }}
       />
       {tooltip.show && (
         <div

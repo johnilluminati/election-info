@@ -47,7 +47,15 @@ const ElectionsSearchPage = () => {
         el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
       }
       if (typeof window !== 'undefined' && window.innerWidth < 1024 && detailsRef.current) {
-        detailsRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // Scroll to details but account for header/sticky elements
+        const headerOffset = 80; // Approximate header height
+        const elementPosition = detailsRef.current.getBoundingClientRect().top + window.pageYOffset;
+        const offsetPosition = elementPosition - headerOffset;
+        
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
       }
     }
   }, [selectedElection]);
@@ -133,10 +141,10 @@ const ElectionsSearchPage = () => {
 
   return (
     <>
-      <section className="h-auto lg:h-[620px] overflow-hidden">
-        <div className="h-full">
-          <div className="flex flex-col lg:flex-row justify-center items-stretch w-full h-full">
-            <div className="flex flex-col w-full lg:basis-3/4 lg:h-full">
+      <section className="min-h-[400px] lg:h-[620px] lg:overflow-hidden">
+        <div className="h-full lg:h-full">
+          <div className="flex flex-col lg:flex-row justify-center items-stretch w-full lg:h-full">
+            <div className="flex flex-col w-full lg:basis-3/4 lg:h-full lg:flex-1 lg:min-h-0">
               <CongressionalMapNav 
                 onMapSelection={handleSelection} 
                 selectedState={selectedState}
