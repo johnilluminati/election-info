@@ -11,15 +11,21 @@ const PORT = process.env.PORT || 3001;
 const frontendDistPath = path.join(__dirname, 'election-info/build');
 
 // Middleware
-app.use( // Security headers
+app.use(
   helmet({
     contentSecurityPolicy: {
       useDefaults: true,
       directives: {
-        imgSrc: ["'self'", "data:", "https://tile.openstreetmap.org"],
-        connectSrc: ["'self'", "https://tile.openstreetmap.org"],
+        "default-src": ["'self'"],
+        "script-src": ["'self'", "'unsafe-inline'", "blob:"],
+        "worker-src": ["'self'", "blob:"],
+        "child-src": ["'self'", "blob:"],
+        "style-src": ["'self'", "'unsafe-inline'"],
+        "img-src": ["'self'", "data:", "https://tile.openstreetmap.org"],
+        "connect-src": ["'self'", "https://tile.openstreetmap.org"],
       },
     },
+    crossOriginEmbedderPolicy: false,
   })
 );
 app.use(cors()); // Enable CORS
