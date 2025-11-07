@@ -8,7 +8,7 @@ require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 3001;
-const frontendDistPath = path.join(__dirname, '../election-info/dist');
+const frontendDistPath = path.join(__dirname, 'election-info/dist');
 
 // Middleware
 app.use(helmet()); // Security headers
