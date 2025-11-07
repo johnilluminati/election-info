@@ -97,12 +97,17 @@ const CongressionalMap: React.FC<CongressionalMapProps> = ({
   const [districtData, setDistrictData] = useState<GeoJSON.FeatureCollection<GeoJSON.Polygon | GeoJSON.MultiPolygon, DistrictProperties> | null>(null);
   const [stateData, setStateData] = useState<GeoJSON.FeatureCollection<GeoJSON.Polygon | GeoJSON.MultiPolygon, StateProperties> | null>(null);
   const [tooltip, setTooltip] = useState<TooltipState>({ show: false, text: '', x: 0, y: 0 });
+  const [isLoadingData, setIsLoadingData] = useState(true);
+  const [isMapReady, setIsMapReady] = useState(false);
+  const [mapError, setMapError] = useState<string | null>(null);
   const selectedDistrictIdRef = useRef<number | null>(null);
   const selectedStateIdRef = useRef<number | null>(null);
   const onMapSelectionRef = useRef(onMapSelection);
 
   useEffect(() => {
     // Fetch the GeoJSON data
+    setIsLoadingData(true);
+    setMapError(null);
     fetch('/data/converted_congressional_voting_districts.geojson')
       .then(response => response.json())
       .then(data => {
@@ -131,8 +136,14 @@ const CongressionalMap: React.FC<CongressionalMapProps> = ({
         };
         
         setDistrictData(districtsWithStateColors);
+        setIsLoadingData(false);
+        setMapError(null);
       })
-      .catch(error => console.error('Error loading district data:', error));
+      .catch(error => {
+        console.error('Error loading district data:', error);
+        setIsLoadingData(false);
+        setMapError('Unable to load congressional map data.');
+      });
   }, []);
 
   useEffect(() => {
@@ -143,6 +154,12 @@ const CongressionalMap: React.FC<CongressionalMapProps> = ({
     if (!mapContainer.current || !districtData || !stateData) return;
 
     // Create the map instance
+    if (map.current) {
+      map.current.remove();
+      map.current = null;
+    }
+
+    setIsMapReady(false);
     map.current = new maplibregl.Map({
       container: mapContainer.current,
       style: {
@@ -245,6 +262,19 @@ const CongressionalMap: React.FC<CongressionalMapProps> = ({
       center: [-98.5795, 39.8283],
       zoom: 3
     });
+
+    const handleMapLoad = () => {
+      setIsMapReady(true);
+      setMapError(null);
+    };
+
+    const handleMapError = (event: { error?: Error }) => {
+      console.error('Map initialization error:', event.error);
+      setMapError('Unable to initialize map.');
+    };
+
+    map.current.once('load', handleMapLoad);
+    map.current.on('error', handleMapError);
 
     // Add navigation controls
     map.current.addControl(new maplibregl.NavigationControl());
@@ -587,7 +617,11 @@ const CongressionalMap: React.FC<CongressionalMapProps> = ({
 
     // Cleanup
     return () => {
-      map.current?.remove();
+      if (map.current) {
+        map.current.off('error', handleMapError);
+        map.current.remove();
+        map.current = null;
+      }
     };
   }, [districtData, stateData]);
 
@@ -718,8 +752,30 @@ const CongressionalMap: React.FC<CongressionalMapProps> = ({
     }
   }, [zoomToHome, zoomToState, zoomToDistrict, districtData, stateData]);
 
+  const showLoadingOverlay = (isLoadingData || !isMapReady) && !mapError;
+
   return (
-    <div className="w-full h-full relative lg:flex-1 lg:min-h-0">
+    <div className="w-full h-full relative lg:flex-1 lg:min-h-0" style={{ minHeight: '385px' }}>
+      {showLoadingOverlay && (
+        <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-white/80 dark:bg-gray-900/80">
+          <div className="h-10 w-10 animate-spin rounded-full border-4 border-blue-500 border-t-transparent" aria-hidden="true" />
+          <p className="mt-4 text-sm font-medium text-gray-700 dark:text-gray-200">
+            Loading congressional map…
+          </p>
+        </div>
+      )}
+
+      {mapError && (
+        <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-white dark:bg-gray-900">
+          <p className="text-sm font-medium text-red-600 dark:text-red-400">
+            {mapError}
+          </p>
+          <p className="mt-2 text-xs text-gray-600 dark:text-gray-300">
+            Please refresh the page to try again.
+          </p>
+        </div>
+      )}
+
       <div 
         ref={mapContainer} 
         className="w-full h-full" 
