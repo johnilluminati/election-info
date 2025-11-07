@@ -1,10 +1,12 @@
-import { useState } from "react"
-import { Outlet } from "react-router-dom"
+import { useState, useEffect } from "react"
+import { Outlet, useLocation } from "react-router-dom"
 import Header from "../components/Header/Header"
 import Footer from "../components/Footer/Footer"
 import { FaTimes } from "react-icons/fa"
 
 const Mainlayout = () => {
+  const { pathname } = useLocation();
+
   // Check sessionStorage synchronously on initial render to avoid flash
   // sessionStorage automatically clears when the tab/browser is closed
   const [isAnnouncementDismissed, setIsAnnouncementDismissed] = useState(() => {
@@ -13,6 +15,11 @@ const Mainlayout = () => {
     }
     return false;
   });
+
+  // Scroll to top when route changes
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   const handleDismiss = () => {
     setIsAnnouncementDismissed(true);
