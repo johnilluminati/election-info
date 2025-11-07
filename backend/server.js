@@ -11,7 +11,17 @@ const PORT = process.env.PORT || 3001;
 const frontendDistPath = path.join(__dirname, 'election-info/build');
 
 // Middleware
-app.use(helmet()); // Security headers
+app.use( // Security headers
+  helmet({
+    contentSecurityPolicy: {
+      useDefaults: true,
+      directives: {
+        imgSrc: ["'self'", "data:", "https://tile.openstreetmap.org"],
+        connectSrc: ["'self'", "https://tile.openstreetmap.org"],
+      },
+    },
+  })
+);
 app.use(cors()); // Enable CORS
 app.use(morgan('combined')); // Logging
 app.use(express.json()); // Parse JSON bodies
