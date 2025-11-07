@@ -183,7 +183,7 @@ const CongressionalMap: React.FC<CongressionalMapProps> = ({
               'fill-opacity': [
                 'case',
                 ['boolean', ['feature-state', 'selected'], false],
-                0.6,
+                0.7,
                 ['case',
                   ['boolean', ['feature-state', 'hover'], false],
                   0.3,
@@ -211,7 +211,7 @@ const CongressionalMap: React.FC<CongressionalMapProps> = ({
               'fill-opacity': [
                 'case',
                 ['boolean', ['feature-state', 'selected'], false],
-                0.9,
+                0.95,
                 ['case',
                   ['boolean', ['feature-state', 'hover'], false],
                   0.8,
