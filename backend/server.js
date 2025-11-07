@@ -2,10 +2,13 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
+const path = require('path');
+const fs = require('fs');
 require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 3001;
+const frontendDistPath = path.join(__dirname, '../election-info/dist');
 
 // Middleware
 app.use(helmet()); // Security headers
@@ -59,6 +62,19 @@ routes.forEach(route => {
     console.log(`❌ Failed to load route ${route.path}: ${error.message}`);
   }
 });
+
+// Serve the frontend build (if available)
+if (fs.existsSync(frontendDistPath)) {
+  app.use(express.static(frontendDistPath));
+
+  app.get(/^\/(?!api|health).*/, (req, res, next) => {
+    res.sendFile(path.join(frontendDistPath, 'index.html'), (err) => {
+      if (err) {
+        next(err);
+      }
+    });
+  });
+}
 
 // 404 handler with available routes info
 app.use((req, res) => {

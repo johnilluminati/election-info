@@ -22,7 +22,25 @@ import type {
 // Vite replaces environment variables at build time
 // For production on Render, set VITE_API_URL in the environment variables
 // If not set, falls back to localhost for development
-export const API_BASE_URL = import.meta.env.VITE_API_URL?.trim() || 'http://localhost:3001'
+const resolveApiBaseUrl = () => {
+  const configuredUrl = import.meta.env.VITE_API_URL?.trim()
+
+  if (configuredUrl) {
+    return configuredUrl
+  }
+
+  if (import.meta.env.DEV) {
+    return 'http://localhost:3001'
+  }
+
+  if (typeof window !== 'undefined' && window.location) {
+    return window.location.origin
+  }
+
+  return ''
+}
+
+export const API_BASE_URL = resolveApiBaseUrl()
 
 class ApiError extends Error {
   constructor(
