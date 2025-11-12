@@ -96,7 +96,7 @@ const CandidateModal = ({ candidate, isOpen, onClose, isLoading = false }: Candi
       onClick={handleBackdropClick}
     >
       <div 
-        className="relative w-full max-w-7xl max-h-[90vh] bg-white dark:bg-gray-800 rounded-lg shadow-xl overflow-hidden"
+        className="relative w-full max-w-7xl max-h-[90vh] bg-white dark:bg-gray-800 rounded-lg shadow-xl flex flex-col"
         onClick={handleModalContentClick}
       >
         {/* Modal Header */}
@@ -196,7 +196,7 @@ const CandidateModal = ({ candidate, isOpen, onClose, isLoading = false }: Candi
         </div>
 
         {/* Modal Content */}
-        <div className="overflow-y-auto max-h-[calc(90vh-120px)]">
+        <div className="flex-1 min-h-0 overflow-y-auto">
           <div className="p-4">
             {isLoading ? (
               <div className="flex items-center justify-center py-12">
