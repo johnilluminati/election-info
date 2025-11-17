@@ -2,7 +2,7 @@
 
 A comprehensive web platform designed to make information about upcoming US elections and candidates easily accessible, helping voters distinguish accurate information from misinformation.
 
-**A proof-of-concept version of the site is now available online: https://election-info-frontend.onrender.com/**
+**A proof-of-concept version of the site is now available online: https://election-info.onrender.com/**
 
 *Note: All of the election and candidate data is just dummy data that I'm creating, for the purpose of having data to work with for the frontend.*
 
