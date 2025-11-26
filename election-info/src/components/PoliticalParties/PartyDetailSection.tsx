@@ -13,10 +13,10 @@ interface PartyDetailSectionProps {
 
 const PartyDetailSection = ({ selectedParty, onClose }: PartyDetailSectionProps) => {
   const [isLeadershipExpanded, setIsLeadershipExpanded] = useState(false)
-  
+
   // Fetch complete party data including candidates
   const { data: fullPartyData, isLoading: partyLoading } = useParty(selectedParty?.id || '')
-  
+
   // Fetch states data for filtering
   const { data: states } = useStates()
 
@@ -106,7 +106,7 @@ const PartyDetailSection = ({ selectedParty, onClose }: PartyDetailSectionProps)
         color: 'orange'
       }
     }
-    
+
     return stances[partyCode] || {
       keyIssues: ['Policy positions vary by candidate'],
       color: 'gray'
@@ -114,7 +114,7 @@ const PartyDetailSection = ({ selectedParty, onClose }: PartyDetailSectionProps)
   }
 
   const stances = getPartyStances(selectedParty.party_code)
-  
+
   // Get spectrum position
   const getSpectrumPosition = (partyCode: string): number => {
     const positions: Record<string, number> = {
@@ -129,7 +129,7 @@ const PartyDetailSection = ({ selectedParty, onClose }: PartyDetailSectionProps)
     }
     return positions[partyCode] || 50
   }
-  
+
   const spectrumPosition = getSpectrumPosition(selectedParty.party_code)
 
   return (
@@ -145,7 +145,7 @@ const PartyDetailSection = ({ selectedParty, onClose }: PartyDetailSectionProps)
             {selectedParty.party_code}
           </span>
         </div>
-        
+
         <button
           onClick={onClose}
           className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
@@ -154,54 +154,12 @@ const PartyDetailSection = ({ selectedParty, onClose }: PartyDetailSectionProps)
         </button>
       </div>
 
-      {/* Party Stats */}
-      <div className="grid md:grid-cols-2 gap-4 mb-6">
-        <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 text-center">
-          <div className="text-2xl font-bold text-gray-900 dark:text-white">
-            {partyLoading ? (
-              <span className="text-gray-400">...</span>
-            ) : (
-              fullPartyData?.election_candidates?.length || 0
-            )}
-          </div>
-          <div className="text-sm text-gray-600 dark:text-gray-400">Candidates Running</div>
-        </div>
-        
-        <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 text-center">
-          <div className="text-2xl font-bold text-gray-900 dark:text-white">
-            {partyLoading ? (
-              <span className="text-gray-400">...</span>
-            ) : (() => {
-              // TEMPORARY: Calculate office holders based on party type
-              // TODO: Replace with actual calculation based on election results data
-              // The seed file doesn't currently generate historical election data for previous terms
-              // Once we have proper election result data, calculate current office holders based on:
-              // - Elections from previous cycles where candidate won
-              // - Current office status tracked in the database
-              const candidatesRunning = fullPartyData?.election_candidates?.length || 0
-              const partyCode = selectedParty.party_code
-              
-              if (partyCode === 'DEM') {
-                return Math.floor(candidatesRunning / 2)
-              } else if (partyCode === 'REP') {
-                return Math.ceil(candidatesRunning / 2)
-              } else if (partyCode === 'IND') {
-                return 8
-              } else {
-                return 0
-              }
-            })()}
-          </div>
-          <div className="text-sm text-gray-600 dark:text-gray-400">Current Office Holders</div>
-        </div>
-      </div>
-
       {/* Political Spectrum */}
       <div className="mb-6">
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Political Position</h3>
         <div className="relative h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
           <div className="h-full bg-gradient-to-r from-green-500 via-blue-500 to-red-500"></div>
-          <div 
+          <div
             className="absolute top-0 w-1 h-full bg-white dark:bg-gray-800 border border-gray-400 shadow-sm"
             style={{ left: `${spectrumPosition}%`, transform: 'translateX(-50%)' }}
           ></div>
@@ -231,11 +189,53 @@ const PartyDetailSection = ({ selectedParty, onClose }: PartyDetailSectionProps)
       {/* Leadership */}
       <div className="mb-6">
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Party Leadership</h3>
-        <PartyLeadership 
+        <PartyLeadership
           partyCode={selectedParty.party_code}
           isExpanded={isLeadershipExpanded}
           onToggle={() => setIsLeadershipExpanded(!isLeadershipExpanded)}
         />
+      </div>
+
+      {/* Party Stats */}
+      <div className="grid md:grid-cols-2 gap-4 mb-6">
+        <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 text-center">
+          <div className="text-2xl font-bold text-gray-900 dark:text-white">
+            {partyLoading ? (
+              <span className="text-gray-400">...</span>
+            ) : (
+              fullPartyData?.election_candidates?.length || 0
+            )}
+          </div>
+          <div className="text-sm text-gray-600 dark:text-gray-400">Candidates Running</div>
+        </div>
+
+        <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 text-center">
+          <div className="text-2xl font-bold text-gray-900 dark:text-white">
+            {partyLoading ? (
+              <span className="text-gray-400">...</span>
+            ) : (() => {
+              // TEMPORARY: Calculate office holders based on party type
+              // TODO: Replace with actual calculation based on election results data
+              // The seed file doesn't currently generate historical election data for previous terms
+              // Once we have proper election result data, calculate current office holders based on:
+              // - Elections from previous cycles where candidate won
+              // - Current office status tracked in the database
+              const candidatesRunning = fullPartyData?.election_candidates?.length || 0
+              const partyCode = selectedParty.party_code
+
+              if (partyCode === 'DEM') {
+                return Math.floor(candidatesRunning / 2)
+              } else if (partyCode === 'REP') {
+                return Math.ceil(candidatesRunning / 2)
+              } else if (partyCode === 'IND') {
+                return 8
+              } else {
+                return 0
+              }
+            })()}
+          </div>
+          <div className="text-sm text-gray-600 dark:text-gray-400">Current Office Holders</div>
+        </div>
       </div>
 
       {/* Candidates */}
@@ -246,7 +246,7 @@ const PartyDetailSection = ({ selectedParty, onClose }: PartyDetailSectionProps)
             Loading candidates...
           </div>
         ) : (
-          <PartyCandidatesSection 
+          <PartyCandidatesSection
             candidates={fullPartyData?.candidate_parties || []}
             electionCandidates={fullPartyData?.election_candidates}
             states={states}
