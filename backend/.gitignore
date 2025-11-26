@@ -6,6 +6,10 @@ node_modules
 
 /scripts
 
+# Data files
+/data/2024-election-data-export.json
+
 # Deployment documentation (keeping locally for now)
 DOCKER_DEPLOYMENT.md
 QUICK_START.md
+IMPORT-2024-DATA.md
