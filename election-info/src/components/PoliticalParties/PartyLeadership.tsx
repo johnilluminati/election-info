@@ -14,9 +14,10 @@ interface PartyLeadershipProps {
   partyCode: string
   isExpanded?: boolean
   onToggle?: () => void
+  showHeader?: boolean
 }
 
-const PartyLeadership = ({ partyCode, isExpanded = false, onToggle }: PartyLeadershipProps) => {
+const PartyLeadership = ({ partyCode, isExpanded = false, onToggle, showHeader = true }: PartyLeadershipProps) => {
   // Dummy leadership data - in a real app, this would come from the backend
   const getPartyLeadership = (code: string): PartyLeader[] => {
     const leadershipData: Record<string, PartyLeader[]> = {
@@ -180,27 +181,29 @@ const PartyLeadership = ({ partyCode, isExpanded = false, onToggle }: PartyLeade
   }
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-3 px-2">
       {/* Header */}
-      <button
-        onClick={onToggle}
-        className="w-full flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
-      >
-        <div className="flex items-center space-x-2">
-          <span className="text-sm font-medium text-gray-900 dark:text-white">
-            Party Leadership ({leaders.length})
-          </span>
-        </div>
-        {isExpanded ? (
-          <FaChevronUp className="w-3 h-3 text-gray-500 dark:text-gray-400" />
-        ) : (
-          <FaChevronDown className="w-3 h-3 text-gray-500 dark:text-gray-400" />
-        )}
-      </button>
+      {showHeader && (
+        <button
+          onClick={onToggle}
+          className="w-full flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
+        >
+          <div className="flex items-center space-x-2">
+            <span className="text-sm font-medium text-gray-900 dark:text-white">
+              Party Leadership ({leaders.length})
+            </span>
+          </div>
+          {isExpanded ? (
+            <FaChevronUp className="w-3 h-3 text-gray-500 dark:text-gray-400" />
+          ) : (
+            <FaChevronDown className="w-3 h-3 text-gray-500 dark:text-gray-400" />
+          )}
+        </button>
+      )}
 
       {/* Leadership List */}
       {isExpanded && (
-        <div className="space-y-2">
+        <div className="space-y-2 py-2">
           {leaders.map((leader) => (
             <div 
               key={leader.id}

@@ -4,7 +4,7 @@ import PartyCandidatesSection from './PartyCandidatesSection'
 import PartyLeadership from './PartyLeadership'
 import { useParty } from '../../hooks/useParties'
 import { useStates } from '../../hooks'
-import { FaTimes } from 'react-icons/fa'
+import { FaTimes, FaChevronDown, FaChevronUp } from 'react-icons/fa'
 
 interface PartyDetailSectionProps {
   selectedParty: PoliticalParty | null
@@ -160,7 +160,7 @@ const PartyDetailSection = ({ selectedParty, onClose }: PartyDetailSectionProps)
       </div>
 
       {/* Key Issues */}
-      <div className="mb-6">
+      <div className="mb-6 px-2">
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Key Policy Positions</h3>
         <ul className="space-y-2">
           {stances.keyIssues.map((issue, index) => (
@@ -173,12 +173,21 @@ const PartyDetailSection = ({ selectedParty, onClose }: PartyDetailSectionProps)
       </div>
 
       {/* Leadership */}
-      <div className="mb-6">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Party Leadership</h3>
+      <div className="mb-6 border-1 border-gray-200 dark:border-gray-700 rounded-lg">
+        <div onClick={() => setIsLeadershipExpanded(!isLeadershipExpanded)} className="p-2 cursor-pointer">
+          <h3 className="flex items-center justify-between w-full text-lg font-semibold text-gray-900 dark:text-white">
+            Party Leadership
+            {isLeadershipExpanded ? (
+              <FaChevronUp className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+            ) : (
+              <FaChevronDown className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+            )}
+          </h3>
+        </div>
         <PartyLeadership
           partyCode={selectedParty.party_code}
           isExpanded={isLeadershipExpanded}
-          onToggle={() => setIsLeadershipExpanded(!isLeadershipExpanded)}
+          showHeader={false}
         />
       </div>
 
@@ -225,7 +234,7 @@ const PartyDetailSection = ({ selectedParty, onClose }: PartyDetailSectionProps)
       </div>
 
       {/* Candidates */}
-      <div>
+      <div className="px-2">
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Active Candidates</h3>
         {partyLoading ? (
           <div className="text-center py-4 text-gray-500 dark:text-gray-400 text-sm">
