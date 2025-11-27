@@ -181,7 +181,7 @@ const PartyLeadership = ({ partyCode, isExpanded = false, onToggle, showHeader =
   }
 
   return (
-    <div className="space-y-3 px-2">
+    <div className="space-y-3">
       {/* Header */}
       {showHeader && (
         <button
@@ -203,7 +203,7 @@ const PartyLeadership = ({ partyCode, isExpanded = false, onToggle, showHeader =
 
       {/* Leadership List */}
       {isExpanded && (
-        <div className="space-y-2 py-2">
+        <div className="space-y-2 p-2">
           {leaders.map((leader) => (
             <div 
               key={leader.id}
