@@ -4,7 +4,7 @@ import PartyCandidatesSection from './PartyCandidatesSection'
 import PartyLeadership from './PartyLeadership'
 import { useParty } from '../../hooks/useParties'
 import { useStates } from '../../hooks'
-import { FaTimes, FaChevronDown, FaChevronUp } from 'react-icons/fa'
+import { FaTimes, FaChevronDown, FaChevronRight } from 'react-icons/fa'
 
 interface PartyDetailSectionProps {
   selectedParty: PoliticalParty | null
@@ -178,9 +178,9 @@ const PartyDetailSection = ({ selectedParty, onClose }: PartyDetailSectionProps)
           <h3 className="flex items-center justify-between w-full text-lg font-semibold text-gray-900 dark:text-white">
             Party Leadership
             {isLeadershipExpanded ? (
-              <FaChevronUp className="w-4 h-4 text-gray-500 dark:text-gray-400" />
-            ) : (
               <FaChevronDown className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+            ) : (
+              <FaChevronRight className="w-4 h-4 text-gray-500 dark:text-gray-400" />
             )}
           </h3>
         </div>

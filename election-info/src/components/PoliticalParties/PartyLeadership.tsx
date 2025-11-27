@@ -1,4 +1,4 @@
-import { FaUser, FaChevronDown, FaChevronUp } from 'react-icons/fa'
+import { FaUser, FaChevronDown, FaChevronRight } from 'react-icons/fa'
 
 interface PartyLeader {
   id: string
@@ -194,9 +194,9 @@ const PartyLeadership = ({ partyCode, isExpanded = false, onToggle, showHeader =
             </span>
           </div>
           {isExpanded ? (
-            <FaChevronUp className="w-3 h-3 text-gray-500 dark:text-gray-400" />
-          ) : (
             <FaChevronDown className="w-3 h-3 text-gray-500 dark:text-gray-400" />
+          ) : (
+            <FaChevronRight className="w-3 h-3 text-gray-500 dark:text-gray-400" />
           )}
         </button>
       )}

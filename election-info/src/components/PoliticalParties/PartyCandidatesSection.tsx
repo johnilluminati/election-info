@@ -356,7 +356,7 @@ const PartyCandidatesSection = ({
         </div>
       </div>
 
-      <div className="space-y-6">
+      <div className="divide-y divide-gray-200 dark:divide-gray-700">
         {electionTypeOrder
           .filter(type => groupedByElectionType[type] && groupedByElectionType[type].length > 0)
           .map((electionType) => {
@@ -364,9 +364,9 @@ const PartyCandidatesSection = ({
             const isCollapsed = collapsedElectionTypes.has(electionType)
 
             return (
-              <div key={electionType} className="border-b border-gray-200 dark:border-gray-700 pb-6 last:border-b-0 last:pb-0">
+              <div key={electionType}>
                 {/* Election Type Header */}
-                <div className="flex items-center justify-between mb-4">
+                <div onClick={() => toggleElectionTypeCollapse(electionType)} className="flex items-center justify-between py-3 cursor-pointer">
                   <div className="flex-1">
                     <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
                       {electionType}
@@ -375,9 +375,8 @@ const PartyCandidatesSection = ({
                       {candidatesInType.length} candidate{candidatesInType.length !== 1 ? 's' : ''}
                     </p>
                   </div>
-                  <button
-                    onClick={() => toggleElectionTypeCollapse(electionType)}
-                    className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
+                  <div
+                    className="p-2 text-gray-500 dark:text-gray-400"
                     aria-label={isCollapsed ? 'Expand section' : 'Collapse section'}
                   >
                     {isCollapsed ? (
@@ -385,7 +384,7 @@ const PartyCandidatesSection = ({
                     ) : (
                       <FaChevronDown className="w-5 h-5" />
                     )}
-                  </button>
+                  </div>
                 </div>
 
                 {/* Candidates Grid */}
@@ -395,7 +394,7 @@ const PartyCandidatesSection = ({
                   const paginatedCandidates = getPaginatedCandidates(candidatesInType, electionType)
                   
                   return (
-                    <>
+                    <div className="pb-4">
                       <div className="grid gap-3">
                         {paginatedCandidates.map((candidate, index) => (
                       <div 
@@ -918,7 +917,7 @@ const PartyCandidatesSection = ({
                           </div>
                         </div>
                       )}
-                    </>
+                    </div>
                   )
                 })()}
               </div>
