@@ -9,16 +9,16 @@ const HomeBanner = () => {
             </h1>
 
             <p className="mt-6 text-lg text-gray-700 dark:text-gray-300">
-              To learn about your candidates.
+              To learn about your candidates and upcoming elections.
             </p>
             <p className="mt-2 text-lg text-gray-700 dark:text-gray-300"> 
-              To know what candidates' stances are on the issues that matter to you.
+              To know what candidates' stances and goals are on the issues that matter to you.
             </p>
             <p className="mt-2 text-lg text-gray-700 dark:text-gray-300">
-              To determine if a candidate's actions are in line with their stated beliefs.
+              To compare a politician's words with their actions.
             </p>
             <p className="mt-2 text-lg text-gray-700 dark:text-gray-300">
-              To know of any conflicts of interest that a candidate may have.
+              To discover who is funding your candidates.
             </p>            
           </div>
         </div>
