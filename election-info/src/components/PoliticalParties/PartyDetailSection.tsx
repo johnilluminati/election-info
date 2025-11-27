@@ -12,7 +12,7 @@ interface PartyDetailSectionProps {
 }
 
 const PartyDetailSection = ({ selectedParty, onClose }: PartyDetailSectionProps) => {
-  const [isLeadershipExpanded, setIsLeadershipExpanded] = useState(false)
+  const [isLeadershipExpanded, setIsLeadershipExpanded] = useState(true)
 
   // Fetch complete party data including candidates
   const { data: fullPartyData, isLoading: partyLoading } = useParty(selectedParty?.id || '')
@@ -115,22 +115,20 @@ const PartyDetailSection = ({ selectedParty, onClose }: PartyDetailSectionProps)
 
   const stances = getPartyStances(selectedParty.party_code)
 
-  // Get spectrum position
-  const getSpectrumPosition = (partyCode: string): number => {
-    const positions: Record<string, number> = {
-      'GRN': 15,    // Green Party - Far Left
-      'DEM': 25,    // Democratic Party - Left
-      'WFP': 20,    // Working Families Party - Left
-      'IND': 50,    // Independent - Center
-      'LIB': 75,    // Libertarian Party - Right
-      'REP': 85,    // Republican Party - Right
-      'CON': 90,    // Constitution Party - Far Right
-      'REF': 60,    // Reform Party - Center-Right
+  // Get party description
+  const getPartyDescription = (partyCode: string): string => {
+    const descriptions: Record<string, string> = {
+      'DEM': 'The Democratic Party is one of the two major political parties in the United States. Founded in 1828, it is the oldest active voter-based political party in the world. The party generally supports progressive policies, social liberalism, and a mixed economy with government intervention.',
+      'REP': 'The Republican Party, also known as the GOP (Grand Old Party), is one of the two major political parties in the United States. Founded in 1854, the party generally supports conservative policies, free market capitalism, and limited government regulation.',
+      'LIB': 'The Libertarian Party is the third-largest political party in the United States. Founded in 1971, it advocates for civil liberties, non-interventionism, laissez-faire capitalism, and limiting the size and scope of government.',
+      'GRN': 'The Green Party of the United States is a federation of state Green parties. Founded in 1991, it emphasizes environmentalism, nonviolence, social justice, participatory democracy, and respect for diversity.',
+      'IND': 'Independent candidates are not affiliated with any political party. They run on their own platforms and often focus on issues that transcend traditional party lines, appealing to voters who are dissatisfied with major party options.',
+      'REF': 'The Reform Party was founded in 1995 with a focus on political reform, including campaign finance reform, term limits, and balanced budgets. It advocates for reducing the influence of special interests in government.',
+      'CON': 'The Constitution Party is a conservative political party founded in 1991. It advocates for a strict interpretation of the U.S. Constitution, limited federal government, and traditional values rooted in Christian principles.',
+      'WFP': 'The Working Families Party is a progressive political party founded in 1998. It focuses on economic justice, workers\' rights, affordable housing, and building political power for working-class communities.'
     }
-    return positions[partyCode] || 50
+    return descriptions[partyCode] || 'This party represents a unique political perspective in American politics.'
   }
-
-  const spectrumPosition = getSpectrumPosition(selectedParty.party_code)
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 shadow-lg">
@@ -154,23 +152,11 @@ const PartyDetailSection = ({ selectedParty, onClose }: PartyDetailSectionProps)
         </button>
       </div>
 
-      {/* Political Spectrum */}
+      {/* Party Description */}
       <div className="mb-6">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Political Position</h3>
-        <div className="relative h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-          <div className="h-full bg-gradient-to-r from-green-500 via-blue-500 to-red-500"></div>
-          <div
-            className="absolute top-0 w-1 h-full bg-white dark:bg-gray-800 border border-gray-400 shadow-sm"
-            style={{ left: `${spectrumPosition}%`, transform: 'translateX(-50%)' }}
-          ></div>
-        </div>
-        <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
-          <span>Far Left</span>
-          <span>Left</span>
-          <span>Center</span>
-          <span>Right</span>
-          <span>Far Right</span>
-        </div>
+        <p className="text-gray-600 dark:text-gray-400 leading-relaxed text-lg">
+          {getPartyDescription(selectedParty.party_code)}
+        </p>
       </div>
 
       {/* Key Issues */}
