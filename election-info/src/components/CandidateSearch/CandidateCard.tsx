@@ -1,6 +1,6 @@
 import { FaCalendarAlt, FaMapMarkerAlt, FaUserTie } from 'react-icons/fa';
 import type { ElectionCandidate } from '../../types/api';
-import { STATE_ABBREVIATION } from '../../lib/constants';
+import { STATE_ABBREVIATION, formatDistrictDisplay } from '../../lib/constants';
 import { getPositionTitle } from '../../lib/candidateUtils';
 
 interface CandidateCardProps {
@@ -99,7 +99,7 @@ const CandidateCard = ({ candidate, onViewDetails }: CandidateCardProps) => {
               <FaMapMarkerAlt className="mr-2 flex-shrink-0" />
               <span>
                 {state}
-                {district && ` - District ${district}`}
+                {district && ` - ${formatDistrictDisplay(district)}`}
               </span>
             </div>
           )}

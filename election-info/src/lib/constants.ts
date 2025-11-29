@@ -66,6 +66,9 @@ export const formatDistrictCode = (districtCode: string): string => {
 
 // Helper function to format district code for display with "District" prefix
 export const formatDistrictDisplay = (districtCode: string): string => {
-  const formatted = formatDistrictCode(districtCode);
-  return `District ${formatted}`;
+  if (districtCode.endsWith('AL')) {
+    return 'District At-Large';
+  }
+  // For non-At-Large districts, include the full code with state abbreviation (e.g., "PA04")
+  return `District ${districtCode}`;
 }; 

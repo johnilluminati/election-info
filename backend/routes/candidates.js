@@ -71,6 +71,45 @@ async function getElectionCandidates(req, res, next) {
     const { search, state, election_type, party, page = 1, limit = 50 } = req.query;
     const skip = (parseInt(page) - 1) * parseInt(limit);
     
+    // Resolve state to abbreviation if state filter is provided
+    // This must be done BEFORE building the where clause
+    let stateAbbreviation = null;
+    if (state) {
+      // Check if state is a numeric ID
+      if (/^\d+$/.test(state)) {
+        // It's a state ID, look up the abbreviation
+        const stateRecord = await prisma.uSState.findUnique({
+          where: { id: BigInt(state) },
+          select: { abbreviation: true }
+        });
+        if (stateRecord) {
+          stateAbbreviation = stateRecord.abbreviation;
+        }
+      } else {
+        // Check if it's already an abbreviation (2 uppercase letters)
+        if (/^[A-Z]{2}$/.test(state.toUpperCase())) {
+          stateAbbreviation = state.toUpperCase();
+        } else {
+          // It's likely a state name, try to find the abbreviation
+          const stateRecord = await prisma.uSState.findFirst({
+            where: {
+              OR: [
+                { name: { equals: state, mode: 'insensitive' } },
+                { abbreviation: { equals: state.toUpperCase(), mode: 'insensitive' } }
+              ]
+            },
+            select: { abbreviation: true }
+          });
+          if (stateRecord) {
+            stateAbbreviation = stateRecord.abbreviation;
+          } else {
+            // Fallback: assume it's an abbreviation if we can't find it
+            stateAbbreviation = state.length === 2 ? state.toUpperCase() : null;
+          }
+        }
+      }
+    }
+    
     // Build where clause for filtering
     const where = {};
     
@@ -96,28 +135,19 @@ async function getElectionCandidates(req, res, next) {
       };
     }
     
-         if (state) {
-       // Try to find the state in the geographies
-       // Since we don't know the exact structure yet, let's try a few approaches
-       if (!where.election) {
-         where.election = {};
-       }
-       
-       where.election.geographies = {
-         some: {
-           OR: [
-             // Try exact match first
-             { scope_id: { equals: state } },
-             // Try contains match
-             { scope_id: { contains: state, mode: 'insensitive' } },
-             // Try with state abbreviation (e.g., "DE" for "Delaware")
-             { scope_id: { contains: state.substring(0, 2).toUpperCase(), mode: 'insensitive' } },
-             // Try with state abbreviation (e.g., "Del" for "Delaware")
-             { scope_id: { contains: state.substring(0, 3).toLowerCase(), mode: 'insensitive' } }
-           ]
-         }
-       };
-     }
+    // Filter by state - only match STATE geography type with exact abbreviation match
+    // This prevents matching district codes like "AL01" when searching for "AK"
+    if (stateAbbreviation) {
+      if (!where.election) {
+        where.election = {};
+      }
+      where.election.geographies = {
+        some: {
+          scope_type: 'STATE',
+          scope_id: stateAbbreviation
+        }
+      };
+    }
     
     const [electionCandidates, total] = await Promise.all([
       prisma.electionCandidate.findMany({

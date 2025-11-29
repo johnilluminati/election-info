@@ -42,12 +42,41 @@ router.get('/', async (req, res, next) => {
     }
     
     if (geography_type && geography_id) {
-      where.geographies = {
-        some: {
-          scope_type: geography_type,
-          scope_id: geography_id
-        }
-      };
+      // Handle district filtering - support both new format (AKAL) and old format (AK01) for at-large districts
+      if (geography_type === 'DISTRICT' && geography_id.endsWith('AL')) {
+        // For at-large districts, try both "AKAL" and "AK01" format
+        // Extract state abbreviation (first 2 characters)
+        const stateAbbr = geography_id.substring(0, 2);
+        const oldFormatCode = `${stateAbbr}01`;
+        
+        where.geographies = {
+          some: {
+            scope_type: geography_type,
+            scope_id: {
+              in: [geography_id, oldFormatCode]
+            }
+          }
+        };
+      } else if (geography_type === 'STATE') {
+        // For state filtering, ensure exact match and that it's the STATE geography type
+        // This prevents matching district codes that might contain the state abbreviation
+        where.geographies = {
+          some: {
+            scope_type: 'STATE',
+            scope_id: {
+              equals: geography_id,
+              mode: 'insensitive'
+            }
+          }
+        };
+      } else {
+        where.geographies = {
+          some: {
+            scope_type: geography_type,
+            scope_id: geography_id
+          }
+        };
+      }
     }
     
     const [elections, total] = await Promise.all([

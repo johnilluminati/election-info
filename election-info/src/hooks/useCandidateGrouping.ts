@@ -1,6 +1,6 @@
 import { useMemo, useCallback } from 'react';
 import type { ElectionCandidate } from '../types/api';
-import { STATE_ABBREVIATION } from '../lib/constants';
+import { STATE_ABBREVIATION, formatDistrictDisplay } from '../lib/constants';
 
 interface CandidateGroup {
   group: string;
@@ -204,7 +204,7 @@ export const useCandidateGrouping = ({
               return a.localeCompare(b);
             })
             .map(([district, candidates]) => ({
-              group: `District ${district}`,
+              group: formatDistrictDisplay(district),
               candidates
             }));
           
@@ -261,11 +261,10 @@ export const useCandidateGrouping = ({
           }
           return a.localeCompare(b);
         })
-        .map(([district, candidates]) => {
-          // Format district code (convert "AKAL" to "At-Large", "CA01" to "01")
-          const formatted = district.endsWith('AL') ? 'At-Large' : (district.match(/\d+$/) || [district])[0];
-          return { group: `District ${formatted}`, candidates };
-        });
+        .map(([district, candidates]) => ({
+          group: formatDistrictDisplay(district),
+          candidates
+        }));
       
       return result;
     }
@@ -419,7 +418,7 @@ export const useCandidateGrouping = ({
             .map(([key, candidates]) => {
               const district = key.split('|')[1];
               return {
-                group: `District ${district}`,
+                group: formatDistrictDisplay(district),
                 candidates
               };
             });

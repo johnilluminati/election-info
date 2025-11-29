@@ -4,7 +4,7 @@ import CongressionalMap from "../components/CongressionalMap/CongressionalMap";
 import { useElections } from "../hooks";
 import type { Election } from "../types/api";
 import CongressionalMapNav from '../components/CongressionalMap/CongressionalMapNav';
-import { STATE_ABBREVIATION } from '../lib/constants';
+import { STATE_ABBREVIATION, formatDistrictDisplay } from '../lib/constants';
 
 const ElectionsSearchPage = () => {
   const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
@@ -213,7 +213,7 @@ const ElectionsSearchPage = () => {
                                 <div className="text-sm text-gray-600 mb-1">
                                   {dateText}
                                   {districtToShow && (
-                                    <span className="ml-2 text-gray-500">· District {districtToShow}</span>
+                                    <span className="ml-2 text-gray-500">· {formatDistrictDisplay(districtToShow)}</span>
                                   )}
                                 </div>
                               <button
