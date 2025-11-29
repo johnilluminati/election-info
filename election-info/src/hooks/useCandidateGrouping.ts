@@ -261,7 +261,11 @@ export const useCandidateGrouping = ({
           }
           return a.localeCompare(b);
         })
-        .map(([district, candidates]) => ({ group: `District ${district}`, candidates }));
+        .map(([district, candidates]) => {
+          // Format district code (convert "AKAL" to "At-Large", "CA01" to "01")
+          const formatted = district.endsWith('AL') ? 'At-Large' : (district.match(/\d+$/) || [district])[0];
+          return { group: `District ${formatted}`, candidates };
+        });
       
       return result;
     }

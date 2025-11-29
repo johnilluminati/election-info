@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useStates, useStateDistricts } from '../../hooks';
 import type { USState, VotingDistrict } from '../../types/api';
+import { formatDistrictDisplay } from '../../lib/constants';
 
 const CongressionalMapNav = ({ 
   onMapSelection, 
@@ -203,7 +204,7 @@ const CongressionalMapNav = ({
                 onClick={() => onSelect(district)}
                 className="block w-full rounded-lg px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-left"
               >
-                District {district.district_code}
+                {formatDistrictDisplay(district.district_code)}
               </button>
             ))
           )}

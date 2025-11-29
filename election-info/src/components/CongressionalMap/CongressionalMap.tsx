@@ -493,12 +493,31 @@ const CongressionalMap: React.FC<CongressionalMapProps> = ({
         }
         
         // Zoom to district
-        const bbox = turf.bbox(feature);
-        map.current?.fitBounds(bbox as [number, number, number, number], {
-          padding: 50,
-          duration: 1000,
-          maxZoom: 12
-        });
+        // Special handling for Alaska - use a focused bounding box to avoid zooming out too far
+        // Alaska's geometry includes distant islands (Aleutians) that create a very wide bbox
+        let bbox: [number, number, number, number];
+        let zoomOptions;
+        
+        if (stateName === 'Alaska' || stateName === 'AK') {
+          // Use Alaska mainland-focused bounding box (approximate)
+          // This focuses on the main Alaska landmass, excluding far western islands
+          bbox = [-165, 51, -130, 72] as [number, number, number, number];
+          zoomOptions = {
+            padding: 50,
+            duration: 1000,
+            minZoom: 4,
+            maxZoom: 8
+          };
+        } else {
+          bbox = turf.bbox(feature) as [number, number, number, number];
+          zoomOptions = {
+            padding: 50,
+            duration: 1000,
+            maxZoom: 12
+          };
+        }
+        
+        map.current?.fitBounds(bbox, zoomOptions);
       }
     });
 
@@ -762,12 +781,31 @@ const CongressionalMap: React.FC<CongressionalMapProps> = ({
       
       // Zoom to district
       if (districtFeature) {
-        const bbox = turf.bbox(districtFeature);
-        map.current?.fitBounds(bbox as [number, number, number, number], {
-          padding: 50,
-          duration: 1000,
-          maxZoom: 12
-        });
+        // Special handling for Alaska - use a focused bounding box to avoid zooming out too far
+        const districtState = districtFeature.properties.state;
+        let bbox: [number, number, number, number];
+        let zoomOptions;
+        
+        if (districtState === 'Alaska' || districtState === 'AK') {
+          // Use Alaska mainland-focused bounding box (approximate)
+          // This focuses on the main Alaska landmass, excluding far western islands
+          bbox = [-165, 51, -130, 72] as [number, number, number, number];
+          zoomOptions = {
+            padding: 50,
+            duration: 1000,
+            minZoom: 4,
+            maxZoom: 8
+          };
+        } else {
+          bbox = turf.bbox(districtFeature) as [number, number, number, number];
+          zoomOptions = {
+            padding: 50,
+            duration: 1000,
+            maxZoom: 12
+          };
+        }
+        
+        map.current?.fitBounds(bbox, zoomOptions);
       }
       return;
     }

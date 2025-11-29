@@ -51,4 +51,21 @@ export const STATE_ABBREVIATION: Record<string, string> = {
   'Wisconsin': 'WI',
   'Wyoming': 'WY',
   'District of Columbia': 'DC'
+};
+
+// Helper function to format district code for display
+// Converts codes like "AKAL" to "At-Large", and "CA01" to "01"
+export const formatDistrictCode = (districtCode: string): string => {
+  if (districtCode.endsWith('AL')) {
+    return 'At-Large';
+  }
+  // Extract the numeric part (e.g., "CA01" -> "01", "TX38" -> "38")
+  const match = districtCode.match(/\d+$/);
+  return match ? match[0] : districtCode;
+};
+
+// Helper function to format district code for display with "District" prefix
+export const formatDistrictDisplay = (districtCode: string): string => {
+  const formatted = formatDistrictCode(districtCode);
+  return `District ${formatted}`;
 }; 

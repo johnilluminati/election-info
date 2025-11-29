@@ -83,8 +83,13 @@ function generateDistrictsForState(stateAbbr) {
   const count = districtCounts[stateAbbr] || 1;
   const districts = [];
   
-  for (let i = 1; i <= count; i++) {
-    districts.push(`${stateAbbr}${i.toString().padStart(2, '0')}`);
+  // For states with only one district, use "AL" (At-Large) suffix instead of "01"
+  if (count === 1) {
+    districts.push(`${stateAbbr}AL`);
+  } else {
+    for (let i = 1; i <= count; i++) {
+      districts.push(`${stateAbbr}${i.toString().padStart(2, '0')}`);
+    }
   }
   
   return districts;
