@@ -852,8 +852,8 @@ async function main() {
       }
     }
 
-    // About 33% of views get legislation
-    if (seed % 3 === 1) {
+    // About 50% of views get legislation
+    if (seed % 2 === 0) {
       const legislation = await prisma.candidateLegislation.create({
         data: {
           candidate_view_id: view.id,
