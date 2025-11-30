@@ -103,7 +103,7 @@ const CandidateSearchPage = () => {
           state: filters.selectedState || undefined,
           election_type: filters.selectedElectionType || undefined,
           party: filters.selectedParty || undefined,
-          limit: 100
+          limit: 10000
         });
         
         // Handle both array and paginated response formats
