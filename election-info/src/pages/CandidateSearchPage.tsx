@@ -146,7 +146,7 @@ const CandidateSearchPage = () => {
     };
 
     fetchCandidates();
-  }, [hasActiveFilters, searchCache, addToCache, getCacheKey, filters]);
+  }, [hasActiveFilters, searchCache, addToCache, getCacheKey, filters.searchQuery, filters.selectedState, filters.selectedElectionType, filters.selectedParty]);
 
   // Use grouping hook
   const { groupingStrategy, groupedCandidates } = useCandidateGrouping({
@@ -177,6 +177,54 @@ const CandidateSearchPage = () => {
     return groupedCandidates.slice(startIndex, endIndex);
   }, [shouldPaginate, groupedCandidates, currentPage]);
 
+  // Memoize pagination buttons to avoid recreating on every render
+  const paginationButtons = useMemo(() => {
+    if (!shouldPaginate || totalPages <= 1) return [];
+    
+    const pages: (number | string)[] = [];
+    let lastShown = 0;
+    
+    for (let page = 1; page <= totalPages; page++) {
+      const showPage = 
+        page === 1 ||
+        page === totalPages ||
+        (page >= currentPage - 1 && page <= currentPage + 1);
+      
+      if (showPage) {
+        // Add ellipsis if there's a gap
+        if (page - lastShown > 1) {
+          pages.push('ellipsis');
+        }
+        pages.push(page);
+        lastShown = page;
+      }
+    }
+    
+    return pages.map((page, index) => {
+      if (page === 'ellipsis') {
+        return (
+          <span key={`ellipsis-${index}`} className="px-2 text-gray-500 dark:text-gray-400">
+            ...
+          </span>
+        );
+      }
+      
+      return (
+        <button
+          key={page}
+          onClick={() => setCurrentPage(page as number)}
+          className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+            currentPage === page
+              ? 'bg-blue-600 text-white'
+              : 'bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700'
+          }`}
+        >
+          {page}
+        </button>
+      );
+    });
+  }, [totalPages, currentPage, shouldPaginate]);
+
   // Reset pagination when filters change
   useEffect(() => {
     setCurrentPage(1);
@@ -184,63 +232,74 @@ const CandidateSearchPage = () => {
 
   // Auto-expand first state and first district on each page, collapse others
   useEffect(() => {
-    if (shouldPaginate && paginatedGroups.length > 0) {
-      const newCollapsedSections = new Set<string>();
+    if (!shouldPaginate || paginatedGroups.length === 0) return;
+    
+    const newCollapsedSections = new Set<string>();
+    const currentPageStateGroups = new Set(paginatedGroups.map(g => g.group));
+    
+    // Collapse all states on current page except the first one
+    for (let index = 0; index < paginatedGroups.length; index++) {
+      const group = paginatedGroups[index];
+      if (index > 0) {
+        newCollapsedSections.add(group.group);
+      }
       
-      // Collapse all states on current page except the first one
-      paginatedGroups.forEach((group, index) => {
-        if (index > 0) {
-          // Collapse state groups after the first one
-          newCollapsedSections.add(group.group);
-        }
-        
-        // Handle districts within states
-        if (group.subGroups && group.subGroups.length > 0) {
-          group.subGroups.forEach((subGroup, subIndex) => {
-            // Expand first district of first state, collapse all others
-            if (index === 0 && subIndex === 0) {
-              // Don't add to collapsed sections - this will be expanded
-            } else {
-              newCollapsedSections.add(subGroup.group);
-            }
-          });
-        }
-      });
-      
-      // Update collapsed sections, preserving any sections not on current page
-      setCollapsedSections(prev => {
-        const currentPageStateGroups = new Set(paginatedGroups.map(g => g.group));
-        const preserved = new Set<string>();
-        
-        // Preserve collapsed state for sections not on current page
-        prev.forEach(section => {
-          if (!currentPageStateGroups.has(section)) {
-            preserved.add(section);
+      // Handle districts within states
+      if (group.subGroups && group.subGroups.length > 0) {
+        for (let subIndex = 0; subIndex < group.subGroups.length; subIndex++) {
+          // Expand first district of first state, collapse all others
+          if (index !== 0 || subIndex !== 0) {
+            newCollapsedSections.add(group.subGroups[subIndex].group);
           }
-        });
-        
-        // Add collapsed sections for current page
-        newCollapsedSections.forEach(section => preserved.add(section));
-        return preserved;
-      });
+        }
+      }
     }
-  }, [shouldPaginate, paginatedGroups, currentPage]);
+    
+    // Update collapsed sections, preserving any sections not on current page
+    setCollapsedSections(prev => {
+      const preserved = new Set<string>();
+      
+      // Preserve collapsed state for sections not on current page
+      for (const section of prev) {
+        if (!currentPageStateGroups.has(section)) {
+          preserved.add(section);
+        }
+      }
+      
+      // Add collapsed sections for current page
+      for (const section of newCollapsedSections) {
+        preserved.add(section);
+      }
+      
+      return preserved;
+    });
+  }, [shouldPaginate, currentPage, paginatedGroups]);
 
-  // Scroll to top of results when page changes
+  // Scroll to top of results when page changes (not when expanding/collapsing sections)
   useEffect(() => {
-    if (shouldPaginate && resultsContainerRef.current && paginatedGroups.length > 0) {
-      // Use requestAnimationFrame to wait for DOM updates after page change
+    if (!shouldPaginate || !resultsContainerRef.current || paginatedGroups.length === 0) return;
+    
+    // Use requestAnimationFrame + small timeout to ensure:
+    // 1. React has applied state updates
+    // 2. The collapsed sections effect has updated the DOM
+    // 3. Browser has recalculated layout
+    const timeoutId = setTimeout(() => {
       requestAnimationFrame(() => {
-        const elementPosition = resultsContainerRef.current?.getBoundingClientRect().top || 0;
+        const element = resultsContainerRef.current;
+        if (!element) return;
+        
+        const elementPosition = element.getBoundingClientRect().top;
         const offsetPosition = elementPosition + window.pageYOffset - 100; // Account for sticky header (approx 100px)
         
         window.scrollTo({
-          top: Math.max(0, offsetPosition), // Ensure we don't scroll to negative position
+          top: Math.max(0, offsetPosition),
           behavior: 'smooth'
         });
       });
-    }
-  }, [shouldPaginate, currentPage, paginatedGroups.length]);
+    }, 40); // Small delay to let the collapsed sections effect complete
+    
+    return () => clearTimeout(timeoutId);
+  }, [shouldPaginate, currentPage, paginatedGroups.length]); // Removed collapsedSections dependency
   
   // Modal handlers
   const handleViewDetails = useCallback(async (candidate: ElectionCandidate) => {
@@ -272,14 +331,30 @@ const CandidateSearchPage = () => {
   const toggleSection = useCallback((sectionName: string) => {
     setCollapsedSections(prev => {
       const newSet = new Set(prev);
-      if (newSet.has(sectionName)) {
+      const isCurrentlyCollapsed = newSet.has(sectionName);
+      
+      if (isCurrentlyCollapsed) {
+        // Expanding a section
         newSet.delete(sectionName);
+        
+        // If this is a state group being expanded, also expand its first district
+        const stateGroup = groupedCandidates.find(
+          g => g.group === sectionName && g.subGroups && g.subGroups.length > 0
+        );
+        
+        if (stateGroup?.subGroups && stateGroup.subGroups.length > 0) {
+          // Expand the first district
+          const firstDistrict = stateGroup.subGroups[0].group;
+          newSet.delete(firstDistrict);
+        }
       } else {
+        // Collapsing a section
         newSet.add(sectionName);
       }
+      
       return newSet;
     });
-  }, []);
+  }, [groupedCandidates]);
 
   return (
     <div className="bg-gray-50 dark:bg-gray-900">
@@ -403,39 +478,7 @@ const CandidateSearchPage = () => {
                 </button>
                 
                 <div className="flex items-center space-x-1">
-                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => {
-                    // Show first page, last page, current page, and pages around current
-                    const showPage = 
-                      page === 1 ||
-                      page === totalPages ||
-                      (page >= currentPage - 1 && page <= currentPage + 1);
-                    
-                    if (!showPage) {
-                      // Show ellipsis
-                      if (page === currentPage - 2 || page === currentPage + 2) {
-                        return (
-                          <span key={page} className="px-2 text-gray-500 dark:text-gray-400">
-                            ...
-                          </span>
-                        );
-                      }
-                      return null;
-                    }
-                    
-                    return (
-                      <button
-                        key={page}
-                        onClick={() => setCurrentPage(page)}
-                        className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                          currentPage === page
-                            ? 'bg-blue-600 text-white'
-                            : 'bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700'
-                        }`}
-                      >
-                        {page}
-                      </button>
-                    );
-                  })}
+                  {paginationButtons}
                 </div>
                 
                 <button

@@ -22,6 +22,10 @@ interface CandidateSearchFiltersProps {
   hasActiveFilters: boolean;
 }
 
+// Available filter options (defined outside component to prevent recreation on each render)
+const ELECTION_TYPES = ['Presidential', 'Senate', 'Gubernatorial', 'Congressional', 'State Legislature', 'Local'];
+const PARTIES = ['Democratic Party', 'Republican Party', 'Independent', 'Green Party', 'Libertarian Party'];
+
 const CandidateSearchFilters = ({
   searchQuery,
   selectedState,
@@ -35,9 +39,6 @@ const CandidateSearchFilters = ({
   states,
   hasActiveFilters
 }: CandidateSearchFiltersProps) => {
-  // Available filter options
-  const electionTypes = ['Presidential', 'Senate', 'Gubernatorial', 'Congressional', 'State Legislature', 'Local'];
-  const parties = ['Democratic Party', 'Republican Party', 'Independent', 'Green Party', 'Libertarian Party'];
 
   return (
     <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
@@ -88,7 +89,7 @@ const CandidateSearchFilters = ({
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
             >
               <option value="">All Types</option>
-              {electionTypes.map(type => (
+              {ELECTION_TYPES.map(type => (
                 <option key={type} value={type}>{type}</option>
               ))}
             </select>
@@ -106,7 +107,7 @@ const CandidateSearchFilters = ({
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
             >
               <option value="">All Parties</option>
-              {parties.map(party => (
+              {PARTIES.map(party => (
                 <option key={party} value={party}>{party}</option>
               ))}
             </select>
