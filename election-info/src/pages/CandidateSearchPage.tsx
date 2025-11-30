@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import type { ElectionCandidate } from '../types/api';
 import { api } from '../lib/api';
 import { useStates } from '../hooks';
@@ -38,6 +38,13 @@ const CandidateSearchPage = () => {
   
   // Collapsible sections state
   const [collapsedSections, setCollapsedSections] = useState<Set<string>>(new Set());
+
+  // Pagination state (for state-level pagination)
+  const [currentPage, setCurrentPage] = useState(1);
+  const STATES_PER_PAGE = 5;
+  
+  // Ref for scrolling to results when page changes
+  const resultsContainerRef = useRef<HTMLDivElement>(null);
 
   // Cache for storing search results (limit to 50 entries to prevent memory issues)
   const [searchCache, setSearchCache] = useState<Record<string, ElectionCandidate[]>>({});
@@ -150,6 +157,90 @@ const CandidateSearchPage = () => {
     selectedParty: filters.selectedParty,
     sortBy: filters.sortBy
   });
+
+  // Calculate pagination for state-level grouping (by_state_with_districts)
+  // This paginates states when filtering by Congressional election type only
+  const shouldPaginate = groupingStrategy === 'by_state_with_districts';
+  
+  const totalStates = shouldPaginate ? groupedCandidates.length : 0;
+  const totalPages = shouldPaginate ? Math.ceil(totalStates / STATES_PER_PAGE) : 1;
+  
+  // Get paginated groups (slice state groups for current page)
+  const paginatedGroups = useMemo(() => {
+    if (!shouldPaginate) {
+      return groupedCandidates;
+    }
+
+    // Paginate state groups directly
+    const startIndex = (currentPage - 1) * STATES_PER_PAGE;
+    const endIndex = startIndex + STATES_PER_PAGE;
+    return groupedCandidates.slice(startIndex, endIndex);
+  }, [shouldPaginate, groupedCandidates, currentPage]);
+
+  // Reset pagination when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filters.searchQuery, filters.selectedState, filters.selectedElectionType, filters.selectedParty]);
+
+  // Auto-expand first state and first district on each page, collapse others
+  useEffect(() => {
+    if (shouldPaginate && paginatedGroups.length > 0) {
+      const newCollapsedSections = new Set<string>();
+      
+      // Collapse all states on current page except the first one
+      paginatedGroups.forEach((group, index) => {
+        if (index > 0) {
+          // Collapse state groups after the first one
+          newCollapsedSections.add(group.group);
+        }
+        
+        // Handle districts within states
+        if (group.subGroups && group.subGroups.length > 0) {
+          group.subGroups.forEach((subGroup, subIndex) => {
+            // Expand first district of first state, collapse all others
+            if (index === 0 && subIndex === 0) {
+              // Don't add to collapsed sections - this will be expanded
+            } else {
+              newCollapsedSections.add(subGroup.group);
+            }
+          });
+        }
+      });
+      
+      // Update collapsed sections, preserving any sections not on current page
+      setCollapsedSections(prev => {
+        const currentPageStateGroups = new Set(paginatedGroups.map(g => g.group));
+        const preserved = new Set<string>();
+        
+        // Preserve collapsed state for sections not on current page
+        prev.forEach(section => {
+          if (!currentPageStateGroups.has(section)) {
+            preserved.add(section);
+          }
+        });
+        
+        // Add collapsed sections for current page
+        newCollapsedSections.forEach(section => preserved.add(section));
+        return preserved;
+      });
+    }
+  }, [shouldPaginate, paginatedGroups, currentPage]);
+
+  // Scroll to top of results when page changes
+  useEffect(() => {
+    if (shouldPaginate && resultsContainerRef.current && paginatedGroups.length > 0) {
+      // Use requestAnimationFrame to wait for DOM updates after page change
+      requestAnimationFrame(() => {
+        const elementPosition = resultsContainerRef.current?.getBoundingClientRect().top || 0;
+        const offsetPosition = elementPosition + window.pageYOffset - 100; // Account for sticky header (approx 100px)
+        
+        window.scrollTo({
+          top: Math.max(0, offsetPosition), // Ensure we don't scroll to negative position
+          behavior: 'smooth'
+        });
+      });
+    }
+  }, [shouldPaginate, currentPage, paginatedGroups.length]);
   
   // Modal handlers
   const handleViewDetails = useCallback(async (candidate: ElectionCandidate) => {
@@ -291,13 +382,76 @@ const CandidateSearchPage = () => {
 
         {/* Results Grid */}
         {!isLoading && !error && hasActiveFilters && candidates.length > 0 && (
-          <CandidateGrid
-            groups={groupedCandidates}
-            groupingStrategy={groupingStrategy}
-            collapsedSections={collapsedSections}
-            onToggleSection={toggleSection}
-            onViewDetails={handleViewDetails}
-          />
+          <div ref={resultsContainerRef}>
+            <CandidateGrid
+              groups={paginatedGroups}
+              groupingStrategy={groupingStrategy}
+              collapsedSections={collapsedSections}
+              onToggleSection={toggleSection}
+              onViewDetails={handleViewDetails}
+            />
+            
+            {/* Pagination Controls */}
+            {shouldPaginate && totalPages > 1 && (
+              <div className="mt-8 flex items-center justify-center space-x-2">
+                <button
+                  onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                  disabled={currentPage === 1}
+                  className="px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                >
+                  Previous
+                </button>
+                
+                <div className="flex items-center space-x-1">
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => {
+                    // Show first page, last page, current page, and pages around current
+                    const showPage = 
+                      page === 1 ||
+                      page === totalPages ||
+                      (page >= currentPage - 1 && page <= currentPage + 1);
+                    
+                    if (!showPage) {
+                      // Show ellipsis
+                      if (page === currentPage - 2 || page === currentPage + 2) {
+                        return (
+                          <span key={page} className="px-2 text-gray-500 dark:text-gray-400">
+                            ...
+                          </span>
+                        );
+                      }
+                      return null;
+                    }
+                    
+                    return (
+                      <button
+                        key={page}
+                        onClick={() => setCurrentPage(page)}
+                        className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                          currentPage === page
+                            ? 'bg-blue-600 text-white'
+                            : 'bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700'
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    );
+                  })}
+                </div>
+                
+                <button
+                  onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                  disabled={currentPage === totalPages}
+                  className="px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                >
+                  Next
+                </button>
+                
+                <span className="ml-4 text-sm text-gray-600 dark:text-gray-400">
+                  Page {currentPage} of {totalPages}
+                </span>
+              </div>
+            )}
+          </div>
         )}
       </div>
       
