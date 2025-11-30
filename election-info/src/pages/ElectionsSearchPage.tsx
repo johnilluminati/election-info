@@ -4,7 +4,8 @@ import CongressionalMap from "../components/CongressionalMap/CongressionalMap";
 import { useElections } from "../hooks";
 import type { Election } from "../types/api";
 import CongressionalMapNav from '../components/CongressionalMap/CongressionalMapNav';
-import { STATE_ABBREVIATION, formatDistrictDisplay } from '../lib/constants';
+import { STATE_ABBREVIATION, formatDistrictDisplay, isAtLargeDistrict } from '../lib/constants';
+import { InfoTooltip } from '../components/InfoTooltip';
 
 const ElectionsSearchPage = () => {
   const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
@@ -161,11 +162,29 @@ const ElectionsSearchPage = () => {
               />
             </div>
             <div className="flex w-full lg:basis-1/4 lg:h-full flex-col lg:pl-4 mt-4 lg:mt-0">
-              <span className="text-2xl font-bold text-center w-full pb-4 border-b">
-                <u>Upcoming Elections
-                  {selectedDistrict ? ` - ${selectedDistrict}` : selectedState ? ` - ${selectedState}` : ''}
+              <div className="text-2xl font-bold text-center w-full pb-4 border-b">
+                <u>
+                  Upcoming Elections
+                  {selectedDistrict ? (
+                    <>
+                      {' - '}
+                      {selectedDistrict}
+                      {isAtLargeDistrict(selectedDistrict) && (
+                        <span className="inline-flex items-center ml-1" style={{ textDecoration: 'none' }}>
+                          <InfoTooltip 
+                            content="An 'At-Large' district means the entire state serves as a single congressional district. This occurs in states with only one representative in the U.S. House of Representatives."
+                            position="bottom"
+                          />
+                        </span>
+                      )}
+                    </>
+                  ) : selectedState ? (
+                    ` - ${selectedState}`
+                  ) : (
+                    ''
+                  )}
                 </u>
-              </span>
+              </div>
               <div className="overflow-y-auto p-4" ref={listContainerRef}>
                 {!selectedDistrict && !selectedState ? (
                   <div className="text-center text-gray-500 mt-8">
@@ -213,7 +232,12 @@ const ElectionsSearchPage = () => {
                                 <div className="text-sm text-gray-600 mb-1">
                                   {dateText}
                                   {districtToShow && (
-                                    <span className="ml-2 text-gray-500">· {formatDistrictDisplay(districtToShow)}</span>
+                                    <span className="ml-2 text-gray-500 flex items-center gap-1">
+                                      {formatDistrictDisplay(districtToShow)}
+                                      {isAtLargeDistrict(districtToShow) && (
+                                        <InfoTooltip content="An 'At-Large' district means the entire state serves as a single congressional district. This occurs in states with only one representative in the U.S. House of Representatives." />
+                                      )}
+                                    </span>
                                   )}
                                 </div>
                               <button

@@ -71,4 +71,15 @@ export const formatDistrictDisplay = (districtCode: string): string => {
   }
   // For non-At-Large districts, include the full code with state abbreviation (e.g., "PA04")
   return `District ${districtCode}`;
+};
+
+// Helper function to check if a district code represents an At-Large district
+export const isAtLargeDistrict = (districtCode: string | null | undefined): boolean => {
+  if (!districtCode) return false;
+  return districtCode.endsWith('AL');
+};
+
+// Helper function to check if a formatted district display string contains "At-Large"
+export const isAtLargeDisplay = (districtDisplay: string): boolean => {
+  return districtDisplay.includes('At-Large');
 }; 

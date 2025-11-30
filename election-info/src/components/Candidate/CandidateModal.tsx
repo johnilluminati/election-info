@@ -2,7 +2,8 @@ import { useEffect } from 'react';
 import { FaTimes, FaExternalLinkAlt } from 'react-icons/fa';
 import type { ElectionCandidate } from '../../types/api';
 import { getPositionTitle } from '../../lib/candidateUtils';
-import { STATE_ABBREVIATION } from '../../lib/constants';
+import { STATE_ABBREVIATION, formatDistrictDisplay, isAtLargeDistrict } from '../../lib/constants';
+import { InfoTooltip } from '../InfoTooltip';
 import CandidateInfoTabs from './CandidateInfoTabs';
 import CandidateKeyIssuesTab from './CandidateKeyIssuesTab';
 import CandidateViewsTab from './CandidateViewsTab';
@@ -155,19 +156,27 @@ const CandidateModal = ({ candidate, isOpen, onClose, isLoading = false }: Candi
                       }
                       
                       const position = getPositionTitle(electionType);
-                      let locationText = '';
                       
                       if (stateName) {
                         if (electionType === 'Congressional' && districtGeo?.scope_id) {
-                          // For Congressional, include district: "Alabama - AL01"
-                          locationText = ` in ${stateName} - ${districtGeo.scope_id}`;
+                          // For Congressional, include district with tooltip for At-Large
+                          const districtDisplay = formatDistrictDisplay(districtGeo.scope_id);
+                          const isAtLarge = isAtLargeDistrict(districtGeo.scope_id);
+                          return (
+                            <>
+                              Running for {position} in {stateName} - {districtDisplay}
+                              {isAtLarge && (
+                                <InfoTooltip content="An 'At-Large' district means the entire state serves as a single congressional district. This occurs in states with only one representative in the U.S. House of Representatives." className="ml-1" />
+                              )}
+                            </>
+                          );
                         } else {
                           // For other election types, just state
-                          locationText = ` in ${stateName}`;
+                          return `Running for ${position} in ${stateName}`;
                         }
                       }
                       
-                      return `Running for ${position}${locationText}`;
+                      return `Running for ${position}`;
                     })()}
                   </p>
                   {candidate.website && (
