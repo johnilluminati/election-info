@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useLayoutEffect } from 'react';
+import { useState, useRef, useLayoutEffect } from 'react';
 import { FaInfoCircle } from 'react-icons/fa';
 
 type TooltipPosition = 'top' | 'bottom' | 'left' | 'right' | 'auto';
@@ -16,7 +16,6 @@ const InfoTooltip = ({ content, className = '', position = 'auto' }: InfoTooltip
   const tooltipRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const updateTimeoutRef = useRef<number | null>(null);
-  const hasCalculatedRef = useRef(false);
 
   // Calculate initial position immediately for faster display
   useLayoutEffect(() => {
@@ -30,7 +29,6 @@ const InfoTooltip = ({ content, className = '', position = 'auto' }: InfoTooltip
     const container = containerRef.current;
     if (container) {
       const containerRect = container.getBoundingClientRect();
-      const padding = 12;
       const finalPosition = position === 'auto' ? 'bottom' : position;
       
       const initialStyle: React.CSSProperties = {
@@ -185,12 +183,9 @@ const InfoTooltip = ({ content, className = '', position = 'auto' }: InfoTooltip
     };
   }, [isVisible, position]);
 
-  const getTooltipClasses = (pos: TooltipPosition) => {
+  const getTooltipClasses = () => {
     return "w-64 p-3 text-sm text-white bg-gray-900 dark:bg-gray-700 rounded-lg shadow-lg pointer-events-none";
   };
-
-  // For rendering, use explicit position or default to bottom for auto
-  const finalPosition = position === 'auto' ? 'bottom' : position;
 
   return (
     <div
@@ -214,7 +209,7 @@ const InfoTooltip = ({ content, className = '', position = 'auto' }: InfoTooltip
       {isVisible && (
         <div
           ref={tooltipRef}
-          className={getTooltipClasses(finalPosition)}
+          className={getTooltipClasses()}
           style={tooltipStyle}
           role="tooltip"
         >
