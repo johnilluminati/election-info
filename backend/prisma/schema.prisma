@@ -253,6 +253,9 @@ model ElectionGeography {
   scope_type  GeographyType
   scope_id    String
   election    Election      @relation(fields: [election_id], references: [id])
+  
+  @@index([scope_type, scope_id])
+  @@index([election_id])
 }
 
 enum GeographyType {

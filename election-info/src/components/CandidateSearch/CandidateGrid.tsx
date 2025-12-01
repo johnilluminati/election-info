@@ -6,9 +6,11 @@ import CongressionalGroup from './CongressionalGroup';
 interface CandidateGridProps {
   groups: Array<{
     group: string;
+    key?: string;
     candidates: ElectionCandidate[];
     subGroups?: Array<{
       group: string;
+      key?: string;
       candidates: ElectionCandidate[];
     }>;
   }>;
@@ -28,13 +30,12 @@ const CandidateGrid = ({
     <div className="space-y-8">
       {groups.map((group) => {
         const hasSubGroups = group.subGroups && group.subGroups.length > 0;
-        const isCollapsed = collapsedSections.has(group.group);
         
         // If this group has subgroups (Congressional), render hierarchically
         if (hasSubGroups) {
           return (
             <CongressionalGroup
-              key={group.group}
+              key={group.key || group.group}
               group={group}
               collapsedSections={collapsedSections}
               onToggleSection={onToggleSection}
@@ -44,8 +45,10 @@ const CandidateGrid = ({
         }
         
         // For groups without subgroups, render normally
+        const groupKey = group.key || group.group;
+        const isCollapsed = collapsedSections.has(groupKey);
         return (
-          <div key={group.group} className="space-y-4">
+          <div key={groupKey} className="space-y-4">
             {/* Group Header */}
             <div className="border-b border-gray-200 dark:border-gray-700 pb-2">
               <div className="flex items-center justify-between">
@@ -59,7 +62,7 @@ const CandidateGrid = ({
                 </div>
                 {/* Add collapse button for all groups (not just when grouping by state) */}
                 <button
-                  onClick={() => onToggleSection(group.group)}
+                  onClick={() => onToggleSection(groupKey)}
                   className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
                   aria-label={isCollapsed ? 'Expand section' : 'Collapse section'}
                 >

@@ -10,6 +10,7 @@ interface CongressionalGroupProps {
     candidates: ElectionCandidate[];
     subGroups?: Array<{
       group: string;
+      key?: string;
       candidates: ElectionCandidate[];
     }>;
   };
@@ -65,9 +66,9 @@ const CongressionalGroup = ({
       {!isCollapsed && (
         <div className="ml-4 space-y-6">
           {group.subGroups!.map((subGroup) => {
-            const isSubCollapsed = collapsedSections.has(subGroup.group);
+            const isSubCollapsed = collapsedSections.has(subGroup.key || subGroup.group);
             return (
-              <div key={subGroup.group} className="space-y-4">
+              <div key={subGroup.key || subGroup.group} className="space-y-4">
                 {/* Subgroup Header (District) */}
                 <div className="border-b border-gray-200 dark:border-gray-700 pb-2">
                   <div className="flex items-center justify-between">
@@ -85,7 +86,7 @@ const CongressionalGroup = ({
                       </p>
                     </div>
                     <button
-                      onClick={() => onToggleSection(subGroup.group)}
+                      onClick={() => onToggleSection(subGroup.key || subGroup.group)}
                       className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
                       aria-label={isSubCollapsed ? 'Expand section' : 'Collapse section'}
                     >

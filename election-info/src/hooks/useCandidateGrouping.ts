@@ -4,9 +4,11 @@ import { STATE_ABBREVIATION, formatDistrictDisplay } from '../lib/constants';
 
 interface CandidateGroup {
   group: string;
+  key?: string; // Unique key for the group (used when display names might be duplicated)
   candidates: ElectionCandidate[];
   subGroups?: Array<{
     group: string;
+    key?: string; // Unique key combining state and district (for Congressional districts)
     candidates: ElectionCandidate[];
   }>;
 }
@@ -167,19 +169,37 @@ export const useCandidateGrouping = ({
     if (groupingStrategy === 'by_state_with_districts') {
       // Group by state first, then by district within each state
       // This creates a hierarchical structure with states as main groups and districts as subGroups
+      // Optimize by caching geography lookups to avoid repeated find() calls
       const stateGroups: Record<string, Record<string, typeof candidates>> = {};
       
+      // Pre-extract geographies to avoid repeated find() operations
       candidates.forEach(candidate => {
-        const state = getStateFromCandidate(candidate);
-        const district = getDistrictFromCandidate(candidate);
+        const geographies = candidate.election?.geographies || [];
+        // Cache lookups - only search once per candidate
+        let state: string | undefined;
+        let district: string | undefined;
         
-        if (!stateGroups[state]) {
-          stateGroups[state] = {};
+        for (const geo of geographies) {
+          if (geo.scope_type === 'STATE' && !state) {
+            state = geo.scope_id || 'Unknown State';
+          }
+          if (geo.scope_type === 'DISTRICT' && !district) {
+            district = geo.scope_id;
+          }
+          // Early exit if both found
+          if (state && district) break;
         }
-        if (!stateGroups[state][district]) {
-          stateGroups[state][district] = [];
+        
+        const stateKey = state || 'Unknown State';
+        const districtKey = district || 'At-Large';
+        
+        if (!stateGroups[stateKey]) {
+          stateGroups[stateKey] = {};
         }
-        stateGroups[state][district].push(candidate);
+        if (!stateGroups[stateKey][districtKey]) {
+          stateGroups[stateKey][districtKey] = [];
+        }
+        stateGroups[stateKey][districtKey].push(candidate);
       });
       
       // Create state groups with district subGroups
@@ -193,8 +213,16 @@ export const useCandidateGrouping = ({
         })
         .forEach(([state, districts]) => {
           // Create district subGroups
+          // Optimize sorting: At-Large districts (ending in 'AL') should come first, then numeric districts
           const subGroups = Object.entries(districts)
             .sort(([a], [b]) => {
+              const aIsAtLarge = a.endsWith('AL');
+              const bIsAtLarge = b.endsWith('AL');
+              
+              // At-Large districts come first
+              if (aIsAtLarge && !bIsAtLarge) return -1;
+              if (!aIsAtLarge && bIsAtLarge) return 1;
+              
               // Sort districts numerically if possible
               const numA = parseInt(a);
               const numB = parseInt(b);
@@ -205,6 +233,7 @@ export const useCandidateGrouping = ({
             })
             .map(([district, candidates]) => ({
               group: formatDistrictDisplay(district),
+              key: `${state}-${district}`, // Unique key combining state and district
               candidates
             }));
           
@@ -263,6 +292,7 @@ export const useCandidateGrouping = ({
         })
         .map(([district, candidates]) => ({
           group: formatDistrictDisplay(district),
+          key: district, // Use raw district code as unique key (e.g., "AKAL", "PA04")
           candidates
         }));
       

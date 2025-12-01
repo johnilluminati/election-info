@@ -149,45 +149,25 @@ async function getElectionCandidates(req, res, next) {
       };
     }
     
+    // For listing/searching, we don't need heavy relations like donations, views, or histories
+    // These should only be loaded when viewing individual candidate details
     const [electionCandidates, total] = await Promise.all([
       prisma.electionCandidate.findMany({
         where,
         include: {
           candidate: {
-            include: {
-              candidate_views: {
-                include: {
-                  view_category: true
-                }
-              },
-              candidate_histories: {
-                orderBy: {
-                  created_on: 'desc'
-                }
-              }
-            }
+            // Include basic candidate fields only - exclude heavy relations
+            // candidate_views and candidate_histories removed for performance
           },
           party: true,
           election: {
             include: {
               election_cycle: true,
               election_type: true,
-              geographies: true
-            }
-          },
-          key_issues: {
-            orderBy: {
-              order_of_important: 'asc'
-            }
-          },
-          donations: {
-            include: {
-              donor: true
-            },
-            orderBy: {
-              donation_amount: 'desc'
+              geographies: true // Needed for grouping by state/district
             }
           }
+          // Exclude key_issues and donations - too heavy for listing, should be loaded on demand
         },
         skip,
         take: parseInt(limit),
