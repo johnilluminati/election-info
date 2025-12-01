@@ -17,7 +17,7 @@ const InfoTooltip = ({ content, className = '', position = 'auto' }: InfoTooltip
   const containerRef = useRef<HTMLDivElement>(null);
   const updateTimeoutRef = useRef<number | null>(null);
 
-  // Calculate initial position immediately for faster display
+  // Calculate position once after tooltip renders to avoid visible shift
   useLayoutEffect(() => {
     if (!isVisible) {
       setTooltipStyle({});
@@ -25,39 +25,13 @@ const InfoTooltip = ({ content, className = '', position = 'auto' }: InfoTooltip
       return;
     }
 
-    // Set initial position immediately for instant display
-    const container = containerRef.current;
-    if (container) {
-      const containerRect = container.getBoundingClientRect();
-      const finalPosition = position === 'auto' ? 'bottom' : position;
-      
-      const initialStyle: React.CSSProperties = {
-        position: 'fixed',
-        zIndex: 9999,
-        maxWidth: 'min(256px, calc(100vw - 24px))',
-      };
-
-      if (finalPosition === 'top' || finalPosition === 'bottom') {
-        const containerCenterX = containerRect.left + containerRect.width / 2;
-        initialStyle.left = `${containerCenterX - 128}px`; // Approximate center (256px / 2)
-        if (finalPosition === 'bottom') {
-          initialStyle.top = `${containerRect.bottom + 8}px`;
-        } else {
-          initialStyle.bottom = `${window.innerHeight - containerRect.top + 8}px`;
-        }
-      }
-
-      setTooltipStyle(initialStyle);
-    }
-
-    // Refine position after tooltip renders
-    const refinePosition = () => {
+    const calculatePosition = () => {
       const tooltip = tooltipRef.current;
       const container = containerRef.current;
       
       if (!tooltip || !container) {
-        // Try once more if not ready
-        updateTimeoutRef.current = requestAnimationFrame(refinePosition);
+        // Tooltip not rendered yet, try again next frame
+        updateTimeoutRef.current = requestAnimationFrame(calculatePosition);
         return;
       }
 
@@ -92,6 +66,7 @@ const InfoTooltip = ({ content, className = '', position = 'auto' }: InfoTooltip
         position: 'fixed',
         zIndex: 9999,
         maxWidth: 'min(256px, calc(100vw - 24px))',
+        opacity: 1, // Make visible after calculation
       };
 
       if (finalPosition === 'top' || finalPosition === 'bottom') {
@@ -172,9 +147,16 @@ const InfoTooltip = ({ content, className = '', position = 'auto' }: InfoTooltip
 
       setArrowStyle(arrowStyleProps);
     };
-    
-    // Refine position after initial render (single RAF)
-    updateTimeoutRef.current = requestAnimationFrame(refinePosition);
+
+    // Start with invisible tooltip, then calculate and show
+    setTooltipStyle({
+      position: 'fixed',
+      opacity: 0,
+      pointerEvents: 'none',
+    });
+
+    // Calculate position after tooltip renders
+    updateTimeoutRef.current = requestAnimationFrame(calculatePosition);
 
     return () => {
       if (updateTimeoutRef.current) {
