@@ -197,6 +197,7 @@ export const api = {
     return apiRequest<ElectionCandidate[] | PaginatedResponse<Candidate>>(`/api/candidates${query ? `?${query}` : ''}`)
   },
   getCandidate: (id: string) => apiRequest<Candidate>(`/api/candidates/${id}`),
+  getElectionCandidate: (id: string) => apiRequest<ElectionCandidate>(`/api/candidates/election-candidate/${id}`),
   getCandidateElections: (id: string) => apiRequest<ElectionCandidate[]>(`/api/candidates/${id}/elections`),
   getCandidateKeyIssues: (id: string, election_id?: string) => {
     const params = election_id ? `?election_id=${election_id}` : ''

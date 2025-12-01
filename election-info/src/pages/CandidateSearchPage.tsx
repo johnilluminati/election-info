@@ -307,16 +307,19 @@ const CandidateSearchPage = () => {
       setIsModalLoading(true);
       setIsModalOpen(true);
       
-      // Use the candidate data from search results
+      // Show the candidate from search results immediately (basic info)
       setSelectedCandidate(candidate);
       
-      // TODO: Fetch detailed candidate information when the detailed API is ready
-      // const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
-      // const response = await fetch(`${API_BASE_URL}/api/candidates/${candidate.candidate?.id}`);
-      // ... detailed data fetching logic
+      // Fetch detailed candidate information with all relations for the modal tabs
+      if (candidate.id) {
+        const detailedCandidate = await api.getElectionCandidate(candidate.id);
+        setSelectedCandidate(detailedCandidate);
+      }
       
-    } catch {
-      setSelectedCandidate(candidate);
+    } catch (error) {
+      // If fetching detailed data fails, keep the basic candidate data
+      console.error('Failed to fetch detailed candidate data:', error);
+      // candidate is already set from search results, so tabs will just be empty
     } finally {
       setIsModalLoading(false);
     }

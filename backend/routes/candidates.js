@@ -452,6 +452,61 @@ router.post('/donors/batch', async (req, res, next) => {
   }
 });
 
+// GET /api/candidates/election-candidate/:id - Get election candidate by ID with all relations for modal
+router.get('/election-candidate/:id', async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const electionCandidate = await prisma.electionCandidate.findUnique({
+      where: { id: BigInt(id) },
+      include: {
+        candidate: {
+          include: {
+            candidate_views: {
+              include: {
+                view_category: true
+              }
+            },
+            candidate_histories: {
+              orderBy: {
+                created_on: 'desc'
+              }
+            }
+          }
+        },
+        party: true,
+        election: {
+          include: {
+            election_cycle: true,
+            election_type: true,
+            geographies: true
+          }
+        },
+        key_issues: {
+          orderBy: {
+            order_of_important: 'asc'
+          }
+        },
+        donations: {
+          include: {
+            donor: true
+          },
+          orderBy: {
+            donation_amount: 'desc'
+          }
+        }
+      }
+    });
+    
+    if (!electionCandidate) {
+      return res.status(404).json({ error: 'Election candidate not found' });
+    }
+    
+    res.json(electionCandidate);
+  } catch (error) {
+    next(error);
+  }
+});
+
 // GET /api/candidates/:id - Get candidate by ID (MUST come after specific routes)
 router.get('/:id', async (req, res, next) => {
   try {
