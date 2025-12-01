@@ -87,5 +87,7 @@ export const isAtLargeDisplay = (districtDisplay: string): boolean => {
 // Tooltip content constants
 export const TOOLTIP_CONTENT = {
   AT_LARGE_DISTRICT: "An 'At-Large' district means the entire state serves as a single congressional district. This occurs in states with only one representative in the U.S. House of Representatives.",
+  PRESENT_VOTE: "A 'Present' vote means the representative was present for the vote but chose not to vote either for or against the bill. This is different from not voting due to absence.",
+  PENDING_LEGISLATION: "Legislation with a 'Pending' status is currently under consideration and has not yet been voted on, passed, or vetoed.",
   // Add more tooltip content here as needed
 } as const; 

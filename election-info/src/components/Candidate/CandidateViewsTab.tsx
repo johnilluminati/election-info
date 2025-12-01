@@ -3,6 +3,8 @@ import { useQuery } from "@tanstack/react-query";
 import { FaChevronDown, FaChevronRight, FaVoteYea, FaFileSignature, FaExclamationTriangle } from "react-icons/fa";
 import { api } from "../../lib/api";
 import type { CandidateView } from "../../types/api";
+import { InfoTooltip } from "../InfoTooltip";
+import { TOOLTIP_CONTENT } from "../../lib/constants";
 
 interface CandidateViewsTabProps {
   views?: CandidateView[];
@@ -51,13 +53,18 @@ const ViewRelatedContent = ({ viewId }: { viewId: string }) => {
               <div key={vote.id} className="bg-gray-50 dark:bg-gray-700 rounded p-3 space-y-3">
                 <div className="flex items-start justify-between gap-2">
                   <span className="text-sm font-medium text-gray-900 dark:text-white">{vote.bill_title}</span>
-                  <span className={`text-xs font-semibold px-2 py-1 rounded ${
-                    vote.vote_type === "FOR" ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400" :
-                    vote.vote_type === "AGAINST" ? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400" :
-                    "bg-gray-100 text-gray-800 dark:bg-gray-600 dark:text-gray-300"
-                  }`}>
-                    {formatVoteType(vote.vote_type)}
-                  </span>
+                  <div className="flex items-center gap-1">
+                    <span className={`text-xs font-semibold px-2 py-1 rounded ${
+                      vote.vote_type === "FOR" ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400" :
+                      vote.vote_type === "AGAINST" ? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400" :
+                      "bg-gray-100 text-gray-800 dark:bg-gray-600 dark:text-gray-300"
+                    }`}>
+                      {formatVoteType(vote.vote_type)}
+                    </span>
+                    {vote.vote_type === "PRESENT" && (
+                      <InfoTooltip content={TOOLTIP_CONTENT.PRESENT_VOTE} />
+                    )}
+                  </div>
                 </div>
                 {vote.description && (
                   <div className="text-xs text-gray-600 dark:text-gray-400">{vote.description}</div>
@@ -127,13 +134,18 @@ const ViewRelatedContent = ({ viewId }: { viewId: string }) => {
               <div key={leg.id} className="bg-gray-50 dark:bg-gray-700 rounded p-3 space-y-3">
                 <div className="flex items-start justify-between gap-2">
                   <span className="text-sm font-medium text-gray-900 dark:text-white">{leg.title}</span>
-                  <span className={`text-xs font-semibold px-2 py-1 rounded ${
-                    leg.status === "PASSED" ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400" :
-                    leg.status === "PENDING" ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400" :
-                    "bg-gray-100 text-gray-800 dark:bg-gray-600 dark:text-gray-300"
-                  }`}>
-                    {formatStatus(leg.status)}
-                  </span>
+                  <div className="flex items-center gap-1">
+                    <span className={`text-xs font-semibold px-2 py-1 rounded ${
+                      leg.status === "PASSED" ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400" :
+                      leg.status === "PENDING" ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400" :
+                      "bg-gray-100 text-gray-800 dark:bg-gray-600 dark:text-gray-300"
+                    }`}>
+                      {formatStatus(leg.status)}
+                    </span>
+                    {leg.status === "PENDING" && (
+                      <InfoTooltip content={TOOLTIP_CONTENT.PENDING_LEGISLATION} />
+                    )}
+                  </div>
                 </div>
                 {leg.description && (
                   <div className="text-xs text-gray-600 dark:text-gray-400">{leg.description}</div>
