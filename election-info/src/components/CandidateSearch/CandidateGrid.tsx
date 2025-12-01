@@ -2,6 +2,8 @@ import { FaChevronDown, FaChevronRight } from 'react-icons/fa';
 import type { ElectionCandidate } from '../../types/api';
 import CandidateCard from './CandidateCard';
 import CongressionalGroup from './CongressionalGroup';
+import { InfoTooltip } from '../InfoTooltip';
+import { isAtLargeDisplay } from '../../lib/constants';
 
 interface CandidateGridProps {
   groups: Array<{
@@ -53,9 +55,14 @@ const CandidateGrid = ({
             <div className="border-b border-gray-200 dark:border-gray-700 pb-2">
               <div className="flex items-center justify-between">
                 <div className="flex-1">
-                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-                    {group.group}
-                  </h3>
+                  <div className="flex items-center gap-1">
+                    <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+                      {group.group}
+                    </h3>
+                    {isAtLargeDisplay(group.group) && (
+                      <InfoTooltip content="An 'At-Large' district means the entire state serves as a single congressional district. This occurs in states with only one representative in the U.S. House of Representatives." />
+                    )}
+                  </div>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
                     {group.candidates.length} candidate{group.candidates.length !== 1 ? 's' : ''}
                   </p>

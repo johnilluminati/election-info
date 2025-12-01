@@ -74,9 +74,9 @@ const CongressionalGroup = ({
                   <div className="flex items-center justify-between">
                     <div className="flex-1">
                       <div className="flex items-center gap-1">
-                        <h4 className="text-lg font-semibold text-gray-900 dark:text-white">
-                          {subGroup.group}
-                        </h4>
+                      <h4 className="text-lg font-semibold text-gray-900 dark:text-white">
+                        {subGroup.group}
+                      </h4>
                         {isAtLargeDisplay(subGroup.group) && (
                           <InfoTooltip content="An 'At-Large' district means the entire state serves as a single congressional district. This occurs in states with only one representative in the U.S. House of Representatives." />
                         )}

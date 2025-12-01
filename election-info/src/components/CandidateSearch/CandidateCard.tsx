@@ -1,8 +1,7 @@
 import { FaCalendarAlt, FaMapMarkerAlt, FaUserTie } from 'react-icons/fa';
 import type { ElectionCandidate } from '../../types/api';
-import { STATE_ABBREVIATION, formatDistrictDisplay, isAtLargeDistrict } from '../../lib/constants';
+import { STATE_ABBREVIATION, formatDistrictDisplay } from '../../lib/constants';
 import { getPositionTitle } from '../../lib/candidateUtils';
-import { InfoTooltip } from '../InfoTooltip';
 
 interface CandidateCardProps {
   candidate: ElectionCandidate;
@@ -98,15 +97,10 @@ const CandidateCard = ({ candidate, onViewDetails }: CandidateCardProps) => {
           {state && (
             <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
               <FaMapMarkerAlt className="mr-2 flex-shrink-0" />
-              <div className="flex items-center gap-1">
-                <span>
-                  {state}
-                  {district && ` - ${formatDistrictDisplay(district)}`}
-                </span>
-                {district && isAtLargeDistrict(district) && (
-                  <InfoTooltip content="An 'At-Large' district means the entire state serves as a single congressional district. This occurs in states with only one representative in the U.S. House of Representatives." />
-                )}
-              </div>
+              <span>
+                {state}
+                {district && ` - ${formatDistrictDisplay(district)}`}
+              </span>
             </div>
           )}
           {electionDate && (
