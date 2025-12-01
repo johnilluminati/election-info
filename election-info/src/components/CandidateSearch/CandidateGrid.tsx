@@ -3,7 +3,7 @@ import type { ElectionCandidate } from '../../types/api';
 import CandidateCard from './CandidateCard';
 import CongressionalGroup from './CongressionalGroup';
 import { InfoTooltip } from '../InfoTooltip';
-import { isAtLargeDisplay } from '../../lib/constants';
+import { isAtLargeDisplay, TOOLTIP_CONTENT } from '../../lib/constants';
 
 interface CandidateGridProps {
   groups: Array<{
@@ -60,7 +60,7 @@ const CandidateGrid = ({
                       {group.group}
                     </h3>
                     {isAtLargeDisplay(group.group) && (
-                      <InfoTooltip content="An 'At-Large' district means the entire state serves as a single congressional district. This occurs in states with only one representative in the U.S. House of Representatives." />
+                      <InfoTooltip content={TOOLTIP_CONTENT.AT_LARGE_DISTRICT} />
                     )}
                   </div>
                   <p className="text-sm text-gray-600 dark:text-gray-400">

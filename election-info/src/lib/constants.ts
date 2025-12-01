@@ -82,4 +82,10 @@ export const isAtLargeDistrict = (districtCode: string | null | undefined): bool
 // Helper function to check if a formatted district display string contains "At-Large"
 export const isAtLargeDisplay = (districtDisplay: string): boolean => {
   return districtDisplay.includes('At-Large');
-}; 
+};
+
+// Tooltip content constants
+export const TOOLTIP_CONTENT = {
+  AT_LARGE_DISTRICT: "An 'At-Large' district means the entire state serves as a single congressional district. This occurs in states with only one representative in the U.S. House of Representatives.",
+  // Add more tooltip content here as needed
+} as const; 

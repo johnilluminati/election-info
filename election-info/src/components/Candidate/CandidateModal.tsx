@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { FaTimes, FaExternalLinkAlt } from 'react-icons/fa';
 import type { ElectionCandidate } from '../../types/api';
 import { getPositionTitle } from '../../lib/candidateUtils';
-import { STATE_ABBREVIATION, formatDistrictDisplay, isAtLargeDistrict } from '../../lib/constants';
+import { STATE_ABBREVIATION, formatDistrictDisplay, isAtLargeDistrict, TOOLTIP_CONTENT } from '../../lib/constants';
 import { InfoTooltip } from '../InfoTooltip';
 import CandidateInfoTabs from './CandidateInfoTabs';
 import CandidateKeyIssuesTab from './CandidateKeyIssuesTab';
@@ -166,7 +166,7 @@ const CandidateModal = ({ candidate, isOpen, onClose, isLoading = false }: Candi
                             <>
                               Running for {position} in {stateName} - {districtDisplay}
                               {isAtLarge && (
-                                <InfoTooltip content="An 'At-Large' district means the entire state serves as a single congressional district. This occurs in states with only one representative in the U.S. House of Representatives." className="ml-1" />
+                                <InfoTooltip content={TOOLTIP_CONTENT.AT_LARGE_DISTRICT} className="ml-1" />
                               )}
                             </>
                           );

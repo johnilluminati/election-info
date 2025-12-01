@@ -2,7 +2,7 @@ import { FaChevronDown, FaChevronRight } from 'react-icons/fa';
 import type { ElectionCandidate } from '../../types/api';
 import CandidateCard from './CandidateCard';
 import { InfoTooltip } from '../InfoTooltip';
-import { isAtLargeDisplay } from '../../lib/constants';
+import { isAtLargeDisplay, TOOLTIP_CONTENT } from '../../lib/constants';
 
 interface CongressionalGroupProps {
   group: {
@@ -78,7 +78,7 @@ const CongressionalGroup = ({
                         {subGroup.group}
                       </h4>
                         {isAtLargeDisplay(subGroup.group) && (
-                          <InfoTooltip content="An 'At-Large' district means the entire state serves as a single congressional district. This occurs in states with only one representative in the U.S. House of Representatives." />
+                          <InfoTooltip content={TOOLTIP_CONTENT.AT_LARGE_DISTRICT} />
                         )}
                       </div>
                       <p className="text-sm text-gray-600 dark:text-gray-400">

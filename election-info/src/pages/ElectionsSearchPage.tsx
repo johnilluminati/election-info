@@ -4,7 +4,7 @@ import CongressionalMap from "../components/CongressionalMap/CongressionalMap";
 import { useElections } from "../hooks";
 import type { Election } from "../types/api";
 import CongressionalMapNav from '../components/CongressionalMap/CongressionalMapNav';
-import { STATE_ABBREVIATION, formatDistrictDisplay, isAtLargeDistrict } from '../lib/constants';
+import { STATE_ABBREVIATION, formatDistrictDisplay, isAtLargeDistrict, TOOLTIP_CONTENT } from '../lib/constants';
 import { InfoTooltip } from '../components/InfoTooltip';
 
 const ElectionsSearchPage = () => {
@@ -172,7 +172,7 @@ const ElectionsSearchPage = () => {
                       {isAtLargeDistrict(selectedDistrict) && (
                         <span className="inline-flex items-center ml-1" style={{ textDecoration: 'none' }}>
                           <InfoTooltip 
-                            content="An 'At-Large' district means the entire state serves as a single congressional district. This occurs in states with only one representative in the U.S. House of Representatives."
+                            content={TOOLTIP_CONTENT.AT_LARGE_DISTRICT}
                             position="bottom"
                           />
                         </span>
