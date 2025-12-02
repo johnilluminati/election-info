@@ -710,19 +710,160 @@ async function main() {
   }
   console.log(`✅ Created ${totalDonors} donor records`);
 
-  // 5. Donations for ALL candidates (created after donors due to foreign key)
-  console.log('Creating campaign donations for all candidates...');
+  // 5. Donations for ALL candidates with notable contexts (created after donors due to foreign key)
+  console.log('Creating campaign donations with notable contexts for all candidates...');
+  
+  // Define donor-to-issue mappings for aligned donations
+  const alignedDonorMappings = {
+    'Environmental Action Fund': ['Environmental Protection', 'Climate Change Action'],
+    'Climate Action Fund': ['Environmental Protection', 'Climate Change Action'],
+    'Healthcare Reform PAC': ['Healthcare Reform and Access', 'Mental Health Services'],
+    'Healthcare PAC': ['Healthcare Reform and Access', 'Mental Health Services'],
+    'Education First Coalition': ['Education Funding and Reform'],
+    'Education PAC': ['Education Funding and Reform'],
+    'Infrastructure Now': ['Infrastructure Investment', 'Transportation and Roads'],
+    'Transportation PAC': ['Infrastructure Investment', 'Transportation and Roads'],
+    'Veterans for America': ['Veterans Affairs'],
+    'Veterans Affairs Fund': ['Veterans Affairs'],
+    'Law Enforcement Support': ['Public Safety and Law Enforcement'],
+    'Criminal Justice Reform PAC': ['Criminal Justice Reform'],
+    'Social Justice PAC': ['Social Justice and Equality'],
+    'Small Business Alliance': ['Small Business Support', 'Economic Growth and Job Creation'],
+    'Small Business PAC': ['Small Business Support', 'Economic Growth and Job Creation'],
+    'Rural Development PAC': ['Rural Development'],
+    'Affordable Housing PAC': ['Affordable Housing'],
+    'Mental Health Coalition': ['Mental Health Services', 'Healthcare Reform and Access'],
+    'Workforce Development Fund': ['Workforce Development', 'Economic Growth and Job Creation'],
+    'National Security PAC': ['National Security'],
+    'Homeland Security PAC': ['National Security'],
+    'Energy Independence Fund': ['Energy Independence'],
+    'Immigration Reform Fund': ['Immigration Reform'],
+    'Taxpayers Alliance': ['Tax Policy'],
+    'Labor Union Local 123': ['Workforce Development', 'Economic Growth and Job Creation'],
+    'Progressive PAC': ['Social Justice and Equality', 'Criminal Justice Reform', 'Environmental Protection'],
+    'Conservative Coalition': ['Tax Policy', 'National Security', 'Energy Independence'],
+    'Business Roundtable': ['Economic Growth and Job Creation', 'Small Business Support', 'Tax Policy'],
+    'Manufacturing PAC': ['Economic Growth and Job Creation', 'Workforce Development'],
+    'Defense PAC': ['National Security'],
+    'Agricultural PAC': ['Rural Development'],
+    'Technology Innovation Fund': ['Economic Growth and Job Creation', 'Infrastructure Investment'],
+    'Retail PAC': ['Small Business Support', 'Economic Growth and Job Creation']
+  };
+
+  // Define donor-to-issue mappings for CONFLICTING donations (notable contexts)
+  // These create interesting scenarios like gun rights groups donating to candidates who support gun restrictions
+  const conflictingDonorMappings = {
+    'Environmental Action Fund': ['Energy Independence'], // Environmental groups vs fossil fuel interests
+    'Climate Action Fund': ['Energy Independence'],
+    'Law Enforcement Support': ['Criminal Justice Reform'], // Law enforcement vs reform advocates
+    'Criminal Justice Reform PAC': ['Public Safety and Law Enforcement'], // Reform advocates vs law enforcement
+    'Healthcare Reform PAC': ['Tax Policy'], // Healthcare reform vs tax cuts
+    'Social Justice PAC': ['Public Safety and Law Enforcement'], // Social justice vs law enforcement
+    'Taxpayers Alliance': ['Infrastructure Investment', 'Education Funding and Reform'], // Tax cuts vs spending
+    'Small Business Alliance': ['Environmental Protection'], // Business interests vs environmental regulations
+    'Energy Independence Fund': ['Environmental Protection', 'Climate Change Action'], // Energy vs environment
+    'National Security PAC': ['Immigration Reform'], // Security vs immigration
+    'Immigration Reform Fund': ['National Security'], // Immigration vs security
+    'Conservative Coalition': ['Social Justice and Equality', 'Criminal Justice Reform'], // Conservative vs progressive issues
+    'Progressive PAC': ['Tax Policy', 'National Security'], // Progressive vs conservative issues
+    'Business Roundtable': ['Environmental Protection', 'Criminal Justice Reform'], // Business vs regulation/reform
+    'Manufacturing PAC': ['Environmental Protection', 'Climate Change Action'], // Manufacturing vs environmental regulations
+    'Defense PAC': ['Immigration Reform', 'Social Justice and Equality'], // Defense industry vs social issues
+    'Homeland Security PAC': ['Immigration Reform'], // Security vs immigration
+    'Agricultural PAC': ['Environmental Protection', 'Climate Change Action'], // Agriculture vs environmental regulations
+    'Technology Innovation Fund': ['Criminal Justice Reform', 'Social Justice and Equality'] // Tech vs social issues (privacy concerns)
+  };
+
+  // Map view categories to key issues for matching
+  const viewCategoryToIssues = {
+    'Environmental Policy': ['Environmental Protection', 'Climate Change Action'],
+    'Healthcare': ['Healthcare Reform and Access', 'Mental Health Services'],
+    'Education': ['Education Funding and Reform'],
+    'Infrastructure': ['Infrastructure Investment', 'Transportation and Roads'],
+    'Veterans Affairs': ['Veterans Affairs'],
+    'Criminal Justice': ['Criminal Justice Reform', 'Public Safety and Law Enforcement'],
+    'Gun Policy': ['Public Safety and Law Enforcement'], // Can create conflicts with gun rights/restrictions
+    'Tax Policy': ['Tax Policy'],
+    'Immigration': ['Immigration Reform'],
+    'National Security': ['National Security'],
+    'Economic Policy': ['Economic Growth and Job Creation', 'Small Business Support', 'Workforce Development']
+  };
+
   let totalDonations = 0;
+  let alignedDonations = 0;
+  let conflictingDonations = 0;
+  let randomDonations = 0;
+
   for (const candidate of allElectionCandidates) {
+    // Fetch candidate's key issues and views
+    const keyIssues = await prisma.candidateKeyIssue.findMany({
+      where: { election_candidate_id: candidate.id }
+    });
+    
+    const candidateViews = await prisma.candidateView.findMany({
+      where: { candidate_id: candidate.candidate_id },
+      include: { view_category: true }
+    });
+
+    // Collect all relevant issues from key issues and view categories
+    const candidateIssues = new Set();
+    keyIssues.forEach(issue => candidateIssues.add(issue.issue_text));
+    candidateViews.forEach(view => {
+      if (view.view_category && viewCategoryToIssues[view.view_category.title]) {
+        viewCategoryToIssues[view.view_category.title].forEach(issue => candidateIssues.add(issue));
+      }
+    });
+
     const donationCount = Math.floor(Math.random() * 5) + 2; // 2-6 donations per candidate
+    
     for (let i = 0; i < donationCount; i++) {
-      const randomDonor = donorNames[Math.floor(Math.random() * donorNames.length)];
+      let selectedDonor;
+      let donationType = 'random';
+      const rand = Math.random();
+      
+      // 40% aligned donations, 15% conflicting (notable), 45% random
+      if (rand < 0.40 && candidateIssues.size > 0) {
+        // Try to find an aligned donor
+        const alignedDonors = Object.entries(alignedDonorMappings).filter(([donor, issues]) => {
+          return issues.some(issue => candidateIssues.has(issue));
+        });
+        
+        if (alignedDonors.length > 0) {
+          const [donor] = alignedDonors[Math.floor(Math.random() * alignedDonors.length)];
+          selectedDonor = donor;
+          donationType = 'aligned';
+          alignedDonations++;
+        } else {
+          selectedDonor = donorNames[Math.floor(Math.random() * donorNames.length)];
+          randomDonations++;
+        }
+      } else if (rand < 0.55 && candidateIssues.size > 0) {
+        // Try to find a conflicting donor (notable context)
+        const conflictingDonors = Object.entries(conflictingDonorMappings).filter(([donor, issues]) => {
+          return issues.some(issue => candidateIssues.has(issue));
+        });
+        
+        if (conflictingDonors.length > 0) {
+          const [donor] = conflictingDonors[Math.floor(Math.random() * conflictingDonors.length)];
+          selectedDonor = donor;
+          donationType = 'conflicting';
+          conflictingDonations++;
+        } else {
+          selectedDonor = donorNames[Math.floor(Math.random() * donorNames.length)];
+          randomDonations++;
+        }
+      } else {
+        // Random donation
+        selectedDonor = donorNames[Math.floor(Math.random() * donorNames.length)];
+        randomDonations++;
+      }
+
       const amount = (Math.random() * 10000 + 1000).toFixed(2);
       
       await prisma.electionCandidateDonation.create({
         data: {
           election_candidate_id: candidate.id,
-          donor_name: randomDonor,
+          donor_name: selectedDonor,
           donation_amount: amount,
           created_on: new Date(),
           created_by: 'seed',
@@ -732,7 +873,9 @@ async function main() {
       totalDonations++;
     }
   }
+  
   console.log(`✅ Created ${totalDonations} campaign donations for all candidates`);
+  console.log(`   📊 Breakdown: ${alignedDonations} aligned, ${conflictingDonations} conflicting (notable), ${randomDonations} random`);
 
   // 6. Create votes and legislation for candidate views
   console.log('Creating votes and legislation for candidate views...');
@@ -898,6 +1041,7 @@ async function main() {
   console.log('🐕 Candidate profile pictures are random dog images from dog.ceo API');
   console.log('🌍 Comprehensive coverage: Presidential, Congressional (all districts), Senate (all states), Gubernatorial (all states)');
   console.log('✅ EVERY candidate has Key Issues, Views, History, and Donations data');
+  console.log('💰 Donations include notable contexts: aligned donations (40%), conflicting donations (15% - e.g., environmental groups donating to candidates who oppose environmental policy), and random donations (45%)');
 }
 
 main()
