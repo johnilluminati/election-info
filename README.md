@@ -24,8 +24,9 @@ The goal is to cut through the noise and make it simple to find accurate, transp
 - Interactive map for exploring elections by state and congressional district
 - Filter elections by type (Presidential, Congressional, Senate, Gubernatorial, State Legislature, Local)
 - View upcoming elections with candidate information
-- Detailed election cycle information
-<img width="1580" height="1170" alt="Image" src="https://github.com/user-attachments/assets/c488caa8-f846-48fd-87e1-8b6b6ca86f61" />
+- Detailed election cycle information- **Side-by-side candidate comparison** for easy evaluation
+<img width="1580" height="1170" alt="Image" src="https://github.com/user-attachments/assets/26b625ba-5882-46bf-a22d-4866dd15ebbf" />
+<img width="1575" height="1266" alt="Image" src="https://github.com/user-attachments/assets/c04ed743-1375-4c1c-b849-ab7863af8aaa" />
 
 ### Candidate Search & Comparison
 - Search candidates by name, state, party, or election type
@@ -35,14 +36,13 @@ The goal is to cut through the noise and make it simple to find accurate, transp
   - Campaign donations and donor information
   - Professional and personal background
   - Potential conflicts of interest
-- **Side-by-side candidate comparison** for easy evaluation
-<img width="1575" height="1266" alt="Image" src="https://github.com/user-attachments/assets/d6a0c6c7-dc4f-4942-aba7-aceddd2ed54d" />
+<img width="1527" height="1425" alt="Image" src="https://github.com/user-attachments/assets/4ddc6a98-4613-4cb6-b392-18ef9438a338" />
 
 ### Political Party Information
 - View party stances and positions
 - Party leadership information
 - See candidates by party and see how they align with their party
-<img width="1551" height="1275" alt="Image" src="https://github.com/user-attachments/assets/d09ebde2-4693-466c-be75-5b8adc7ac152" />
+<img width="1551" height="1275" alt="Image" src="https://github.com/user-attachments/assets/973b4d94-509b-4275-8678-5491123e7cb0" />
 
 ### User Experience
 - Much emphasis placed on ease of navigation and presenting information in as unbiased a way as possible
