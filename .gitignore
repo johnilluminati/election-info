@@ -1,0 +1,7 @@
+# VS Code settings
+.vscode/
+
+README.md
+
+# Admin project (separate repository)
+election-info-admin/
