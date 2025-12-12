@@ -494,35 +494,71 @@ router.get('/views/:viewId/legislation', async (req, res, next) => {
   }
 });
 
-// GET /api/candidates/views/:viewId/related-content - Get all related content (votes + legislation) for a view
+// GET /api/candidates/views/:viewId/related-content - Get related content (votes + legislation) for a view with pagination
 router.get('/views/:viewId/related-content', async (req, res, next) => {
   try {
     const { viewId } = req.params;
-    const [votes, legislation] = await Promise.all([
+    const { 
+      votes_page = 1, 
+      votes_limit = 10, 
+      legislation_page = 1, 
+      legislation_limit = 10 
+    } = req.query;
+    
+    const votesSkip = (parseInt(votes_page) - 1) * parseInt(votes_limit);
+    const legislationSkip = (parseInt(legislation_page) - 1) * parseInt(legislation_limit);
+    
+    const where = {
+      candidate_view_id: BigInt(viewId)
+    };
+    
+    const [votes, votesTotal, legislation, legislationTotal] = await Promise.all([
       prisma.candidateVote.findMany({
-        where: {
-          candidate_view_id: BigInt(viewId)
-        },
+        where,
         include: {
           conflicts: true
         },
         orderBy: {
           vote_date: 'desc'
-        }
-      }),
-      prisma.candidateLegislation.findMany({
-        where: {
-          candidate_view_id: BigInt(viewId)
         },
+        skip: votesSkip,
+        take: parseInt(votes_limit)
+      }),
+      prisma.candidateVote.count({ where }),
+      prisma.candidateLegislation.findMany({
+        where,
         include: {
           conflicts: true
         },
         orderBy: {
           date: 'desc'
-        }
-      })
+        },
+        skip: legislationSkip,
+        take: parseInt(legislation_limit)
+      }),
+      prisma.candidateLegislation.count({ where })
     ]);
-    res.json({ votes, legislation });
+    
+    res.json({ 
+      votes: {
+        data: votes,
+        pagination: {
+          page: parseInt(votes_page),
+          limit: parseInt(votes_limit),
+          total: votesTotal,
+          pages: Math.ceil(votesTotal / parseInt(votes_limit))
+        }
+      },
+      legislation: {
+        data: legislation,
+        pagination: {
+          page: parseInt(legislation_page),
+          limit: parseInt(legislation_limit),
+          total: legislationTotal,
+          pages: Math.ceil(legislationTotal / parseInt(legislation_limit))
+        }
+      }
+    });
   } catch (error) {
     next(error);
   }
