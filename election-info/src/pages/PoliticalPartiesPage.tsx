@@ -2,7 +2,7 @@ import { useState, useRef, useLayoutEffect } from 'react'
 import { useParties } from '../hooks'
 import PartyCard from '../components/PoliticalParties/PartyCard'
 import PartyDetailSection from '../components/PoliticalParties/PartyDetailSection'
-import type { PoliticalParty } from '../types/api'
+import type { PoliticalParty } from '@shared/types'
 import { FaInfoCircle } from 'react-icons/fa'
 
 const PoliticalPartiesPage = () => {

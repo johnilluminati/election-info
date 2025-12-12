@@ -2,9 +2,9 @@ import { useEffect, useRef, useState } from 'react';
 import CandidateComparison from "../components/CandidateComparison";
 import CongressionalMap from "../components/CongressionalMap/CongressionalMap";
 import { useElections } from "../hooks";
-import type { Election } from "../types/api";
+import type { Election } from "@shared/types";
 import CongressionalMapNav from '../components/CongressionalMap/CongressionalMapNav';
-import { STATE_ABBREVIATION, formatDistrictDisplay, isAtLargeDistrict, TOOLTIP_CONTENT } from '../lib/constants';
+import { STATE_ABBREVIATION, formatDistrictDisplay, isAtLargeDistrict, TOOLTIP_CONTENT } from '@shared/constants';
 import { InfoTooltip } from '../components/InfoTooltip';
 
 const ElectionsSearchPage = () => {

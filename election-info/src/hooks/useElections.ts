@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { api } from '../lib/api'
-import type { Election, ElectionType, ElectionCycle, ElectionCandidate, PaginatedResponse } from '../types/api'
+import type { Election, ElectionType, ElectionCycle, ElectionCandidate, PaginatedResponse } from '@shared/types'
 
 export const useElections = (params?: { 
   year?: number; 

@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { api } from '../lib/api'
-import type { Candidate, ElectionCandidate, CandidateKeyIssue, ElectionCandidateDonation, PaginatedResponse } from '../types/api'
+import type { Candidate, ElectionCandidate, CandidateKeyIssue, ElectionCandidateDonation, PaginatedResponse } from '@shared/types'
 
 export const useCandidates = (params?: { page?: number; limit?: number; search?: string }) => {
   return useQuery<ElectionCandidate[] | PaginatedResponse<Candidate>>({

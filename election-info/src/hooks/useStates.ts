@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { api } from '../lib/api'
-import type { USState, USCounty, USCity, VotingDistrict } from '../types/api'
+import type { USState, USCounty, USCity, VotingDistrict } from '@shared/types'
 
 export const useStates = () => {
   return useQuery<USState[]>({

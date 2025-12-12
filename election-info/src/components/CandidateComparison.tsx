@@ -1,4 +1,4 @@
-import type { Election } from '../types/api';
+import type { Election } from '@shared/types';
 import { useElectionCandidates } from '../hooks';
 import Candidate from "./Candidate/Candidate";
 import { useEffect, useState, useMemo, useRef } from 'react';

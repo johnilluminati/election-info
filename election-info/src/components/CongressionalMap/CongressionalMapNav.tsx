@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useStates, useStateDistricts } from '../../hooks';
-import type { USState, VotingDistrict } from '../../types/api';
-import { formatDistrictDisplay } from '../../lib/constants';
+import type { USState, VotingDistrict } from '@shared/types';
+import { formatDistrictDisplay } from '@shared/constants';
 
 const CongressionalMapNav = ({ 
   onMapSelection, 

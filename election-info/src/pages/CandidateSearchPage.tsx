@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import type { ElectionCandidate } from '../types/api';
+import type { ElectionCandidate } from '@shared/types';
 import { api } from '../lib/api';
 import { useStates } from '../hooks';
 import { useCandidateFilters } from '../hooks/useCandidateFilters';

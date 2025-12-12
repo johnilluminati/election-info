@@ -253,6 +253,8 @@ export interface CandidateView {
   updated_by?: string
   candidate?: Candidate
   view_category?: CandidateViewCategory
+  votes?: CandidateVote[]
+  legislation?: CandidateLegislation[]
 }
 
 export interface CandidateVote {
@@ -347,4 +349,5 @@ export interface HealthCheck {
   status: string
   message: string
   timestamp: string
-} 
+}
+

@@ -17,7 +17,7 @@ import type {
   CandidateLegislation,
   Donor,
   HealthCheck
-} from '../types/api'
+} from '@shared/types'
 
 // Vite replaces environment variables at build time
 // For production on Render, set VITE_API_URL in the environment variables

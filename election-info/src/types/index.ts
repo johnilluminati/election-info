@@ -1,26 +1,8 @@
+// UI-specific types for the frontend application
+// API types are in @shared/types
+
 export interface HeaderLink {
   text: string,
   routerLink: string,
   alignment: 'left' | 'right'
-}
-
-export interface Candidate {
-  firstName: string,
-  lastName: string,
-  party: string,
-  position: {
-    title: string,
-    tenure: string
-  },
-  website: string,
-  image: string,
-  keyIssues: {
-    position: string
-  }[]
-}
-
-export interface CandidateInfoTab {
-  title: string,
-  link: string,
-  component: React.ReactNode
 }

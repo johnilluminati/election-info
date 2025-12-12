@@ -1,8 +1,8 @@
 import { FaChevronDown, FaChevronRight } from 'react-icons/fa';
-import type { ElectionCandidate } from '../../types/api';
+import type { ElectionCandidate } from '@shared/types';
 import CandidateCard from './CandidateCard';
 import { InfoTooltip } from '../InfoTooltip';
-import { isAtLargeDisplay, TOOLTIP_CONTENT } from '../../lib/constants';
+import { isAtLargeDisplay, TOOLTIP_CONTENT } from '@shared/constants';
 
 interface CongressionalGroupProps {
   group: {

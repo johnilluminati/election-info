@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { api } from '../lib/api'
-import type { PoliticalParty, CandidateParty } from '../types/api'
+import type { PoliticalParty, CandidateParty } from '@shared/types'
 
 export const useParties = () => {
   return useQuery<PoliticalParty[]>({

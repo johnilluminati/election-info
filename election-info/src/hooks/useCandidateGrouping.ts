@@ -1,6 +1,6 @@
 import { useMemo, useCallback } from 'react';
-import type { ElectionCandidate } from '../types/api';
-import { STATE_ABBREVIATION, formatDistrictDisplay } from '../lib/constants';
+import type { ElectionCandidate } from '@shared/types';
+import { STATE_ABBREVIATION, formatDistrictDisplay } from '@shared/constants';
 
 interface CandidateGroup {
   group: string;

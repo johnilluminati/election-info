@@ -53,6 +53,37 @@ export const STATE_ABBREVIATION: Record<string, string> = {
   'District of Columbia': 'DC'
 };
 
+// Helper function to get full state name from abbreviation or full name
+// Returns the full state name if input is an abbreviation, or returns the input if it's already a full name
+export const getFullStateName = (stateInput: string): string => {
+  if (!stateInput) return '';
+  
+  // Check if input is already a full state name
+  if (STATE_ABBREVIATION[stateInput]) {
+    return stateInput;
+  }
+  
+  // Try to find full name from abbreviation
+  const fullName = Object.keys(STATE_ABBREVIATION).find(
+    name => STATE_ABBREVIATION[name] === stateInput.toUpperCase()
+  );
+  
+  return fullName || stateInput;
+};
+
+// Helper function to get state abbreviation from full name or abbreviation
+export const getStateAbbreviation = (stateInput: string): string => {
+  if (!stateInput) return '';
+  
+  // Check if input is already an abbreviation (2 uppercase letters)
+  if (/^[A-Z]{2}$/.test(stateInput)) {
+    return stateInput;
+  }
+  
+  // Try to find abbreviation from full name
+  return STATE_ABBREVIATION[stateInput] || stateInput.toUpperCase();
+};
+
 // Helper function to format district code for display
 // Converts codes like "AKAL" to "At-Large", and "CA01" to "01"
 export const formatDistrictCode = (districtCode: string): string => {
@@ -90,4 +121,5 @@ export const TOOLTIP_CONTENT = {
   PRESENT_VOTE: "A 'Present' vote means the representative was present for the vote but chose not to vote either for or against the bill. This is different from not voting due to absence.",
   PENDING_LEGISLATION: "Legislation with a 'Pending' status is currently under consideration and has not yet been voted on, passed, or vetoed.",
   // Add more tooltip content here as needed
-} as const; 
+} as const;
+

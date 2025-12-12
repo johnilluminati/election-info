@@ -2,9 +2,9 @@ import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { FaChevronDown, FaChevronRight, FaVoteYea, FaFileSignature, FaExclamationTriangle } from "react-icons/fa";
 import { api } from "../../lib/api";
-import type { CandidateView } from "../../types/api";
+import type { CandidateView, CandidateVote, CandidateLegislation, ConflictOfInterest } from "@shared/types";
 import { InfoTooltip } from "../InfoTooltip";
-import { TOOLTIP_CONTENT } from "../../lib/constants";
+import { TOOLTIP_CONTENT } from "@shared/constants";
 
 interface CandidateViewsTabProps {
   views?: CandidateView[];
@@ -49,7 +49,7 @@ const ViewRelatedContent = ({ viewId }: { viewId: string }) => {
             <h4 className="text-sm font-semibold text-gray-900 dark:text-white">Relevant Votes</h4>
           </div>
           <div className="space-y-2">
-            {relatedContent.votes.map((vote) => (
+            {relatedContent.votes.map((vote: CandidateVote) => (
               <div key={vote.id} className="bg-gray-50 dark:bg-gray-700 rounded p-3 space-y-3">
                 <div className="flex items-start justify-between gap-2">
                   <span className="text-sm font-medium text-gray-900 dark:text-white">{vote.bill_title}</span>
@@ -90,7 +90,7 @@ const ViewRelatedContent = ({ viewId }: { viewId: string }) => {
                       <FaExclamationTriangle className="text-orange-600 dark:text-orange-400 text-xs" />
                       <div className="text-xs font-semibold text-orange-900 dark:text-orange-200">Potential Conflict of Interest</div>
                     </div>
-                    {vote.conflicts.map((conflict) => (
+                    {vote.conflicts.map((conflict: ConflictOfInterest) => (
                       <div key={conflict.id} className="bg-orange-50 dark:bg-orange-900/20 rounded p-2 mb-2 last:mb-0 space-y-2">
                         <div className="flex items-start gap-2">
                           <span className="text-xs font-medium text-orange-900 dark:text-orange-200">{formatConflictType(conflict.conflict_type)} Conflict</span>
@@ -130,7 +130,7 @@ const ViewRelatedContent = ({ viewId }: { viewId: string }) => {
             <h4 className="text-sm font-semibold text-gray-900 dark:text-white">Legislation</h4>
           </div>
           <div className="space-y-2">
-            {relatedContent.legislation.map((leg) => (
+            {relatedContent.legislation.map((leg: CandidateLegislation) => (
               <div key={leg.id} className="bg-gray-50 dark:bg-gray-700 rounded p-3 space-y-3">
                 <div className="flex items-start justify-between gap-2">
                   <span className="text-sm font-medium text-gray-900 dark:text-white">{leg.title}</span>
@@ -171,7 +171,7 @@ const ViewRelatedContent = ({ viewId }: { viewId: string }) => {
                       <FaExclamationTriangle className="text-orange-600 dark:text-orange-400 text-xs" />
                       <div className="text-xs font-semibold text-orange-900 dark:text-orange-200">Potential Conflict of Interest</div>
                     </div>
-                    {leg.conflicts.map((conflict) => (
+                    {leg.conflicts.map((conflict: ConflictOfInterest) => (
                       <div key={conflict.id} className="bg-orange-50 dark:bg-orange-900/20 rounded p-2 mb-2 last:mb-0 space-y-2">
                         <div className="flex items-start gap-2">
                           <span className="text-xs font-medium text-orange-900 dark:text-orange-200">{formatConflictType(conflict.conflict_type)} Conflict</span>
