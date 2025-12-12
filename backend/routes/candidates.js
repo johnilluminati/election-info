@@ -11,7 +11,8 @@ router.get('/', async (req, res, next) => {
     
     // If any of the filter parameters (including search) are provided, use the election candidates endpoint
     // This ensures we return ElectionCandidate objects with all nested relations
-    if (state || election_type || party || search) {
+    // Check if search exists in query (even if empty string) to handle admin panel initial load
+    if (state || election_type || party || search !== undefined) {
       return await getElectionCandidates(req, res, next);
     }
     
@@ -113,11 +114,12 @@ async function getElectionCandidates(req, res, next) {
     // Build where clause for filtering
     const where = {};
     
-    if (search) {
+    // Only apply search filter if search is provided and not empty (after trimming)
+    if (search && search.trim().length > 0) {
       where.OR = [
-        { candidate: { first_name: { contains: search, mode: 'insensitive' } } },
-        { candidate: { last_name: { contains: search, mode: 'insensitive' } } },
-        { candidate: { nickname: { contains: search, mode: 'insensitive' } } }
+        { candidate: { first_name: { contains: search.trim(), mode: 'insensitive' } } },
+        { candidate: { last_name: { contains: search.trim(), mode: 'insensitive' } } },
+        { candidate: { nickname: { contains: search.trim(), mode: 'insensitive' } } }
       ];
     }
     
@@ -279,8 +281,8 @@ router.get('/:id/key-issues', async (req, res, next) => {
   }
 });
 
-// GET /api/candidates/:id/donations - Get donations for a candidate (MUST come before /:id)
-router.get('/:id/donations', async (req, res, next) => {
+// GET /api/candidates/:id/donations/industries - Get unique industries for a candidate's donations (MUST come before /:id/donations)
+router.get('/:id/donations/industries', async (req, res, next) => {
   try {
     const { id } = req.params;
     const { election_id } = req.query;
@@ -295,36 +297,156 @@ router.get('/:id/donations', async (req, res, next) => {
       where.election_candidate.election_id = BigInt(election_id);
     }
     
+    // Get all donations with donor information
     const donations = await prisma.electionCandidateDonation.findMany({
       where,
       include: {
-        donor: true,
+        donor: {
+          select: {
+            industry: true
+          }
+        }
+      }
+    });
+    
+    // Extract unique industries (filter out null/undefined and empty strings)
+    const industriesSet = new Set();
+    donations.forEach(donation => {
+      if (donation.donor && donation.donor.industry && donation.donor.industry.trim().length > 0) {
+        industriesSet.add(donation.donor.industry.trim());
+      }
+    });
+    
+    // Convert to sorted array
+    const industries = Array.from(industriesSet).sort();
+    
+    res.json(industries);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// GET /api/candidates/:id/donations - Get donations for a candidate with filtering and pagination (MUST come before /:id)
+router.get('/:id/donations', async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { 
+      election_id, 
+      election_cycle_id,
+      page = 1, 
+      limit = 20, 
+      search, 
+      donor_type, 
+      industry,
+      sort_by = 'amount',
+      sort_order = 'desc'
+    } = req.query;
+    
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+    
+    // Build where clause
+    const where = {
+      election_candidate: {
+        candidate_id: BigInt(id)
+      }
+    };
+    
+    // Filter by election_id (for backward compatibility)
+    if (election_id) {
+      where.election_candidate.election_id = BigInt(election_id);
+    }
+    
+    // Filter by election_cycle_id - need to filter through nested relation
+    if (election_cycle_id) {
+      where.election_candidate.election = {
+        election_cycle_id: BigInt(election_cycle_id)
+      };
+      // Preserve candidate_id filter
+      where.election_candidate.candidate_id = BigInt(id);
+      // Preserve election_id if it was set
+      if (election_id) {
+        where.election_candidate.election_id = BigInt(election_id);
+      }
+    }
+    
+    // Filter by donor name (search)
+    if (search) {
+      where.donor_name = {
+        contains: search,
+        mode: 'insensitive'
+      };
+    }
+    
+    // Filter by donor type and/or industry
+    if (donor_type || industry) {
+      where.donor = {};
+      if (donor_type) {
+        where.donor.donor_type = donor_type;
+      }
+      if (industry) {
+        where.donor.industry = {
+          equals: industry,
+          mode: 'insensitive'
+        };
+      }
+    }
+    
+    // Build orderBy clause
+    let orderBy = [];
+    if (sort_by === 'amount') {
+      orderBy.push({ donation_amount: sort_order === 'asc' ? 'asc' : 'desc' });
+    } else if (sort_by === 'donor') {
+      orderBy.push({ donor_name: sort_order === 'asc' ? 'asc' : 'desc' });
+    } else if (sort_by === 'date') {
+      orderBy.push({ created_on: sort_order === 'asc' ? 'asc' : 'desc' });
+    } else if (sort_by === 'cycle') {
+      orderBy.push({
         election_candidate: {
-          include: {
-            election: {
-              include: {
-                election_cycle: true,
-                election_type: true
-              }
+          election: {
+            election_cycle: {
+              election_year: sort_order === 'asc' ? 'asc' : 'desc'
             }
           }
         }
-      },
-      orderBy: [
-        {
+      });
+    } else {
+      // Default: amount desc
+      orderBy.push({ donation_amount: 'desc' });
+    }
+    
+    // Get donations with pagination
+    const [donations, total] = await Promise.all([
+      prisma.electionCandidateDonation.findMany({
+        where,
+        include: {
+          donor: true,
           election_candidate: {
-            election: {
-              election_cycle: {
-                election_year: 'desc'
+            include: {
+              election: {
+                include: {
+                  election_cycle: true,
+                  election_type: true
+                }
               }
             }
           }
         },
-        { donation_amount: 'desc' }
-      ]
-    });
+        orderBy,
+        skip,
+        take: parseInt(limit)
+      }),
+      prisma.electionCandidateDonation.count({ where })
+    ]);
     
-    res.json(donations);
+    res.json({
+      data: donations,
+      pagination: {
+        page: parseInt(page),
+        limit: parseInt(limit),
+        total,
+        pages: Math.ceil(total / parseInt(limit))
+      }
+    });
   } catch (error) {
     next(error);
   }
