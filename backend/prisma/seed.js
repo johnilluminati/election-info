@@ -241,7 +241,19 @@ async function main() {
   }
   console.log(`✅ Created ${electionTypes.length} Election Types`);
 
-  // Create Election Cycle for November 3, 2026 ONLY
+  // Create Election Cycle for November 3, 2024 (past election for testing incumbency)
+  console.log('Creating Election Cycle for November 3, 2024...');
+  const pastElectionCycle = await prisma.electionCycle.create({
+    data: {
+      election_year: 2024,
+      election_day: new Date('2024-11-03'),
+      created_on: new Date(),
+      created_by: 'seed',
+      updated_on: new Date()
+    }
+  });
+
+  // Create Election Cycle for November 3, 2026 (future election)
   console.log('Creating Election Cycle for November 3, 2026...');
   const electionCycle = await prisma.electionCycle.create({
     data: {
@@ -350,6 +362,7 @@ async function main() {
         candidate_id: candidate.id,
         party_id: createdParties[i % createdParties.length].id,
         website: `https://candidate${candidateIndex}2026.com`,
+        incumbency_status: i === 0 ? 'INCUMBENT' : 'CHALLENGER', // First candidate is incumbent
         created_on: new Date(),
         created_by: 'seed',
         updated_on: new Date()
@@ -401,6 +414,7 @@ async function main() {
           candidate_id: candidate.id,
           party_id: createdParties[i % createdParties.length].id,
           website: `https://candidate${candidateIndex}2026.com`,
+          incumbency_status: i === 0 ? 'INCUMBENT' : (i === 1 ? 'CHALLENGER' : 'OPEN_SEAT'), // First is incumbent, second is challenger, rest are open seat
           created_on: new Date(),
           created_by: 'seed',
           updated_on: new Date()
@@ -443,6 +457,7 @@ async function main() {
           candidate_id: candidate.id,
           party_id: createdParties[i % createdParties.length].id,
           website: `https://candidate${candidateIndex}2026.com`,
+          incumbency_status: i === 0 ? 'INCUMBENT' : (i === 1 ? 'CHALLENGER' : 'OPEN_SEAT'), // First is incumbent, second is challenger, rest are open seat
           created_on: new Date(),
           created_by: 'seed',
           updated_on: new Date()
@@ -485,6 +500,7 @@ async function main() {
           candidate_id: candidate.id,
           party_id: createdParties[i % createdParties.length].id,
           website: `https://candidate${candidateIndex}2026.com`,
+          incumbency_status: i === 0 ? 'INCUMBENT' : (i === 1 ? 'CHALLENGER' : 'OPEN_SEAT'), // First is incumbent, second is challenger, rest are open seat
           created_on: new Date(),
           created_by: 'seed',
           updated_on: new Date()
@@ -495,7 +511,159 @@ async function main() {
     totalElections++;
   }
 
-  console.log(`✅ Created ${totalElections} Elections with ${totalElectionCandidates} Election Candidates`);
+  console.log(`✅ Created ${totalElections} Elections (2026) with ${totalElectionCandidates} Election Candidates`);
+
+  // Create past elections (2024) for testing incumbency display
+  console.log('Creating past elections for November 3, 2024 (for incumbency testing)...');
+  let pastElectionCandidateIndex = 0;
+  const getNextPastCandidate = () => {
+    const candidate = createdCandidates[pastElectionCandidateIndex % createdCandidates.length];
+    pastElectionCandidateIndex++;
+    return candidate;
+  };
+
+  // Create a few past congressional elections with incumbents
+  const sampleStates = createdStates.slice(0, 10); // Use first 10 states for past elections
+  const sampleDistricts = createdDistricts.filter(d => 
+    sampleStates.some(s => s.id === d.us_state_id)
+  ).slice(0, 20); // Use first 20 districts from those states
+
+  for (const district of sampleDistricts) {
+    const pastCongressionalElection = await prisma.election.create({
+      data: {
+        election_cycle_id: pastElectionCycle.id,
+        election_type_id: createdElectionTypes[1].id, // Congressional
+        created_on: new Date(),
+        created_by: 'seed',
+        updated_on: new Date()
+      }
+    });
+
+    // Add district geography
+    await prisma.electionGeography.create({
+      data: {
+        election_id: pastCongressionalElection.id,
+        scope_type: 'DISTRICT',
+        scope_id: district.district_code
+      }
+    });
+
+    // Add state geography
+    const state = createdStates.find(s => s.id === district.us_state_id);
+    await prisma.electionGeography.create({
+      data: {
+        election_id: pastCongressionalElection.id,
+        scope_type: 'STATE',
+        scope_id: state.abbreviation
+      }
+    });
+
+    // Add 2-3 candidates per district, first one is incumbent
+    const candidateCount = Math.floor(Math.random() * 2) + 2;
+    for (let i = 0; i < candidateCount; i++) {
+      const candidate = getNextPastCandidate();
+      await prisma.electionCandidate.create({
+        data: {
+          election_id: pastCongressionalElection.id,
+          candidate_id: candidate.id,
+          party_id: createdParties[i % createdParties.length].id,
+          website: `https://candidate${pastElectionCandidateIndex}2024.com`,
+          incumbency_status: i === 0 ? 'INCUMBENT' : 'CHALLENGER',
+          created_on: new Date(),
+          created_by: 'seed',
+          updated_on: new Date()
+        }
+      });
+      totalElectionCandidates++;
+    }
+    totalElections++;
+  }
+
+  // Create a few past senate elections with incumbents
+  for (const state of sampleStates.slice(0, 5)) {
+    const pastSenateElection = await prisma.election.create({
+      data: {
+        election_cycle_id: pastElectionCycle.id,
+        election_type_id: createdElectionTypes[2].id, // Senate
+        created_on: new Date(),
+        created_by: 'seed',
+        updated_on: new Date()
+      }
+    });
+
+    // Add state geography
+    await prisma.electionGeography.create({
+      data: {
+        election_id: pastSenateElection.id,
+        scope_type: 'STATE',
+        scope_id: state.abbreviation
+      }
+    });
+
+    // Add 2-3 candidates, first one is incumbent
+    const candidateCount = Math.floor(Math.random() * 2) + 2;
+    for (let i = 0; i < candidateCount; i++) {
+      const candidate = getNextPastCandidate();
+      await prisma.electionCandidate.create({
+        data: {
+          election_id: pastSenateElection.id,
+          candidate_id: candidate.id,
+          party_id: createdParties[i % createdParties.length].id,
+          website: `https://candidate${pastElectionCandidateIndex}2024.com`,
+          incumbency_status: i === 0 ? 'INCUMBENT' : 'CHALLENGER',
+          created_on: new Date(),
+          created_by: 'seed',
+          updated_on: new Date()
+        }
+      });
+      totalElectionCandidates++;
+    }
+    totalElections++;
+  }
+
+  // Create a few past gubernatorial elections with incumbents
+  for (const state of sampleStates.slice(0, 5)) {
+    const pastGubernatorialElection = await prisma.election.create({
+      data: {
+        election_cycle_id: pastElectionCycle.id,
+        election_type_id: createdElectionTypes[3].id, // Gubernatorial
+        created_on: new Date(),
+        created_by: 'seed',
+        updated_on: new Date()
+      }
+    });
+
+    // Add state geography
+    await prisma.electionGeography.create({
+      data: {
+        election_id: pastGubernatorialElection.id,
+        scope_type: 'STATE',
+        scope_id: state.abbreviation
+      }
+    });
+
+    // Add 2-3 candidates, first one is incumbent
+    const candidateCount = Math.floor(Math.random() * 2) + 2;
+    for (let i = 0; i < candidateCount; i++) {
+      const candidate = getNextPastCandidate();
+      await prisma.electionCandidate.create({
+        data: {
+          election_id: pastGubernatorialElection.id,
+          candidate_id: candidate.id,
+          party_id: createdParties[i % createdParties.length].id,
+          website: `https://candidate${pastElectionCandidateIndex}2024.com`,
+          incumbency_status: i === 0 ? 'INCUMBENT' : 'CHALLENGER',
+          created_on: new Date(),
+          created_by: 'seed',
+          updated_on: new Date()
+        }
+      });
+      totalElectionCandidates++;
+    }
+    totalElections++;
+  }
+
+  console.log(`✅ Created ${totalElections} total Elections (including ${totalElections - (totalElections - sampleDistricts.length - 10)} past elections) with ${totalElectionCandidates} total Election Candidates`);
 
   // Create candidate view categories
   console.log('Creating candidate view categories...');

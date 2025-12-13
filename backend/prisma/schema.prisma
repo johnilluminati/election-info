@@ -149,20 +149,21 @@ model CandidateParty {
 }
 
 model ElectionCandidate {
-  id           BigInt                      @id @default(autoincrement())
-  election_id  BigInt
-  candidate_id BigInt
-  party_id     BigInt
-  website      String?
-  created_on   DateTime
-  created_by   String
-  updated_on   DateTime
-  updated_by   String?
-  key_issues   CandidateKeyIssue[]
-  candidate    Candidate                   @relation(fields: [candidate_id], references: [id])
-  election     Election                    @relation(fields: [election_id], references: [id])
-  party        PoliticalParty              @relation(fields: [party_id], references: [id])
-  donations    ElectionCandidateDonation[]
+  id                BigInt                      @id @default(autoincrement())
+  election_id       BigInt
+  candidate_id      BigInt
+  party_id          BigInt
+  website           String?
+  incumbency_status IncumbencyStatus?
+  created_on        DateTime
+  created_by        String
+  updated_on        DateTime
+  updated_by        String?
+  key_issues        CandidateKeyIssue[]
+  candidate         Candidate                   @relation(fields: [candidate_id], references: [id])
+  election          Election                    @relation(fields: [election_id], references: [id])
+  party             PoliticalParty              @relation(fields: [party_id], references: [id])
+  donations         ElectionCandidateDonation[]
 }
 
 model CandidateKeyIssue {
@@ -337,4 +338,10 @@ enum ConflictType {
   FINANCIAL
   PERSONAL
   PROFESSIONAL
+}
+
+enum IncumbencyStatus {
+  INCUMBENT
+  CHALLENGER
+  OPEN_SEAT
 }

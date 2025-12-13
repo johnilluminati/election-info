@@ -208,12 +208,15 @@ export interface CandidateParty {
   political_party?: PoliticalParty
 }
 
+export type IncumbencyStatus = 'INCUMBENT' | 'CHALLENGER' | 'OPEN_SEAT'
+
 export interface ElectionCandidate {
   id: string
   election_id: string
   candidate_id: string
   party_id: string
   website?: string
+  incumbency_status?: IncumbencyStatus
   created_on: string
   created_by: string
   updated_on: string

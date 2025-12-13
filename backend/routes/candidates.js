@@ -69,7 +69,7 @@ router.get('/', async (req, res, next) => {
 // Helper function to get election candidates with filtering
 async function getElectionCandidates(req, res, next) {
   try {
-    const { search, state, election_type, party, page = 1, limit = 50 } = req.query;
+    const { search, state, election_type, party, incumbency_status, page = 1, limit = 50 } = req.query;
     const skip = (parseInt(page) - 1) * parseInt(limit);
     
     // Resolve state to abbreviation if state filter is provided
@@ -135,6 +135,10 @@ async function getElectionCandidates(req, res, next) {
       where.party = {
         name: { contains: party, mode: 'insensitive' }
       };
+    }
+    
+    if (incumbency_status) {
+      where.incumbency_status = incumbency_status;
     }
     
     // Filter by state - only match STATE geography type with exact abbreviation match
@@ -695,7 +699,8 @@ router.get('/:id', async (req, res, next) => {
             election: {
               include: {
                 election_cycle: true,
-                election_type: true
+                election_type: true,
+                geographies: true
               }
             },
             party: true,
