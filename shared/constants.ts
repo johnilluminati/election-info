@@ -123,3 +123,73 @@ export const TOOLTIP_CONTENT = {
   // Add more tooltip content here as needed
 } as const;
 
+/**
+ * Maps election type names to position titles for display
+ */
+export const getPositionTitle = (electionType: string | undefined): string => {
+  const positionMap: Record<string, string> = {
+    'Presidential': 'President of the United States',
+    'Senate': 'U.S. Senator',
+    'Gubernatorial': 'Governor',
+    'Congressional': 'U.S. Representative',
+    'State Legislature': 'State Legislator',
+    'Local': 'Local Office'
+  };
+  
+  return positionMap[electionType || ''] || electionType || 'Public Office';
+};
+
+/**
+ * Formats a current position string from election data
+ */
+export const formatCurrentPosition = (
+  electionType: string | undefined,
+  geographies?: Array<{
+    scope_type: string;
+    scope_id: string;
+  }>
+): string => {
+  const position = getPositionTitle(electionType);
+  
+  if (!geographies || geographies.length === 0) {
+    return position;
+  }
+  
+  const stateGeo = geographies.find(g => g.scope_type === 'STATE');
+  const districtGeo = geographies.find(g => g.scope_type === 'DISTRICT');
+  
+  // Get state name (convert abbreviation to full name if needed)
+  let stateName = '';
+  if (stateGeo?.scope_id) {
+    const stateId = stateGeo.scope_id;
+    if (STATE_ABBREVIATION[stateId]) {
+      stateName = stateId; // Already full name
+    } else {
+      // Convert abbreviation to full name
+      const fullName = Object.keys(STATE_ABBREVIATION).find(
+        name => STATE_ABBREVIATION[name] === stateId
+      );
+      stateName = fullName || stateId;
+    }
+  }
+  
+  // Format based on election type
+  if (electionType === 'Presidential') {
+    return position;
+  }
+  
+  if (electionType === 'Congressional' && districtGeo?.scope_id) {
+    const districtDisplay = formatDistrictCode(districtGeo.scope_id);
+    if (stateName) {
+      return `${position} for ${stateName}'s ${districtDisplay === 'At-Large' ? 'At-Large District' : `District ${districtDisplay}`}`;
+    }
+    return `${position} for ${formatDistrictDisplay(districtGeo.scope_id)}`;
+  }
+  
+  if (stateName) {
+    return `${position} from ${stateName}`;
+  }
+  
+  return position;
+};
+

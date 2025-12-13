@@ -1,8 +1,7 @@
 import { useEffect } from 'react';
 import { FaTimes, FaExternalLinkAlt } from 'react-icons/fa';
 import type { ElectionCandidate } from '@shared/types';
-import { getPositionTitle } from '../../lib/candidateUtils';
-import { STATE_ABBREVIATION, formatDistrictDisplay, isAtLargeDistrict, TOOLTIP_CONTENT } from '@shared/constants';
+import { STATE_ABBREVIATION, formatDistrictDisplay, isAtLargeDistrict, TOOLTIP_CONTENT, getPositionTitle } from '@shared/constants';
 import { InfoTooltip } from '../InfoTooltip';
 import CandidateInfoTabs from './CandidateInfoTabs';
 import CandidateKeyIssuesTab from './CandidateKeyIssuesTab';

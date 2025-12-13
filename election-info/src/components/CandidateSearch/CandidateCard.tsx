@@ -1,7 +1,6 @@
 import { FaCalendarAlt, FaMapMarkerAlt, FaUserTie } from 'react-icons/fa';
 import type { ElectionCandidate } from '@shared/types';
-import { STATE_ABBREVIATION, formatDistrictDisplay } from '@shared/constants';
-import { getPositionTitle } from '../../lib/candidateUtils';
+import { STATE_ABBREVIATION, formatDistrictDisplay, getPositionTitle } from '@shared/constants';
 
 interface CandidateCardProps {
   candidate: ElectionCandidate;
