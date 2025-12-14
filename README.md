@@ -64,29 +64,6 @@ The goal is to cut through the noise and make it simple to find accurate, transp
 - **Prisma ORM**
 - **PostgreSQL**
 
-## Project Structure
-
-```
-election-info/
-├── backend/             # Express.js API server
-│   ├── prisma/          # Database schema, migrations, and seed data
-│   ├── routes/          # API route handlers for all endpoints
-│   └── server.js        # Application entry point
-│
-└── election-info/       # React frontend application
-    ├── src/
-    │   ├── components/
-    │   │   ├── Candidate/        # Candidate-related components
-    │   │   ├── CandidateSearch/  # Candidate search functionality
-    │   │   ├── Header/           # Navigation and header components
-    │   │   └── ...
-    │   ├── pages/       # Page-level components
-    │   ├── hooks/       # Custom React hooks for data fetching
-    │   ├── lib/         # Utilities, API client, and constants
-    │   └── types/       # TypeScript type definitions
-    └── public/          # Static assets and map data
-```
-
 ---
 
 **Note**: This project is designed to be a non-partisan resource for voters. The goal is transparency and accessibility of information, not to promote any particular candidate or political position.
