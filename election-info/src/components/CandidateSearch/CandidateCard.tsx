@@ -1,5 +1,5 @@
 import { FaCalendarAlt, FaMapMarkerAlt, FaUserTie } from 'react-icons/fa';
-import type { ElectionCandidate } from '@shared/types';
+import type { ElectionCandidate, ElectionGeography } from '@shared/types';
 import { STATE_ABBREVIATION, formatDistrictDisplay, getPositionTitle } from '@shared/constants';
 
 interface CandidateCardProps {
@@ -11,7 +11,7 @@ const CandidateCard = ({ candidate, onViewDetails }: CandidateCardProps) => {
   // Helper functions to extract state and district from geographies
   const getStateFromCandidate = (): string => {
     const geographies = candidate.election?.geographies || [];
-    const stateGeo = geographies.find(g => g.scope_type === 'STATE');
+    const stateGeo = geographies.find((g: ElectionGeography) => g.scope_type === 'STATE');
     if (!stateGeo?.scope_id) return '';
     
     // Convert state abbreviation to full name if needed
@@ -29,7 +29,7 @@ const CandidateCard = ({ candidate, onViewDetails }: CandidateCardProps) => {
 
   const getDistrictFromCandidate = (): string | null => {
     const geographies = candidate.election?.geographies || [];
-    const districtGeo = geographies.find(g => g.scope_type === 'DISTRICT');
+    const districtGeo = geographies.find((g: ElectionGeography) => g.scope_type === 'DISTRICT');
     return districtGeo?.scope_id || null;
   };
 

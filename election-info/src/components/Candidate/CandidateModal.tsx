@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { FaTimes, FaExternalLinkAlt } from 'react-icons/fa';
-import type { ElectionCandidate } from '@shared/types';
+import type { ElectionCandidate, ElectionGeography } from '@shared/types';
 import { STATE_ABBREVIATION, formatDistrictDisplay, isAtLargeDistrict, TOOLTIP_CONTENT, getPositionTitle } from '@shared/constants';
 import { InfoTooltip } from '../InfoTooltip';
 import CandidateInfoTabs from './CandidateInfoTabs';
@@ -38,11 +38,11 @@ const CandidateModal = ({ candidate, isOpen, onClose, isLoading = false }: Candi
   }, [isOpen, onClose]);
 
   // Extract candidate positions for context analysis
-  const candidateKeyIssues = candidate?.key_issues?.map(issue => 
+  const candidateKeyIssues = candidate?.key_issues?.map((issue: { issue_text: string; view_text?: string }) => 
     `${issue.issue_text} ${issue.view_text || ''}`
   ) || [];
   
-  const candidateViews = candidate?.candidate?.candidate_views?.map(view => view.view_text) || [];
+  const candidateViews = candidate?.candidate?.candidate_views?.map((view: { view_text: string }) => view.view_text) || [];
 
   // Create tab data for the modal
   const tabData = candidate ? [
@@ -135,8 +135,8 @@ const CandidateModal = ({ candidate, isOpen, onClose, isLoading = false }: Candi
                       const electionType = candidate.election?.election_type?.name;
                       
                       // Find state geography if available
-                      const stateGeo = geographies.find(g => g.scope_type === 'STATE');
-                      const districtGeo = geographies.find(g => g.scope_type === 'DISTRICT');
+                      const stateGeo = geographies.find((g: ElectionGeography) => g.scope_type === 'STATE');
+                      const districtGeo = geographies.find((g: ElectionGeography) => g.scope_type === 'DISTRICT');
                       
                       // Convert state abbreviation to full name
                       let stateName = '';

@@ -75,7 +75,7 @@ const CandidateDonationsTab = ({
         .reduce((sum, d) => sum + parseFloat(d.donation_amount), 0);
       
       // Estimate total this cycle (roughly 1.2x-1.7x, using donation name as seed)
-      const nameHash = donation.donor_name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+      const nameHash = donation.donor_name.split('').reduce((acc: number, char: string) => acc + char.charCodeAt(0), 0);
       const totalThisCycle = totalToCandidate * (1.2 + (nameHash % 10) / 20);
       
       // Build DonorInfo from API data

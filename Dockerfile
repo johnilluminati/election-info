@@ -12,6 +12,9 @@ RUN npx prisma generate
 # Copy backend source code
 COPY backend/. .
 
+# Copy shared folder (needed for TypeScript path resolution)
+COPY shared /app/shared
+
 # Install frontend dependencies and build
 WORKDIR /app/election-info
 COPY election-info/package*.json ./

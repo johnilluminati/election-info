@@ -1,5 +1,5 @@
 import { useMemo, useCallback } from 'react';
-import type { ElectionCandidate } from '@shared/types';
+import type { ElectionCandidate, ElectionGeography } from '@shared/types';
 import { STATE_ABBREVIATION, formatDistrictDisplay } from '@shared/constants';
 
 interface CandidateGroup {
@@ -33,21 +33,21 @@ export const useCandidateGrouping = ({
   // Helper function to extract state name from candidate geography data
   const getStateFromCandidate = useCallback((candidate: ElectionCandidate): string => {
     const geographies = candidate.election?.geographies || [];
-    const stateGeo = geographies.find(g => g.scope_type === 'STATE');
+    const stateGeo = geographies.find((g: ElectionGeography) => g.scope_type === 'STATE');
     return stateGeo?.scope_id || 'Unknown State';
   }, []);
 
   // Helper function to get district from candidate
   const getDistrictFromCandidate = useCallback((candidate: ElectionCandidate): string => {
     const geographies = candidate.election?.geographies || [];
-    const districtGeo = geographies.find(g => g.scope_type === 'DISTRICT');
+    const districtGeo = geographies.find((g: ElectionGeography) => g.scope_type === 'DISTRICT');
     return districtGeo?.scope_id || 'At-Large';
   }, []);
 
   // Create reverse mapping from abbreviation to full state name
   const stateAbbreviationToName = useMemo(() => {
     const reverse: Record<string, string> = {};
-    Object.entries(STATE_ABBREVIATION).forEach(([fullName, abbreviation]) => {
+    Object.entries(STATE_ABBREVIATION).forEach(([fullName, abbreviation]: [string, string]) => {
       reverse[abbreviation] = fullName;
     });
     return reverse;
@@ -173,7 +173,7 @@ export const useCandidateGrouping = ({
       const stateGroups: Record<string, Record<string, typeof candidates>> = {};
       
       // Pre-extract geographies to avoid repeated find() operations
-      candidates.forEach(candidate => {
+      candidates.forEach((candidate: ElectionCandidate) => {
         const geographies = candidate.election?.geographies || [];
         // Cache lookups - only search once per candidate
         let state: string | undefined;
@@ -256,14 +256,14 @@ export const useCandidateGrouping = ({
         return acc;
       }, {} as Record<string, typeof candidates>);
       
-      const result = Object.entries(grouped)
-        .sort(([a], [b]) => {
+      const result: CandidateGroup[] = Object.entries(grouped)
+        .sort(([a]: [string, ElectionCandidate[]], [b]: [string, ElectionCandidate[]]) => {
           // Sort by the original state name for consistent ordering
           const stateA = stateAbbreviationToName[a] || a;
           const stateB = stateAbbreviationToName[b] || b;
           return stateA.localeCompare(stateB);
         })
-        .map(([state, candidates]) => ({ 
+        .map(([state, candidates]: [string, ElectionCandidate[]]) => ({ 
           group: formatStateDisplayName(state), 
           candidates 
         }));
@@ -280,8 +280,8 @@ export const useCandidateGrouping = ({
         return acc;
       }, {} as Record<string, typeof candidates>);
       
-      const result = Object.entries(grouped)
-        .sort(([a], [b]) => {
+      const result: CandidateGroup[] = Object.entries(grouped)
+        .sort(([a]: [string, ElectionCandidate[]], [b]: [string, ElectionCandidate[]]) => {
           // Sort districts numerically if possible
           const numA = parseInt(a);
           const numB = parseInt(b);
@@ -290,7 +290,7 @@ export const useCandidateGrouping = ({
           }
           return a.localeCompare(b);
         })
-        .map(([district, candidates]) => ({
+        .map(([district, candidates]: [string, ElectionCandidate[]]) => ({
           group: formatDistrictDisplay(district),
           key: district, // Use raw district code as unique key (e.g., "AKAL", "PA04")
           candidates
@@ -326,7 +326,7 @@ export const useCandidateGrouping = ({
           } else {
             // For other election types, group by state within the type
             const stateGroups: Record<string, typeof candidates> = {};
-            grouped[type].forEach(candidate => {
+            grouped[type].forEach((candidate: ElectionCandidate) => {
               const state = getStateFromCandidate(candidate);
               if (!stateGroups[state]) stateGroups[state] = [];
               stateGroups[state].push(candidate);
@@ -358,7 +358,7 @@ export const useCandidateGrouping = ({
         .forEach(([type, candidates]) => {
           // Try to group by state for unknown types too
           const stateGroups: Record<string, typeof candidates> = {};
-          candidates.forEach(candidate => {
+          candidates.forEach((candidate: ElectionCandidate) => {
             const state = getStateFromCandidate(candidate);
             if (!stateGroups[state]) stateGroups[state] = [];
             stateGroups[state].push(candidate);
@@ -466,9 +466,9 @@ export const useCandidateGrouping = ({
     
     // Then, add any other election types that weren't in the predefined order
     Object.entries(grouped)
-      .filter(([type]) => !electionTypeOrder.includes(type))
-      .sort(([a], [b]) => a.localeCompare(b))
-      .forEach(([type, candidates]) => {
+      .filter(([type]: [string, ElectionCandidate[]]) => !electionTypeOrder.includes(type))
+      .sort(([a]: [string, ElectionCandidate[]], [b]: [string, ElectionCandidate[]]) => a.localeCompare(b))
+      .forEach(([type, candidates]: [string, ElectionCandidate[]]) => {
         result.push({ group: type, candidates });
       });
     

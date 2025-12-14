@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import CandidateComparison from "../components/CandidateComparison";
 import CongressionalMap from "../components/CongressionalMap/CongressionalMap";
 import { useElections } from "../hooks";
-import type { Election } from "@shared/types";
+import type { Election, ElectionGeography, ElectionCandidate } from "@shared/types";
 import CongressionalMapNav from '../components/CongressionalMap/CongressionalMapNav';
 import { STATE_ABBREVIATION, formatDistrictDisplay, isAtLargeDistrict, TOOLTIP_CONTENT } from '@shared/constants';
 import { InfoTooltip } from '../components/InfoTooltip';
@@ -211,9 +211,9 @@ const ElectionsSearchPage = () => {
                       return (
                         <div key={typeName} className="border-b pb-2">
                           <h3 className="font-semibold text-lg">{typeName}</h3>
-                          {elections?.map((election) => {
+                          {elections?.map((election: Election) => {
                             const isCongressional = typeName === 'Congressional';
-                            const districtFromElection = election.geographies?.find(g => g.scope_type === 'DISTRICT')?.scope_id;
+                            const districtFromElection = election.geographies?.find((g: ElectionGeography) => g.scope_type === 'DISTRICT')?.scope_id;
                             const shouldShowDistrict = isCongressional && !selectedDistrict;
                             const districtToShow = shouldShowDistrict ? districtFromElection : undefined;
                             const dateText = election.election_cycle?.election_day 
@@ -250,7 +250,7 @@ const ElectionsSearchPage = () => {
                               >
                                 {election.election_candidates && election.election_candidates.length > 0 ? (
                                   <ul className="list-disc pl-5 mt-1">
-                                    {election.election_candidates.map((candidate) => (
+                                    {election.election_candidates.map((candidate: ElectionCandidate) => (
                                       <li key={candidate.id}>
                                         {candidate.candidate?.first_name} {candidate.candidate?.last_name}
                                         {candidate.party && ` (${candidate.party.name})`}

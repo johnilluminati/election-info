@@ -1,4 +1,4 @@
-import type { Election } from '@shared/types';
+import type { Election, ElectionCandidate } from '@shared/types';
 import { useElectionCandidates } from '../hooks';
 import Candidate from "./Candidate/Candidate";
 import { useEffect, useState, useMemo, useRef } from 'react';
@@ -146,7 +146,7 @@ const CandidateComparison = ({ selectedElection, selectedState, selectedDistrict
                   Click on candidates to select them for comparison. You can select up to 2 candidates at a time.
                 </p>
                 <div className="flex flex-wrap justify-center gap-3">
-                  {randomizedCandidates.map((electionCandidate, index) => {
+                  {randomizedCandidates.map((electionCandidate: ElectionCandidate, index: number) => {
                     const candidate = electionCandidate.candidate;
                     const party = electionCandidate.party;
                     const isSelected = selectedCandidateIndexes.includes(index);
