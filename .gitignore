@@ -5,3 +5,5 @@ README.md
 
 # Admin project (separate repository)
 election-info-admin/
+config.bat
+node_modules
