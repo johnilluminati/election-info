@@ -1,4 +1,4 @@
-import type { PoliticalParty } from '../../types/api'
+import type { PoliticalParty } from '@shared/types'
 
 interface PartyCardProps {
   party: PoliticalParty

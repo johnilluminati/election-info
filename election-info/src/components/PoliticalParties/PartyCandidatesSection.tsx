@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect, useRef } from 'react'
-import type { CandidateParty, ElectionCandidate, USState } from '../../types/api'
+import type { CandidateParty, ElectionCandidate, USState } from '@shared/types'
 import { FaUser, FaChevronRight, FaSearch, FaMapMarkerAlt, FaVoteYea, FaChevronDown, FaInfoCircle, FaExternalLinkAlt } from 'react-icons/fa'
 
 interface PartyCandidatesSectionProps {
@@ -84,7 +84,7 @@ const PartyCandidatesSection = ({
         const selectedState = states?.find(state => state.id === filters.state)
         const stateAbbreviation = selectedState?.abbreviation
 
-        const hasStateMatch = candidate.election.geographies.some(geo =>
+        const hasStateMatch = candidate.election.geographies.some((geo: { scope_type: string; scope_id: string }) =>
           geo.scope_type === 'STATE' && geo.scope_id === stateAbbreviation
         )
         if (!hasStateMatch) return false
@@ -441,7 +441,7 @@ const PartyCandidatesSection = ({
                               </h5>
 
                               {candidate.type === 'running' && candidate.election && (() => {
-                                const stateGeo = candidate.election.geographies?.find(geo => geo.scope_type === 'STATE')
+                                const stateGeo = candidate.election.geographies?.find((geo: { scope_type: string; scope_id: string }) => geo.scope_type === 'STATE')
 
                                 // Map election types to proper office names
                                 const officeMap: Record<string, string> = {

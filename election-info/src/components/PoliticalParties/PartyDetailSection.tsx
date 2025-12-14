@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import type { PoliticalParty } from '../../types/api'
+import type { PoliticalParty } from '@shared/types'
 import PartyCandidatesSection from './PartyCandidatesSection'
 import PartyLeadership from './PartyLeadership'
 import { useParty } from '../../hooks/useParties'

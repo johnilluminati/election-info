@@ -1,4 +1,4 @@
-import type { ElectionCandidate } from "../../types/api";
+import type { ElectionCandidate } from "@shared/types";
 import { FaExternalLinkAlt } from "react-icons/fa";
 import CandidateInfoTabs from "./CandidateInfoTabs";
 import CandidateKeyIssuesTab from "./CandidateKeyIssuesTab";
@@ -19,11 +19,11 @@ const Candidate = ({ electionCandidate }: CandidateProps) => {
   }
 
   // Extract candidate positions for context analysis
-  const candidateKeyIssues = electionCandidate.key_issues?.map(issue => 
+  const candidateKeyIssues = electionCandidate.key_issues?.map((issue: { issue_text: string; view_text?: string }) => 
     `${issue.issue_text} ${issue.view_text || ''}`
   ) || [];
   
-  const candidateViews = candidate.candidate_views?.map(view => view.view_text) || [];
+  const candidateViews = candidate.candidate_views?.map((view: { view_text: string }) => view.view_text) || [];
 
   const tabData = [
     {

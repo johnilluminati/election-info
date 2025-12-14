@@ -1,4 +1,4 @@
-import type { CandidateKeyIssue } from "../../types/api";
+import type { CandidateKeyIssue } from "@shared/types";
 
 interface CandidateKeyIssuesTabProps {
   keyIssues?: CandidateKeyIssue[];

@@ -1,5 +1,5 @@
 import { FaSearch, FaMapMarkerAlt, FaCalendarAlt, FaUserTie } from 'react-icons/fa';
-import type { USState } from '../../types/api';
+import type { USState } from '@shared/types';
 
 interface CandidateSearchFiltersProps {
   // Filter values

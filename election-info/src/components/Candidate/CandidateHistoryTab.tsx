@@ -1,4 +1,4 @@
-import type { CandidateHistory } from "../../types/api";
+import type { CandidateHistory } from "@shared/types";
 
 interface CandidateHistoryTabProps {
   histories?: CandidateHistory[];
@@ -32,7 +32,7 @@ const CandidateHistoryTab = ({ histories }: CandidateHistoryTabProps) => {
           {histories.map((history) => (
             <div key={history.id} className="text-base leading-7 text-gray-900 dark:text-gray-200">
               {/* Split by paragraphs if text contains newlines */}
-              {history.history_text.split('\n').map((paragraph, pIndex) => (
+              {history.history_text.split('\n').map((paragraph: string, pIndex: number) => (
                 <p key={pIndex} className="mb-4 last:mb-0">
                   {paragraph}
                 </p>
